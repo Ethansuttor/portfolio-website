@@ -35,7 +35,7 @@ const featuredProjects = [
     code: null as string | null,
     codeLabel: null as string | null,
     codeFile: null as string | null,
-    githubHref: "#",
+    githubHref: "https://github.com/Ethansuttor/ECE-412-Microcontrollers",
   },
   {
     title: "FPGA Synchronous Data Pipeline & Display Controller",
@@ -63,7 +63,7 @@ const featuredProjects = [
     code: null as string | null,
     codeLabel: null as string | null,
     codeFile: null as string | null,
-    githubHref: "#",
+    githubHref: "https://github.com/Ethansuttor/ECE-510-511-FPGA",
   },
 ];
 
@@ -86,7 +86,7 @@ const projects = [
     code: null as string | null,
     codeLabel: null as string | null,
     codeFile: null as string | null,
-    githubHref: "#",
+    githubHref: "https://github.com/Ethansuttor/ECE-515-VLSI",
   },
   {
     title: "Autonomous Vision-Guided Robotics Platform",
@@ -104,7 +104,7 @@ const projects = [
     code: null as string | null,
     codeLabel: null as string | null,
     codeFile: null as string | null,
-    githubHref: "#",
+    githubHref: "https://github.com/Ethansuttor/ECE-565",
   },
 ];
 
