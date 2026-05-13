@@ -4,10 +4,11 @@ import { TechnicalMatrix } from "@/components/TechnicalMatrix";
 import { EngineeringExperience } from "@/components/EngineeringExperience";
 import { SystemLog } from "@/components/SystemLog";
 import { CaseStudies } from "@/components/CaseStudies";
+import { AboutMe } from "@/components/AboutMe";
 import { Contact } from "@/components/Contact";
 
 const footerLinks = [
-  { label: "GitHub", href: "https://github.com/ethan-suttor" },
+  { label: "GitHub", href: "https://github.com/Ethansuttor" },
   { label: "LinkedIn", href: "https://linkedin.com/in/ethan-suttor" },
 ];
 
@@ -19,10 +20,13 @@ export default function Home() {
         
         <div className="w-full">
           <Hero />
-          <TechnicalMatrix />
-          <EngineeringExperience />
-          <SystemLog />
           <CaseStudies />
+          <TechnicalMatrix />
+          <div id="experience">
+            <EngineeringExperience />
+            <SystemLog />
+          </div>
+          <AboutMe />
           <Contact />
         </div>
         

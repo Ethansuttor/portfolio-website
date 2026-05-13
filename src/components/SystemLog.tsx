@@ -69,6 +69,8 @@ function EventGallery({ data }: { data: CollapsibleData }) {
     <div className="mt-6 border border-outline-variant/20 overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
+        aria-expanded={expanded}
+        aria-controls="event-gallery-content"
         className="w-full flex items-center justify-between px-4 py-3 bg-background hover:bg-surface-container-high transition-colors duration-300 cursor-pointer border-none text-left"
       >
         <div className="flex items-center gap-3">
@@ -79,7 +81,7 @@ function EventGallery({ data }: { data: CollapsibleData }) {
             photo_library
           </span>
           <span className="text-[0.65rem] font-bold text-on-surface uppercase tracking-[0.2em]">{data.label}</span>
-          <span className="text-[0.55rem] font-mono text-primary/50 uppercase tracking-wider">{data.items.length} EVENTS</span>
+          <span className="text-[0.65rem] font-mono text-primary/50 uppercase tracking-wider">{data.items.length} EVENTS</span>
         </div>
         <span
           className="material-symbols-outlined text-on-surface-variant text-sm transition-transform duration-300"
@@ -90,6 +92,7 @@ function EventGallery({ data }: { data: CollapsibleData }) {
       </button>
 
       <div
+        id="event-gallery-content"
         className="transition-all duration-500 ease-in-out overflow-hidden"
         style={{ maxHeight: expanded ? '600px' : '0px', opacity: expanded ? 1 : 0 }}
       >
@@ -122,7 +125,7 @@ function EventGallery({ data }: { data: CollapsibleData }) {
 
 export function SystemLog() {
   return (
-    <section className="section-divider py-24 px-8 md:px-24 bg-surface" id="experience">
+    <section className="section-divider py-24 px-8 md:px-24 bg-surface">
       <ScrollReveal>
         <div className="flex items-center gap-4 mb-16">
            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-on-surface">Experience</h2>
@@ -172,7 +175,7 @@ export function SystemLog() {
                         />
                         {job.imageCaption && (
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                            <span className="font-mono text-[0.5rem] text-primary/80 tracking-[0.2em] uppercase">{job.imageCaption}</span>
+                            <span className="font-mono text-[0.65rem] text-primary/80 tracking-[0.2em] uppercase">{job.imageCaption}</span>
                           </div>
                         )}
                       </div>

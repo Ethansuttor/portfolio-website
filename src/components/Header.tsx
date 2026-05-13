@@ -3,15 +3,14 @@
 import { useState, useEffect, useCallback } from "react";
 
 const navItems = [
-  { label: "Skills", href: "#education" },
-  { label: "Engineering", href: "#engineering-experience" },
-  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
   { label: "Contact", href: "#contact" },
 ];
 
 export function Header() {
-  const resumeLink = "/Suttor,%20Ethan,%20co-op2.pdf";
+  const resumeLink = "/ethan-suttor-resume.pdf";
   const [activeSection, setActiveSection] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

@@ -48,7 +48,7 @@ export function TechnicalLabs() {
 
       {/* ── Lab 01: 10-Bit Synchronous Up/Down Counter (Featured) ── */}
       <ScrollReveal delay={100}>
-        <div className="group bg-surface-container-high border border-primary-container/30 hover:border-primary-container transition-all duration-500 mb-16">
+        <div className="group bg-surface-container-high border border-primary-container/30 hover:border-primary-container hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 mb-16">
           <div className="bg-primary-container/10 px-6 md:px-10 py-3 flex items-center justify-between border-b border-primary-container/20">
             <div className="flex items-center gap-3">
               <span className="h-2 w-2 bg-primary-container rounded-full animate-pulse"></span>
@@ -72,11 +72,11 @@ export function TechnicalLabs() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  <div className="p-4 bg-background border-l-2 border-primary-container/20">
-                    <span className="block text-[0.55rem] font-black text-primary uppercase tracking-widest mb-1">Debouncer</span>
+                    <span className="block text-[0.65rem] font-black text-primary uppercase tracking-widest mb-1">Debouncer</span>
                     <p className="text-on-surface-variant text-[0.7rem] italic">16-bit Shift Register Logic</p>
                  </div>
                  <div className="p-4 bg-background border-l-2 border-primary-container/20">
-                    <span className="block text-[0.55rem] font-black text-primary uppercase tracking-widest mb-1">Utilization</span>
+                    <span className="block text-[0.65rem] font-black text-primary uppercase tracking-widest mb-1">Utilization</span>
                     <p className="text-on-surface-variant text-[0.7rem] italic">117 / 20,800 Artix-7 Slices</p>
                  </div>
               </div>
@@ -118,10 +118,10 @@ export function TechnicalLabs() {
 
       {/* ── Lab 02: CMOS VLSI Layout ── */}
       <ScrollReveal delay={200}>
-        <div className="bg-surface-container-high border-t border-b border-outline-variant/10 p-8 md:p-12 mb-16 hover:bg-surface-container-highest/20 transition-all duration-300 group">
+        <div className="bg-surface-container-high border-t border-b border-outline-variant/10 p-8 md:p-12 mb-16 hover:bg-surface-container-highest/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 group">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-1 flex items-start justify-center">
-              <span className="font-sans text-4xl font-black text-primary-container/20 group-hover:text-primary-container transition-colors duration-500">02</span>
+              <span className="font-sans text-4xl font-black text-primary-container">02</span>
             </div>
             <div className="lg:col-span-7 flex flex-col gap-6">
               <div className="flex flex-col gap-2">
@@ -139,7 +139,7 @@ export function TechnicalLabs() {
             </div>
             <div className="lg:col-span-4 relative aspect-video border border-outline-variant/20 overflow-hidden">
                <Image src={cmosPhotos[0].src} alt={cmosPhotos[0].alt} fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
-               <div className="absolute inset-x-0 bottom-0 bg-background/80 p-2 text-[0.5rem] font-sans text-primary text-center uppercase tracking-widest">{cmosPhotos[0].caption}</div>
+               <div className="absolute inset-x-0 bottom-0 bg-background/80 p-2 text-[0.65rem] font-sans text-primary text-center uppercase tracking-widest">{cmosPhotos[0].caption}</div>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ export function TechnicalLabs() {
 
       {/* ── Lab 03: ECE 565 Final Competition ── */}
       <ScrollReveal delay={200}>
-        <div className="group bg-surface-container-high border border-primary-container/10 hover:border-primary-container/30 transition-all duration-500 mb-20">
+        <div className="group bg-surface-container-high border border-primary-container/10 hover:border-primary-container/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 mb-20">
           <div className="bg-surface-container-highest/20 px-6 md:px-10 py-3 flex items-center justify-between border-b border-outline-variant/10 font-sans text-[0.65rem] text-on-surface-variant/40 tracking-[0.2em] uppercase">
             ECE 565 — Final Competition
           </div>
@@ -163,11 +163,11 @@ export function TechnicalLabs() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                  <div className="p-4 bg-background border-l-2 border-primary-container/20">
-                    <span className="block text-[0.55rem] font-black text-primary uppercase tracking-widest mb-1">Kinematics</span>
+                    <span className="block text-[0.65rem] font-black text-primary uppercase tracking-widest mb-1">Kinematics</span>
                     <p className="text-on-surface-variant text-[0.7rem] italic">Differential-Drive Tracking</p>
                  </div>
                  <div className="p-4 bg-background border-l-2 border-primary-container/20">
-                    <span className="block text-[0.55rem] font-black text-primary uppercase tracking-widest mb-1">Logic</span>
+                    <span className="block text-[0.65rem] font-black text-primary uppercase tracking-widest mb-1">Logic</span>
                     <p className="text-on-surface-variant text-[0.7rem] italic">Continuous Speed Differential</p>
                  </div>
               </div>
@@ -217,7 +217,7 @@ export function TechnicalLabs() {
 
       {/* ── Lab 04: POSIX Multi-threading ── */}
       <ScrollReveal delay={300}>
-        <div className="bg-surface-container-low p-8 md:p-12 flex flex-col md:flex-row gap-10 items-start hover:bg-surface-container-high transition-all duration-300 group border border-outline-variant/10">
+        <div className="bg-surface-container-low p-8 md:p-12 flex flex-col md:flex-row gap-10 items-start hover:bg-surface-container-high hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 group border border-outline-variant/10">
           <div className="w-full md:w-1/4">
             <span className="text-primary font-sans text-[0.65rem] font-bold tracking-[0.2em] block mb-2">CSE 420</span>
             <h4 className="text-sm font-bold text-on-surface/80 uppercase tracking-widest underline decoration-primary/30 underline-offset-8">Lab Entry 04</h4>
@@ -225,7 +225,7 @@ export function TechnicalLabs() {
 
           <div className="w-full md:w-3/4">
             <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-primary transition-colors tracking-tight duration-300">POSIX Multi-threading & IPC</h3>
-            <div className="p-6 bg-background border-l-2 border-primary-container/40 hover:border-primary-container transition-colors duration-300 font-mono text-sm leading-relaxed text-on-surface-variant italic">
+            <div className="p-6 bg-background border-l-2 border-primary-container/40 hover:border-primary transition-colors duration-300 font-mono text-sm leading-relaxed text-on-surface-variant italic">
                Engineered a Linux keyword search server in C. Spawned per-client child processes and pthread workers, utilizing System V message queues for IPC and custom word-boundary parsing for high-throughput, concurrent file searching.
             </div>
             <div className="mt-6 flex flex-wrap gap-4">

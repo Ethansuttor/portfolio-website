@@ -37,17 +37,11 @@ const skillCategories = [
 
 export function TechnicalMatrix() {
   return (
-    <section className="section-divider py-24 px-8 md:px-24 bg-surface-container-low border-b border-outline-variant/10" id="education">
+    <section className="section-divider py-24 px-8 md:px-24 bg-surface-container-low border-b border-outline-variant/10" id="skills">
       <ScrollReveal className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
         <div>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-on-surface">Skills</h2>
           <p className="text-xs uppercase tracking-[0.3em] font-bold text-primary">University of Louisville</p>
-        </div>
-        
-        <div className="bg-surface-container-high/50 p-6 rounded-sm border border-outline-variant/20 max-w-sm">
-           <p className="text-xs text-on-surface-variant leading-relaxed italic">
-             &quot;Precision is not an accident; it is the result of focused hardware-software co-design.&quot;
-           </p>
         </div>
       </ScrollReveal>
       

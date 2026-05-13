@@ -43,6 +43,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -155,8 +156,8 @@ body {
   right: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--primary-container), transparent);
-  animation: scanline 4s linear infinite;
-  opacity: 0.3;
+  animation: scanline 8s linear infinite;
+  opacity: 0.2;
   pointer-events: none;
 }
 
@@ -340,6 +341,38 @@ body {
 
 .hamburger-open .hamburger-line:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-badge,
+  .hero-name,
+  .hero-title,
+  .hero-description,
+  .hero-buttons {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-scanline {
+    display: none;
+  }
+
+  .terminal-cursor {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 /* ========================================

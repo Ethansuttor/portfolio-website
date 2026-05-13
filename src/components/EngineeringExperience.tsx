@@ -31,7 +31,6 @@ export function EngineeringExperience() {
   return (
     <section
       className="section-divider py-24 px-8 md:px-24 bg-surface-container-low"
-      id="engineering-experience"
     >
       <ScrollReveal>
         <div className="flex items-center gap-4 mb-4">
@@ -116,9 +115,9 @@ export function EngineeringExperience() {
                   ].map((item) => (
                     <div
                       key={item.label}
-                      className="flex gap-3 items-start p-3 bg-background/60 border-l-2 border-outline-variant/20 hover:border-primary-container/60 transition-colors duration-300"
+                      className="flex gap-3 items-start p-3 bg-background/60 border-l-2 border-outline-variant/20 hover:border-primary/60 transition-colors duration-300"
                     >
-                      <span className="text-[0.6rem] font-black text-primary-container uppercase tracking-wider whitespace-nowrap min-w-[5.5rem]">
+                      <span className="text-[0.6rem] font-black text-primary uppercase tracking-wider whitespace-nowrap min-w-[5.5rem]">
                         {item.label}
                       </span>
                       <span className="text-on-surface-variant text-xs leading-relaxed">

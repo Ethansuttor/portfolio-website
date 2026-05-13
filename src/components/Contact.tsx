@@ -21,10 +21,10 @@ export function Contact() {
       <ScrollReveal direction="left" className="w-full md:w-1/2">
         <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter mb-8 leading-[0.85] text-on-surface">
           Get in<br/>
-          <span className="text-primary-container">Touch</span>
+          <span className="text-primary">Touch</span>
         </h2>
         <p className="text-on-surface-variant mb-12 max-w-md text-base md:text-lg leading-relaxed">
-          Seeking collaborators for hardware projects or open to inquiries regarding engineering roles and co-op opportunities.
+          Currently working as an Electrical Engineering Co-op at Gaylor Electric.
         </p>
 
         <div className="space-y-6">
@@ -56,29 +56,33 @@ export function Contact() {
         <div className="bg-surface-container-low p-6 sm:p-8 md:p-12 border border-outline-variant/10 h-full">
           <form className="space-y-8" onSubmit={handleSubmit}>
             <div>
-              <label className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Name</label>
+              <label htmlFor="contact-name" className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Name</label>
               <input
-                className="w-full bg-transparent border-b border-outline-variant py-4 focus:outline-none focus:border-primary transition-colors duration-300 text-on-surface placeholder:text-on-surface/20"
+                id="contact-name"
+                className="w-full bg-transparent border-b border-outline-variant py-4 focus:outline-none focus:border-primary focus:ring-0 transition-colors duration-300 text-on-surface placeholder:text-on-surface/20"
                 placeholder="Your name"
                 type="text"
+                autoComplete="name"
                 value={formData.name}
                 onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 required
               />
             </div>
             <div>
-              <label className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Subject</label>
+              <label htmlFor="contact-subject" className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Subject</label>
               <input
+                id="contact-subject"
                 className="w-full bg-transparent border-b border-outline-variant py-4 focus:outline-none focus:border-primary transition-colors duration-300 text-on-surface placeholder:text-on-surface/20"
-                placeholder="Project, inquiry, or collaboration"
+                placeholder="Project or general inquiry"
                 type="text"
                 value={formData.subject}
                 onChange={e => setFormData(prev => ({ ...prev, subject: e.target.value }))}
               />
             </div>
             <div>
-              <label className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Message</label>
+              <label htmlFor="contact-message" className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Message</label>
               <textarea
+                id="contact-message"
                 className="w-full bg-transparent border-b border-outline-variant py-4 focus:outline-none focus:border-primary transition-colors duration-300 text-on-surface resize-none placeholder:text-on-surface/20"
                 placeholder="What are you working on?"
                 rows={4}
@@ -87,15 +91,18 @@ export function Contact() {
                 required
               ></textarea>
             </div>
+            <p className="text-[0.65rem] text-on-surface-variant/50 uppercase tracking-widest -mt-4">
+              Clicking send will open your email client with this message pre-filled.
+            </p>
             <button
               type="submit"
               className={`cta-primary w-full font-black uppercase tracking-[0.3em] py-5 transition-all duration-300 shadow-xl ${
                 submitted
                   ? 'bg-green-700 text-white'
-                  : 'bg-primary-container text-white'
+                  : 'bg-primary text-background hover:bg-white hover:text-black'
               }`}
             >
-              {submitted ? '✓ Opening Mail Client' : 'Send Message'}
+              {submitted ? 'Opening Email Client...' : 'Send Message'}
             </button>
           </form>
         </div>
