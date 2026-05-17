@@ -15,6 +15,28 @@ const footerLinks = [
 export default function Home() {
   return (
     <main id="top" className="min-h-screen bg-background text-on-background selection:bg-primary-container selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Ethan Suttor",
+            url: "https://ethansuttor.com",
+            email: "ethan.suttor@louisville.edu",
+            jobTitle: "Electrical Engineering Student",
+            affiliation: {
+              "@type": "EducationalOrganization",
+              name: "University of Louisville",
+            },
+            sameAs: [
+              "https://linkedin.com/in/ethan-suttor",
+              "https://github.com/Ethansuttor",
+            ],
+            description: "Electrical Engineering student specializing in FPGA architecture, embedded systems, and hardware/software co-design.",
+          }),
+        }}
+      />
       <div className="flex flex-col">
         <Header />
         
