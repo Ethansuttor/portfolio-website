@@ -13,10 +13,12 @@ export function Hero() {
             Currently at Gaylor Electric
           </span>
 
-          <h1 className="text-4xl sm:text-6xl md:text-[7rem] font-bold leading-[0.85] tracking-tighter mb-8 text-on-surface">
-            <span className="hero-name block">Ethan Suttor</span>
-            <span className="hero-title block text-primary-container">Electrical Engineering Student</span>
+          <h1 className="hero-name text-4xl sm:text-6xl md:text-[7rem] font-bold leading-[0.85] tracking-tighter mb-2 text-on-surface">
+            Ethan Suttor
           </h1>
+          <h2 className="hero-title text-4xl sm:text-6xl md:text-[7rem] font-bold leading-[0.85] tracking-tighter mb-8 text-primary-container">
+            Electrical Engineering Student
+          </h2>
 
           <p className="hero-description text-base sm:text-lg md:text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed font-sans">
             Electrical Engineering candidate at the University of Louisville specializing in hardware/software co-design, FPGA architecture, and embedded control systems. Designing, verifying, and debugging physical logic for real-time applications.
