@@ -1,8 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { TechnicalMatrix } from "@/components/TechnicalMatrix";
-import { EngineeringExperience } from "@/components/EngineeringExperience";
-import { SystemLog } from "@/components/SystemLog";
+import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { CaseStudies } from "@/components/CaseStudies";
 import { AboutMe } from "@/components/AboutMe";
 import { Contact } from "@/components/Contact";
@@ -42,13 +41,10 @@ export default function Home() {
         
         <div className="w-full">
           <Hero />
+          <AboutMe />
           <CaseStudies />
           <TechnicalMatrix />
-          <div id="experience">
-            <EngineeringExperience />
-            <SystemLog />
-          </div>
-          <AboutMe />
+          <ExperienceTimeline />
           <Contact />
         </div>
         

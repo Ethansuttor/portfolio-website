@@ -3,18 +3,53 @@
 import { useState } from "react";
 import { ScrollReveal } from "./ScrollReveal";
 
+type Status = "idle" | "loading" | "success" | "error";
+
 export function Contact() {
   const [formData, setFormData] = useState({ name: '', subject: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const mailtoBody = `Name: ${formData.name}\nSubject: ${formData.subject}\n\n${formData.message}`;
-    const mailtoLink = `mailto:ethan.suttor@louisville.edu?subject=${encodeURIComponent(formData.subject || 'Portfolio Inquiry')}&body=${encodeURIComponent(mailtoBody)}`;
-    window.location.href = mailtoLink;
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("https://formspree.io/f/xjgplybl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Something went wrong.");
+      }
+
+      setStatus("success");
+      setFormData({ name: '', subject: '', message: '' });
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to send. Please try again.");
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
+    }
   };
+
+  const buttonLabel = {
+    idle: "Send Message",
+    loading: "Sending...",
+    success: "Message Sent!",
+    error: "Try Again",
+  }[status];
+
+  const buttonClass = {
+    idle: "bg-primary text-background hover:bg-white hover:text-black",
+    loading: "bg-primary/50 text-background cursor-not-allowed",
+    success: "bg-green-700 text-white",
+    error: "bg-red-900 text-white",
+  }[status];
 
   return (
     <section className="section-divider py-24 px-8 md:px-24 bg-surface flex flex-col md:flex-row gap-12 md:gap-20 border-t border-outline-variant/10" id="contact">
@@ -54,7 +89,7 @@ export function Contact() {
 
       <ScrollReveal direction="right" className="w-full md:w-1/2">
         <div className="bg-surface-container-low p-6 sm:p-8 md:p-12 border border-outline-variant/10 h-full">
-          <form className="space-y-8" onSubmit={handleSubmit}>
+          <form className="space-y-8" onSubmit={handleSubmit} noValidate>
             <div>
               <label htmlFor="contact-name" className="block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Name</label>
               <input
@@ -66,6 +101,7 @@ export function Contact() {
                 value={formData.name}
                 onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 required
+                disabled={status === "loading"}
               />
             </div>
             <div>
@@ -77,6 +113,7 @@ export function Contact() {
                 type="text"
                 value={formData.subject}
                 onChange={e => setFormData(prev => ({ ...prev, subject: e.target.value }))}
+                disabled={status === "loading"}
               />
             </div>
             <div>
@@ -89,20 +126,28 @@ export function Contact() {
                 value={formData.message}
                 onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
                 required
-              ></textarea>
+                disabled={status === "loading"}
+              />
             </div>
-            <p className="text-[0.65rem] text-on-surface-variant/50 uppercase tracking-widest -mt-4">
-              Clicking send will open your email client with this message pre-filled.
-            </p>
+
+            {status === "error" && (
+              <p className="text-[0.65rem] text-red-400 uppercase tracking-widest -mt-4">
+                {errorMsg}
+              </p>
+            )}
+
+            {status === "success" && (
+              <p className="text-[0.65rem] text-green-400 uppercase tracking-widest -mt-4">
+                Message sent — I&apos;ll get back to you soon.
+              </p>
+            )}
+
             <button
               type="submit"
-              className={`cta-primary w-full font-black uppercase tracking-[0.3em] py-5 transition-all duration-300 shadow-xl ${
-                submitted
-                  ? 'bg-green-700 text-white'
-                  : 'bg-primary text-background hover:bg-white hover:text-black'
-              }`}
+              disabled={status === "loading" || status === "success"}
+              className={`cta-primary w-full font-black uppercase tracking-[0.3em] py-5 transition-all duration-300 shadow-xl ${buttonClass}`}
             >
-              {submitted ? 'Opening Email Client...' : 'Send Message'}
+              {buttonLabel}
             </button>
           </form>
         </div>

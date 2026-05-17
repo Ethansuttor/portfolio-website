@@ -19,7 +19,7 @@ export function AboutMe() {
               I'm a junior Electrical Engineering student at the University of Louisville's Speed School, where most of my coursework has pulled me toward the hardware side: embedded systems, FPGA design, and VLSI physical layout. I like knowing what the silicon is actually doing.
             </p>
             <p className="group-hover:text-on-surface transition-colors duration-300">
-              Outside of class I work at the Speed Center for Innovation as an electrical engineering bench tech, helping students debug embedded systems and bring up PCBs. I also competed at SoutheastCon 2026 with a motor control project built around an Arduino Mega, current sensing, and closed-loop IR encoder feedback.
+              Outside of class I work at the Speed Center for Innovation as an electrical engineering bench tech, helping students debug embedded systems and bring up PCBs. I also competed at SoutheastCon 2026, building a closed-loop motor controller with current sensing and IR encoder feedback for an autonomous competition platform.
             </p>
             <p className="text-primary font-medium tracking-wide">
               Currently I am working an electrical engineering co-op at Gaylor Electric in southern Indiana.
