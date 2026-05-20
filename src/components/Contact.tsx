@@ -16,7 +16,7 @@ export function Contact() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("https://formspree.io/f/xjgplybl", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
