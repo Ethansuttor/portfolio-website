@@ -5,7 +5,7 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[85vh] flex flex-col justify-center px-8 md:px-24 technical-grid overflow-hidden border-b border-outline-variant/20">
-      <div className="max-w-6xl z-10 pt-16 flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-16">
+      <div className="max-w-6xl z-10 pt-16 flex flex-col md:flex-row items-center gap-12 md:gap-16 my-auto">
         {/* Text content */}
         <div className="flex-1">
           <span className="hero-badge inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high text-on-surface-variant font-sans text-[0.7rem] tracking-[0.1em] mb-6 border border-outline-variant/30">
@@ -66,14 +66,14 @@ export function Hero() {
         </div>
 
         {/* Headshot */}
-        <div className="hero-headshot relative flex-shrink-0 order-first md:order-last">
+        <div className="hero-headshot relative flex-shrink-0 order-first md:order-last my-auto">
           <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-2 ring-outline-variant/20 ring-offset-4 ring-offset-background">
             <Image
               src="/assets/hero-photo.jpg"
               alt="Ethan Suttor"
               fill
               sizes="(max-width: 768px) 192px, (max-width: 1024px) 256px, 288px"
-              className="object-cover object-left grayscale-[30%] hover:grayscale-0 transition-all duration-700"
+              className="object-cover object-center grayscale-[30%] hover:grayscale-0 transition-all duration-700"
               priority
             />
           </div>
