@@ -67,15 +67,13 @@ export function Hero() {
 
         {/* Headshot */}
         <div className="hero-headshot relative flex-shrink-0 order-first md:order-last">
-          <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72">
-            <div className="absolute -inset-2 border border-outline-variant/20"></div>
-
+          <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-2 ring-outline-variant/20 ring-offset-4 ring-offset-background">
             <Image
               src="/assets/hero-photo.jpg"
               alt="Ethan Suttor"
               fill
               sizes="(max-width: 768px) 192px, (max-width: 1024px) 256px, 288px"
-              className="object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-700"
+              className="object-cover object-left grayscale-[30%] hover:grayscale-0 transition-all duration-700"
               priority
             />
           </div>
