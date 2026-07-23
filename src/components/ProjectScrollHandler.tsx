@@ -3,23 +3,27 @@
 import { useEffect } from 'react';
 
 /**
- * Handles scrolling to the correct project on page load
- * when the URL contains a hash (e.g. /projects#fpga-hierarchical-alu).
+ * Cleans up stacked URL hashes (e.g. #slug1#slug2 → #slug2)
+ * that can occur from nested hash-based navigation.
+ * Scroll positioning is handled natively by the browser +
+ * Next.js data-scroll-behavior + CSS scroll-padding-top.
  */
 export function ProjectScrollHandler() {
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (!hash) return;
+    const fullHash = window.location.hash;
+    if (!fullHash) return;
 
-    // Small delay to let the page render before scrolling
-    const timeout = setTimeout(() => {
-      const el = document.getElementById(hash);
+    const parts = fullHash.split('#').filter(Boolean);
+    if (parts.length > 1) {
+      const targetSlug = parts[parts.length - 1];
+      window.history.replaceState(null, '', `${window.location.pathname}#${targetSlug}`);
+
+      // After cleaning the hash, scroll to the correct element
+      const el = document.getElementById(targetSlug);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.scrollIntoView({ block: 'start' });
       }
-    }, 100);
-
-    return () => clearTimeout(timeout);
+    }
   }, []);
 
   return null;

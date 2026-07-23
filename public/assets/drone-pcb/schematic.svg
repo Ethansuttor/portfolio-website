@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#fafafa"/>
+  <!-- Grid -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#grid)"/>
+  <!-- MCU block -->
+  <rect x="300" y="150" width="200" height="140" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="400" y="200" text-anchor="middle" fill="#333" font-family="monospace" font-size="12" font-weight="bold">STM32F405RGT6</text>
+  <text x="400" y="220" text-anchor="middle" fill="#666" font-family="monospace" font-size="9">168MHz Cortex-M4</text>
+  <!-- Pins -->
+  <line x1="300" y1="180" x2="250" y2="180" stroke="#333" stroke-width="1.5"/>
+  <line x1="300" y1="200" x2="250" y2="200" stroke="#333" stroke-width="1.5"/>
+  <line x1="300" y1="220" x2="250" y2="220" stroke="#333" stroke-width="1.5"/>
+  <line x1="300" y1="260" x2="250" y2="260" stroke="#333" stroke-width="1.5"/>
+  <line x1="500" y1="180" x2="550" y2="180" stroke="#333" stroke-width="1.5"/>
+  <line x1="500" y1="200" x2="550" y2="200" stroke="#333" stroke-width="1.5"/>
+  <line x1="500" y1="240" x2="550" y2="240" stroke="#333" stroke-width="1.5"/>
+  <!-- Power section -->
+  <rect x="80" y="80" width="120" height="60" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="140" y="105" text-anchor="middle" fill="#c0392b" font-family="monospace" font-size="9" font-weight="bold">TPS5430</text>
+  <text x="140" y="120" text-anchor="middle" fill="#c0392b" font-family="monospace" font-size="8">Buck Conv.</text>
+  <!-- LDOs -->
+  <rect x="80" y="180" width="100" height="40" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+  <text x="130" y="205" text-anchor="middle" fill="#2980b9" font-family="monospace" font-size="9">AP2112K</text>
+  <rect x="80" y="260" width="100" height="40" fill="none" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="130" y="285" text-anchor="middle" fill="#27ae60" font-family="monospace" font-size="9">TLV733P</text>
+  <!-- IMU -->
+  <rect x="600" y="150" width="120" height="70" fill="none" stroke="#8e44ad" stroke-width="1.5"/>
+  <text x="660" y="180" text-anchor="middle" fill="#8e44ad" font-family="monospace" font-size="10" font-weight="bold">ICM-42605</text>
+  <text x="660" y="200" text-anchor="middle" fill="#8e44ad" font-family="monospace" font-size="8">6-axis IMU</text>
+  <!-- Flash -->
+  <rect x="600" y="280" width="120" height="50" fill="none" stroke="#e67e22" stroke-width="1.5"/>
+  <text x="660" y="305" text-anchor="middle" fill="#e67e22" font-family="monospace" font-size="9" font-weight="bold">W25Q128</text>
+  <text x="660" y="320" text-anchor="middle" fill="#e67e22" font-family="monospace" font-size="8">SPI Flash</text>
+  <!-- Connections -->
+  <line x1="200" y1="110" x2="200" y2="200" stroke="#999" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="180" y1="200" x2="250" y2="200" stroke="#2980b9" stroke-width="1.5"/>
+  <line x1="180" y1="280" x2="250" y2="260" stroke="#27ae60" stroke-width="1.5"/>
+  <line x1="550" y1="180" x2="600" y2="180" stroke="#8e44ad" stroke-width="1.5"/>
+  <line x1="550" y1="200" x2="600" y2="300" stroke="#e67e22" stroke-width="1.5"/>
+  <!-- Label -->
+  <text x="400" y="450" text-anchor="middle" fill="#333" font-family="monospace" font-size="14" font-weight="bold">SCHEMATIC — PLACEHOLDER</text>
+  <text x="400" y="475" text-anchor="middle" fill="#999" font-family="monospace" font-size="11">Replace with actual KiCad schematic export</text>
+</svg>

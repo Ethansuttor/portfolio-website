@@ -33,27 +33,27 @@ export default function ProjectsPage() {
       </nav>
 
       {/* Project list */}
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-8 py-8">
         {allProjects.map((project, idx) => (
           <article
             key={project.slug}
             id={project.slug}
-            className="px-8 md:px-24 py-16 max-w-7xl mx-auto w-full scroll-mt-16"
+            className="px-8 md:px-20 py-10 max-w-7xl mx-auto w-full scroll-mt-16 bg-surface-container-low/30 border border-outline-variant/20 rounded"
           >
             {/* Header */}
-            <header className="mb-12">
+            <header className="mb-6">
               {project.featured && (
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary-container animate-pulse" />
                   <span className="text-[0.6rem] font-bold uppercase tracking-[0.25em] text-on-primary-container">
                     Featured Project {String(project.featuredIndex).padStart(2, "0")}
                   </span>
                 </div>
               )}
-              <span className="text-primary font-sans text-[0.65rem] font-bold uppercase tracking-[0.2em] block mb-3">
+              <span className="text-primary font-sans text-xs font-bold uppercase tracking-[0.2em] block mb-2">
                 {project.tag}
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-on-surface tracking-tight leading-tight mb-8">
+              <h2 className="text-2xl md:text-4xl font-extrabold text-on-surface tracking-tight leading-tight mb-4">
                 {project.title}
               </h2>
 
@@ -62,30 +62,30 @@ export default function ProjectsPage() {
                 {project.techStack.map((chip) => (
                   <span
                     key={chip.label}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-container-high border border-outline-variant/30 text-[0.6rem] font-sans tracking-wide"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-high border border-outline-variant/30 text-xs font-sans tracking-wide"
                   >
-                    <span className="text-primary font-black">{chip.category}</span>
-                    <span className="text-on-surface/80">{chip.label}</span>
+                    <span className="text-primary font-black uppercase text-[0.65rem]">{chip.category}</span>
+                    <span className="text-on-surface/90 font-medium">{chip.label}</span>
                   </span>
                 ))}
               </div>
             </header>
 
             {/* Body: image + detail side by side on desktop */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Left: Image gallery */}
               <div className="lg:col-span-5">
                 <ProjectDetailGallery images={project.images} />
               </div>
 
               {/* Right: Text content */}
-              <div className="lg:col-span-7 flex flex-col gap-10">
+              <div className="lg:col-span-7 flex flex-col gap-6">
                 {/* Overview */}
                 <section>
-                  <span className="block text-[0.6rem] font-bold text-on-surface-variant/50 uppercase tracking-widest mb-3">
+                  <span className="block text-xs font-bold text-primary uppercase tracking-[0.25em] mb-3">
                     Overview
                   </span>
-                  <p className="text-on-surface-variant leading-relaxed text-sm">
+                  <p className="text-on-surface/90 leading-relaxed text-base md:text-lg font-normal">
                     {project.description}
                   </p>
                 </section>
@@ -93,10 +93,10 @@ export default function ProjectsPage() {
                 {/* Objective (for non-featured projects) */}
                 {!project.featured && project.objective && project.objective !== project.description && (
                   <section>
-                    <span className="block text-[0.6rem] font-bold text-on-surface-variant/50 uppercase tracking-widest mb-3">
+                    <span className="block text-xs font-bold text-primary uppercase tracking-[0.25em] mb-3">
                       Objective
                     </span>
-                    <p className="text-on-surface-variant leading-relaxed text-sm">
+                    <p className="text-on-surface/90 leading-relaxed text-base md:text-lg font-normal">
                       {project.objective}
                     </p>
                   </section>
@@ -105,19 +105,19 @@ export default function ProjectsPage() {
                 {/* Technical details */}
                 {project.technicalDetails && project.technicalDetails.length > 0 && (
                   <section>
-                    <span className="block text-[0.6rem] font-bold text-on-surface-variant/50 uppercase tracking-widest mb-3">
+                    <span className="block text-xs font-bold text-primary uppercase tracking-[0.25em] mb-3">
                       Implementation
                     </span>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {project.technicalDetails.map((item) => (
                         <div
                           key={item.label}
-                          className="flex gap-3 items-start p-3 bg-surface-container-high/60 border-l-2 border-outline-variant/20 hover:border-primary/60 transition-colors duration-200"
+                          className="flex flex-col gap-1.5 p-3.5 bg-surface-container-high/60 border-l-2 border-primary/60 hover:bg-surface-container-high/90 transition-colors duration-200"
                         >
-                          <span className="text-[0.6rem] font-black text-primary uppercase tracking-wider whitespace-nowrap min-w-[5rem]">
+                          <span className="text-xs font-black text-primary uppercase tracking-wider">
                             {item.label}
                           </span>
-                          <span className="text-on-surface-variant text-xs leading-relaxed">
+                          <span className="text-on-surface/90 text-xs md:text-sm leading-relaxed">
                             {item.detail}
                           </span>
                         </div>
@@ -129,10 +129,10 @@ export default function ProjectsPage() {
                 {/* Architecture (non-featured) */}
                 {!project.featured && project.architecture && (
                   <section>
-                    <span className="block text-[0.6rem] font-bold text-on-surface-variant/50 uppercase tracking-widest mb-3">
+                    <span className="block text-xs font-bold text-primary uppercase tracking-[0.25em] mb-3">
                       Architecture
                     </span>
-                    <p className="text-on-surface-variant leading-relaxed text-sm">
+                    <p className="text-on-surface/90 leading-relaxed text-base md:text-lg font-normal">
                       {project.architecture}
                     </p>
                   </section>
@@ -140,11 +140,11 @@ export default function ProjectsPage() {
 
                 {/* Iteration notes */}
                 {project.iteration && (
-                  <div className="p-4 bg-primary-container/5 border-l-2 border-primary-container">
-                    <span className="block text-[0.65rem] font-black text-primary uppercase tracking-widest mb-1">
+                  <div className="p-5 bg-primary-container/10 border-l-2 border-primary-container">
+                    <span className="block text-xs font-black text-primary uppercase tracking-widest mb-2">
                       Competition Notes
                     </span>
-                    <p className="text-on-surface-variant text-xs leading-relaxed">
+                    <p className="text-on-surface/90 text-sm md:text-base leading-relaxed">
                       {project.iteration}
                     </p>
                   </div>
@@ -155,7 +155,7 @@ export default function ProjectsPage() {
                   href={project.githubHref}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 border border-outline-variant/50 hover:border-primary text-on-surface-variant hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-[0.7rem] font-bold uppercase tracking-widest w-fit"
+                  className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest w-fit shadow-md"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />

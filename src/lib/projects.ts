@@ -22,9 +22,43 @@ export type Project = {
 
 export const allProjects: Project[] = [
   {
-    slug: "dual-factor-hardware-security",
+    slug: "custom-drone-flight-controller",
     featured: true,
     featuredIndex: 1,
+    title: "Custom Drone Flight Controller PCB",
+    tag: "Personal Project — PCB Design",
+    subtitle: "Personal Project — PCB Design",
+    techStack: [
+      { label: "STM32F405", category: "MCU" },
+      { label: "KiCad", category: "EDA" },
+      { label: "Betaflight", category: "FIRMWARE" },
+      { label: "Bosch BMI270", category: "IMU" },
+      { label: "TPS5450", category: "POWER" },
+    ],
+    summary:
+      "Custom-designed STM32-based flight controller PCB for FPV drones — dual-LDO power architecture (AP2112K + TLV733P), onboard TPS5450 buck converter from raw LiPo, Bosch BMI270 IMU, and custom Betaflight target (ETHANF405). Designed with staged power isolation for self-reflow assembly.",
+    description:
+      "Designed a custom STM32F405-based flight controller PCB for FPV drones running Betaflight firmware with a custom target configuration (ETHANF405). Engineered a dual-LDO power architecture (AP2112K-3.3 for logic/VDDIO and TLV733P-3.3 for IMU VDD) to strictly isolate noisy logic rails from the sensitive IMU power rail. When supply chain constraints rendered the original 426xx IMU family unavailable, this dedicated rail isolation allowed a seamless migration to the Bosch BMI270 gyro with only footprint and decoupling changes and zero power redesign. An onboard TPS5450 buck converter steps down raw 4S LiPo voltage to 5V/5A, compensating for the lack of a BEC on the mating Flycolor Raptor BLS-04 4-in-1 ESC. Features 16MB SPI NOR Flash (BY25Q128ES) for blackbox logging, FlySky FS-iA6B i-BUS receiver interface, and staged-jumper power isolation for safe bench bring-up.",
+    technicalDetails: [
+      { label: "MCU", detail: "STM32F405RGT6 (168MHz Cortex-M4 with FPU), running custom Betaflight target ETHANF405 with motor 4 remapped to PB5 (TIM3_CH2) to prevent DMA1 Stream 3 collisions" },
+      { label: "Power Tree", detail: "TPS5450DDAR buck converter (VBAT to 5V/5A) with Panasonic POSCAP 220µF ESR-matched output cap; dual-LDO architecture (AP2112K for logic/VDDIO, TLV733P for dedicated quiet IMU VDD)" },
+      { label: "IMU", detail: "Bosch BMI270 6-axis MEMS gyro/accelerometer on isolated 3.3V sensor rail, mounted dead-center for optimal flight dynamics" },
+      { label: "Blackbox", detail: "BOYAMICRO BY25Q128ES 16MB SPI NOR Flash for high-rate flight telemetry and PID tuning log capture" },
+      { label: "Bring-Up", detail: "Normally-open solder jumpers split the power tree across 4 stages for current-limited bench testing; test points on all rails and scope ground loops" },
+      { label: "PCB & Fab", detail: "~60×60mm 4-layer stackup (ENIG finish for LGA gyro) with single-sided SMD layout for hotplate reflow; mated to Flycolor Raptor BLS-04 ESC via 10-pin JST SH1.0 harness" },
+    ],
+    images: [
+      { src: "/assets/3D-angled.png", alt: "Custom Drone Flight Controller PCB 3D Angled View", caption: "3D Board Render" },
+      { src: "/assets/STM32.png", alt: "STM32 MCU Schematic & Signal Routing", caption: "MCU & Core Logic" },
+      { src: "/assets/3d-viewer-PDB.png", alt: "Power Architecture & TPS5450 Buck Converter", caption: "Power Tree & Buck Converter" },
+      { src: "/assets/PCB-Back.png", alt: "Flight Controller PCB Bottom Layer", caption: "PCB Bottom Layer" },
+    ],
+    githubHref: "https://github.com/Ethansuttor/drone_PCB",
+  },
+  {
+    slug: "dual-factor-hardware-security",
+    featured: true,
+    featuredIndex: 2,
     title: "Dual-Factor Hardware Security System",
     tag: "Academic Project — Microcontrollers",
     subtitle: "Academic Project — Microcontrollers",
@@ -54,7 +88,7 @@ export const allProjects: Project[] = [
   {
     slug: "fpga-hierarchical-alu",
     featured: true,
-    featuredIndex: 2,
+    featuredIndex: 3,
     title: "FPGA Hierarchical ALU & 7-Segment Display Controller",
     tag: "Academic Capstone — Digital Design",
     subtitle: "Academic Capstone — Digital Design",

@@ -9,13 +9,13 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative w-full aspect-[4/3] border border-outline-variant/20 hover:border-primary-container/40 transition-colors duration-300 overflow-hidden bg-background">
+      <div className="relative w-full aspect-[4/3] border border-outline-variant/20 hover:border-primary-container/40 transition-colors duration-300 overflow-hidden bg-background p-3 flex items-center justify-center">
         <Image
           src={images[active].src}
           alt={images[active].alt}
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-contain transition-opacity duration-300"
+          className="object-contain p-2 transition-opacity duration-300"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none" />
         <span className="absolute bottom-3 left-3 text-[0.6rem] font-sans font-bold uppercase tracking-widest text-primary bg-background/80 px-2 py-1">
@@ -24,7 +24,15 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
       </div>
 
       {images.length > 1 && (
-        <div className={`grid gap-2 ${images.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+        <div
+          className={`grid gap-2 ${
+            images.length === 2
+              ? "grid-cols-2"
+              : images.length === 4
+              ? "grid-cols-4"
+              : "grid-cols-3"
+          }`}
+        >
           {images.map((img, i) => (
             <button
               key={i}
