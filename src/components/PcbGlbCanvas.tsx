@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, useMemo, useLayoutEffect, useEffect, useRef, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useProgress, Html, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -60,6 +60,40 @@ function GlbMesh({ url }: { url: string }) {
       <primitive object={scene} />
     </group>
   );
+}
+
+// The camera's initial position/fov was tuned for a wide box. On a narrow or
+// near-square container (small browser windows, phones) that same distance
+// clips the edges of the model. Refit the camera distance to the container's
+// actual aspect ratio whenever it changes, preserving the original viewing angle.
+function FitCameraToAspect({
+  halfSize = 1.4,
+  minDist = 0.8,
+  maxDist = 12,
+}: {
+  halfSize?: number;
+  minDist?: number;
+  maxDist?: number;
+}) {
+  const { camera, size } = useThree();
+
+  useEffect(() => {
+    if (size.width === 0 || size.height === 0) return;
+    const persp = camera as THREE.PerspectiveCamera;
+    const aspect = size.width / size.height;
+    const vFov = (persp.fov * Math.PI) / 180;
+    const distForHeight = halfSize / Math.tan(vFov / 2);
+    const distForWidth = halfSize / (Math.tan(vFov / 2) * aspect);
+    const dist = THREE.MathUtils.clamp(Math.max(distForHeight, distForWidth), minDist, maxDist);
+
+    const dir = camera.position.lengthSq() > 0
+      ? camera.position.clone().normalize()
+      : new THREE.Vector3(0, 0.35, 0.94);
+    camera.position.copy(dir.multiplyScalar(dist));
+    camera.updateProjectionMatrix();
+  }, [size.width, size.height, camera, halfSize, minDist, maxDist]);
+
+  return null;
 }
 
 useGLTF.preload("/assets/FC_PC_1.glb");
@@ -135,6 +169,8 @@ export function PcbGlbCanvas({ url = "/assets/FC_PC_1.glb" }: { url?: string }) 
           camera={{ position: [0, 1.2, 3.2], fov: 45 }}
           className="w-full h-full cursor-grab active:cursor-grabbing"
         >
+          <FitCameraToAspect />
+
           {/* Fast Studio Lighting */}
           <ambientLight intensity={1.8} />
           <directionalLight position={[10, 15, 10]} intensity={2.2} />
