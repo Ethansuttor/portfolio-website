@@ -38,7 +38,8 @@ Note the fallback sender's limitation if you ever revert to it: **it delivers
 only to the address that owns the API key**, rejecting every other recipient
 with a `403 validation_error`. A verified domain removes that restriction.
 
-Mail is addressed to `CONTACT_TO_EMAIL`, falling back to `CONTACT_INBOX` in
+Mail is addressed to `CONTACT_TO_EMAIL` — a comma-separated list, so it can go
+to several inboxes at once — falling back to `CONTACT_INBOX` in
 `src/lib/site.ts`. `replyTo` is set to whatever address the visitor typed, so
 replying in your mail client reaches them rather than yourself.
 

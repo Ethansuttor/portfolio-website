@@ -23,11 +23,19 @@ const MAX_BODY_BYTES = 16 * 1024;
 const FROM_ADDRESS = process.env.CONTACT_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
 
 /**
- * While using the onboarding sender, Resend only delivers to the address that
- * owns the API key — anything else comes back 403. Overridable by env so the
- * inbox can change without a code edit and redeploy.
+ * Recipients, as a comma-separated list so mail can go to more than one inbox
+ * (e.g. "a@gmail.com, b@louisville.edu"). Env-overridable so the inbox can
+ * change without a code edit and redeploy.
+ *
+ * Caveat: while on the onboarding sender above, Resend delivers only to the
+ * address that owns the API key and 403s on anything else — including a list
+ * that merely contains another address. Sending anywhere else needs
+ * CONTACT_FROM_EMAIL pointed at a verified domain.
  */
-const TO_ADDRESS = process.env.CONTACT_TO_EMAIL || CONTACT_INBOX;
+const TO_ADDRESSES = (process.env.CONTACT_TO_EMAIL || CONTACT_INBOX)
+  .split(",")
+  .map((address) => address.trim())
+  .filter(Boolean);
 
 const escapeHTML = (str: string) =>
   str.replace(/[&<>'"]/g, (tag) => ({
@@ -124,7 +132,7 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
       from: FROM_ADDRESS,
-      to: TO_ADDRESS,
+      to: TO_ADDRESSES,
       // The whole point of collecting an address: hitting reply reaches them.
       replyTo: email,
       subject: cleanSubject ? `[Portfolio] ${cleanSubject}` : `[Portfolio] Message from ${name}`,
