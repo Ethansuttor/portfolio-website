@@ -92,8 +92,17 @@ export async function POST(request: NextRequest) {
 
   // Honeypot. Report success rather than an error so a bot logs a win and moves
   // on instead of retrying with a different payload shape.
+  //
+  // Logged because the response is deliberately indistinguishable from a real
+  // send: when browser autofill once filled this field, genuine submissions
+  // vanished with no trace anywhere. A burst of these against real-looking
+  // names means the trap is catching humans, not bots.
   const honeypot = body[HONEYPOT_FIELD];
   if (typeof honeypot === "string" && honeypot.trim()) {
+    console.warn(
+      `Contact form: honeypot tripped, message discarded. field=${HONEYPOT_FIELD} ` +
+        `nameGiven=${typeof body.name === "string" && body.name.trim() ? "yes" : "no"}`,
+    );
     return NextResponse.json({ success: true });
   }
 

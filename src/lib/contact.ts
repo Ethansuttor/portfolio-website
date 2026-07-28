@@ -21,5 +21,10 @@ export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * Hidden field name. Real visitors never see it, so anything filled in here
  * came from a bot walking the DOM.
+ *
+ * Deliberately not a word autofill recognises. This was previously "company"
+ * with a matching <label>, which Chrome filled from the user's saved
+ * organisation — it ignores autocomplete="off" for address-type fields — so
+ * genuine submissions were silently classified as bots and dropped.
  */
-export const HONEYPOT_FIELD = "company";
+export const HONEYPOT_FIELD = "contact_ref";

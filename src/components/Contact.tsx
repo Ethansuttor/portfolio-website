@@ -259,15 +259,21 @@ export function Contact() {
             </Field>
 
             {/* Honeypot. Hidden from sight, from assistive tech, and from the tab
-                order, so only a bot filling every field will ever touch it. */}
+                order, so only a bot filling every field should touch it.
+                No <label> and a non-semantic name, because browser autofill and
+                password managers key off both — an earlier "Company" version got
+                filled by Chrome and silently ate real submissions. The
+                data-*-ignore hints opt out of 1Password and LastPass too. */}
             <div aria-hidden="true" className="absolute w-px h-px -m-px overflow-hidden opacity-0">
-              <label htmlFor="contact-company">Company</label>
               <input
-                id="contact-company"
+                id="contact-ref"
                 name={HONEYPOT_FIELD}
                 type="text"
                 tabIndex={-1}
                 autoComplete="off"
+                data-1p-ignore="true"
+                data-lpignore="true"
+                aria-hidden="true"
                 value={honeypot}
                 onChange={(e) => setHoneypot(e.target.value)}
               />
