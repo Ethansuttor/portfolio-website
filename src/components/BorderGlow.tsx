@@ -15,6 +15,7 @@ function parseHSL(hslStr: string): HSL {
   return { h: parseFloat(match[1]), s: parseFloat(match[2]), l: parseFloat(match[3]) };
 }
 
+/** Builds the --glow-color* ramp consumed by the box-shadow rings on .edge-light::before. */
 function buildGlowVars(glowColor: string, intensity: number): Record<string, string> {
   const { h, s, l } = parseHSL(glowColor);
   const base = `${h}deg ${s}% ${l}%`;
@@ -31,6 +32,7 @@ const GRADIENT_POSITIONS = ['80% 55%', '69% 34%', '8% 6%', '41% 38%', '86% 85%',
 const GRADIENT_KEYS = ['--gradient-one', '--gradient-two', '--gradient-three', '--gradient-four', '--gradient-five', '--gradient-six', '--gradient-seven'];
 const COLOR_MAP = [0, 1, 2, 0, 1, 2, 1];
 
+/** Distributes the supplied palette across the seven mesh-gradient stops. */
 function buildGradientVars(colors: string[]): Record<string, string> {
   const vars: Record<string, string> = {};
   for (let i = 0; i < 7; i++) {
@@ -67,17 +69,29 @@ function animateValue({ start = 0, end = 100, duration = 1000, delay = 0, ease =
 }
 
 export interface BorderGlowProps {
+  /** Content rendered inside the card. */
   children?: ReactNode;
+  /** Additional CSS classes for the outer wrapper. */
   className?: string;
+  /** How close the pointer must be to the edge for the glow to appear (0-100). */
   edgeSensitivity?: number;
+  /** HSL values for the glow color, as "H S L" (e.g. "40 80 80"). */
   glowColor?: string;
+  /** Background color of the card. */
   backgroundColor?: string;
+  /** Corner radius of the card in pixels. */
   borderRadius?: number;
+  /** How far the outer glow extends beyond the card in pixels. */
   glowRadius?: number;
+  /** Multiplier for glow opacity (0.1-3.0). */
   glowIntensity?: number;
+  /** Width of the directional cone mask as a percentage (5-45). */
   coneSpread?: number;
+  /** Play an intro sweep animation on mount. */
   animated?: boolean;
+  /** Array of 3 hex colors for the mesh gradient border. */
   colors?: string[];
+  /** Opacity multiplier for the inner mesh-gradient fill. */
   fillOpacity?: number;
 }
 
@@ -102,6 +116,7 @@ export function BorderGlow({
     return [width / 2, height / 2];
   }, []);
 
+  // 0 at the card's center, approaching 1 at its edges. Drives glow opacity.
   const getEdgeProximity = useCallback((el: HTMLElement, x: number, y: number): number => {
     const [cx, cy] = getCenterOfElement(el);
     const dx = x - cx;
@@ -113,6 +128,7 @@ export function BorderGlow({
     return Math.min(Math.max(1 / Math.min(kx, ky), 0), 1);
   }, [getCenterOfElement]);
 
+  // Bearing of the cursor from center, in degrees, 0 = up. Rotates the conic masks.
   const getCursorAngle = useCallback((el: HTMLElement, x: number, y: number): number => {
     const [cx, cy] = getCenterOfElement(el);
     const dx = x - cx;
@@ -160,9 +176,6 @@ export function BorderGlow({
     });
   }, [animated]);
 
-  const glowVars = buildGlowVars(glowColor, glowIntensity);
-  const gradientVars = buildGradientVars(colors);
-
   const styleObj = {
     '--card-bg': backgroundColor,
     '--edge-sensitivity': edgeSensitivity,
@@ -170,8 +183,8 @@ export function BorderGlow({
     '--glow-padding': `${glowRadius}px`,
     '--cone-spread': coneSpread,
     '--fill-opacity': fillOpacity,
-    ...glowVars,
-    ...gradientVars,
+    ...buildGlowVars(glowColor, glowIntensity),
+    ...buildGradientVars(colors),
   } as CSSProperties;
 
   return (

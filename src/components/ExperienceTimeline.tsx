@@ -1,9 +1,3 @@
-'use client';
-
-/* ────────────────────────────────────────────────────
-   DATA
-   ──────────────────────────────────────────────────── */
-
 type Contribution = { label: string; detail: string };
 
 type TimelineEntry = {
@@ -75,21 +69,11 @@ const entries: TimelineEntry[] = [
   },
 ];
 
-/* ────────────────────────────────────────────────────
-   TYPE BADGE
-   ──────────────────────────────────────────────────── */
-
 const typeStyles: Record<TimelineEntry["type"], string> = {
   INTERNSHIP: "text-primary bg-primary-container/10 border-primary-container/30",
   PROFESSIONAL: "text-tertiary bg-tertiary/5 border-tertiary/20",
   LEADERSHIP: "text-on-surface-variant bg-surface-container-highest border-outline-variant/30",
 };
-
-
-
-/* ────────────────────────────────────────────────────
-   TIMELINE ENTRY
-   ──────────────────────────────────────────────────── */
 
 function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
   return (
@@ -130,50 +114,40 @@ function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
         <h3 className="text-xl font-bold text-on-surface tracking-tight mb-0.5">{entry.role}</h3>
         <p className="text-sm text-on-surface-variant/70 uppercase tracking-wider mb-5">{entry.company}{entry.location ? ` — ${entry.location}` : ""}</p>
 
-        {/* Description + optional image */}
-        <div className="flex flex-col md:flex-row gap-6 items-start mb-5">
-          <div className="flex-1">
-            <p className="text-on-surface-variant text-sm leading-relaxed mb-5">{entry.description}</p>
+        <p className="text-on-surface-variant text-sm leading-relaxed mb-5">{entry.description}</p>
 
-            {/* Contributions */}
-            {entry.contributions && (
-              <div className="space-y-2 mb-5">
-                {entry.contributions.map((c) => (
-                  <div
-                    key={c.label}
-                    className="flex gap-3 items-start p-3 bg-surface-container-high/50 border-l-2 border-outline-variant/20 hover:border-primary/60 transition-colors duration-200"
-                  >
-                    <span className="text-[0.6rem] font-black text-primary uppercase tracking-wider whitespace-nowrap min-w-[5.5rem]">
-                      {c.label}
-                    </span>
-                    <span className="text-on-surface-variant text-xs leading-relaxed">{c.detail}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {entry.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2.5 py-1 bg-background border border-outline-variant/25 text-[0.6rem] font-bold uppercase tracking-wider text-on-surface/60 cursor-default"
-                >
-                  {tag}
+        {/* Contributions */}
+        {entry.contributions && (
+          <div className="space-y-2 mb-5">
+            {entry.contributions.map((c) => (
+              <div
+                key={c.label}
+                className="flex gap-3 items-start p-3 bg-surface-container-high/50 border-l-2 border-outline-variant/20 hover:border-primary/60 transition-colors duration-200"
+              >
+                <span className="text-[0.6rem] font-black text-primary uppercase tracking-wider whitespace-nowrap min-w-[5.5rem]">
+                  {c.label}
                 </span>
-              ))}
-            </div>
-
+                <span className="text-on-surface-variant text-xs leading-relaxed">{c.detail}</span>
+              </div>
+            ))}
           </div>
+        )}
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2">
+          {entry.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-2.5 py-1 bg-background border border-outline-variant/25 text-[0.6rem] font-bold uppercase tracking-wider text-on-surface/60 cursor-default"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     </div>
   );
 }
-
-/* ────────────────────────────────────────────────────
-   EXPORT
-   ──────────────────────────────────────────────────── */
 
 export function ExperienceTimeline() {
   return (

@@ -1,8 +1,7 @@
 import Image from "next/image";
+import { GITHUB_URL, LINKEDIN_URL, RESUME_HREF } from "@/lib/site";
 
 export function Hero() {
-  const resumeLink = "/Suttor,%20Ethan,%20co-op2.pdf";
-
   return (
     <section className="relative min-h-[85vh] flex flex-col justify-center px-8 md:px-24 technical-grid overflow-hidden border-b border-outline-variant/20">
       <div className="max-w-6xl z-10 pt-16 flex flex-col md:flex-row items-center gap-12 md:gap-16 my-auto">
@@ -26,7 +25,7 @@ export function Hero() {
 
           <div className="hero-buttons flex flex-wrap gap-4 sm:gap-6">
             <a
-              href={resumeLink}
+              href={RESUME_HREF}
               download
               className="cta-primary bg-primary-container text-on-primary-container px-6 sm:px-8 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2"
             >
@@ -41,7 +40,7 @@ export function Hero() {
               View Projects
             </a>
             <a
-              href="https://github.com/Ethansuttor"
+              href={GITHUB_URL}
               target="_blank"
               rel="noreferrer"
               className="cta-secondary border border-outline-variant text-on-surface px-4 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center transition-all duration-300"
@@ -52,7 +51,7 @@ export function Hero() {
               </svg>
             </a>
             <a
-              href="https://linkedin.com/in/ethan-suttor"
+              href={LINKEDIN_URL}
               target="_blank"
               rel="noreferrer"
               className="cta-secondary border border-outline-variant text-on-surface px-4 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center transition-all duration-300"
@@ -66,7 +65,7 @@ export function Hero() {
         </div>
 
         {/* Headshot */}
-        <div className="hero-headshot relative flex-shrink-0 order-first md:order-last my-auto">
+        <div className="relative flex-shrink-0 order-first md:order-last my-auto">
           <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-2 ring-outline-variant/20 ring-offset-4 ring-offset-background">
             <Image
               src="/assets/hero-photo.jpg"

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useMemo, useLayoutEffect, useEffect, useRef, useState } from 'react';
+import { Suspense, useMemo, useEffect, useRef, useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useProgress, Html, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -41,23 +41,25 @@ function GlbMesh({ url }: { url: string }) {
     };
   }, [scene]);
 
-  // Freeze matrix auto-updates on static sub-meshes (boosts FPS by skipping matrix calculations for 1,000+ nodes)
-  useLayoutEffect(() => {
-    if (scene) {
-      scene.matrixAutoUpdate = false;
-      scene.traverse((child: any) => {
-        child.matrixAutoUpdate = false;
-        child.castShadow = false;
-        child.receiveShadow = false;
-        child.updateMatrix();
-      });
-      scene.updateMatrixWorld(true);
-    }
+  // Freeze matrix auto-updates on static sub-meshes (boosts FPS by skipping
+  // matrix calculations for 1,000+ nodes). useGLTF caches and shares the scene
+  // graph, so we mutate a clone rather than the hook's cached object.
+  const preparedScene = useMemo(() => {
+    const clone = scene.clone(true);
+    clone.matrixAutoUpdate = false;
+    clone.traverse((child: THREE.Object3D) => {
+      child.matrixAutoUpdate = false;
+      child.castShadow = false;
+      child.receiveShadow = false;
+      child.updateMatrix();
+    });
+    clone.updateMatrixWorld(true);
+    return clone;
   }, [scene]);
 
   return (
     <group position={position} scale={scale}>
-      <primitive object={scene} />
+      <primitive object={preparedScene} />
     </group>
   );
 }
@@ -96,9 +98,13 @@ function FitCameraToAspect({
   return null;
 }
 
-useGLTF.preload("/assets/FC_PC_1.glb");
+/** The only board model on the site; kept here so the preload and the component
+ *  default can't point at different files. */
+const DEFAULT_MODEL_URL = "/assets/FC_PC_1.glb";
 
-export function PcbGlbCanvas({ url = "/assets/FC_PC_1.glb" }: { url?: string }) {
+useGLTF.preload(DEFAULT_MODEL_URL);
+
+export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(true);
   const [isSpinning, setIsSpinning] = useState(true);
@@ -185,8 +191,6 @@ export function PcbGlbCanvas({ url = "/assets/FC_PC_1.glb" }: { url?: string }) 
           <OrbitControls
             makeDefault
             enablePan={false}
-            enableZoom={true}
-            enableRotate={true}
             autoRotate={isSpinning}
             autoRotateSpeed={1.0}
             minDistance={0.8}

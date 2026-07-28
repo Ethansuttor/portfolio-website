@@ -5,10 +5,11 @@ import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { CaseStudies } from "@/components/CaseStudies";
 import { AboutMe } from "@/components/AboutMe";
 import { Contact } from "@/components/Contact";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_URL } from "@/lib/site";
 
 const footerLinks = [
-  { label: "GitHub", href: "https://github.com/Ethansuttor" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/ethan-suttor" },
+  { label: "GitHub", href: GITHUB_URL },
+  { label: "LinkedIn", href: LINKEDIN_URL },
 ];
 
 export default function Home() {
@@ -21,17 +22,14 @@ export default function Home() {
             "@context": "https://schema.org",
             "@type": "Person",
             name: "Ethan Suttor",
-            url: "https://ethansuttor.com",
-            email: "ethan.suttor@louisville.edu",
+            url: SITE_URL,
+            email: EMAIL,
             jobTitle: "Electrical Engineering Student",
             affiliation: {
               "@type": "EducationalOrganization",
               name: "University of Louisville",
             },
-            sameAs: [
-              "https://linkedin.com/in/ethan-suttor",
-              "https://github.com/Ethansuttor",
-            ],
+            sameAs: [LINKEDIN_URL, GITHUB_URL],
             description: "Electrical Engineering student specializing in FPGA architecture, embedded systems, and hardware/software co-design.",
           }),
         }}

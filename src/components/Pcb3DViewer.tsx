@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React from 'react';
 
 const DynamicPcbGlbCanvas = dynamic(() => import('@/components/PcbGlbCanvas'), {
   ssr: false,
@@ -13,6 +12,8 @@ const DynamicPcbGlbCanvas = dynamic(() => import('@/components/PcbGlbCanvas'), {
   ),
 });
 
-export function Pcb3DViewer({ url = "/assets/FC_PC_1.glb" }: { url?: string }) {
+/** Client-side wrapper so the r3f canvas (and three.js) stays out of the server
+ *  bundle. Leave `url` unset to use PcbGlbCanvas's default model. */
+export function Pcb3DViewer({ url }: { url?: string }) {
   return <DynamicPcbGlbCanvas url={url} />;
 }

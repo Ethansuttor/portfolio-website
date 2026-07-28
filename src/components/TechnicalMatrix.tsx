@@ -1,5 +1,3 @@
-import { ScrollReveal } from "./ScrollReveal";
-
 const skillCategories = [
   {
     icon: "memory",
@@ -38,16 +36,16 @@ const skillCategories = [
 export function TechnicalMatrix() {
   return (
     <section className="section-divider py-24 px-8 md:px-24 bg-surface-container-low border-b border-outline-variant/10" id="skills">
-      <ScrollReveal className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
         <div>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-on-surface">Skills</h2>
           <p className="text-xs uppercase tracking-[0.3em] font-bold text-primary">University of Louisville</p>
         </div>
-      </ScrollReveal>
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-1 bg-outline-variant/10 border border-outline-variant/10">
-        {skillCategories.map((category, idx) => (
-          <ScrollReveal key={category.title} delay={idx * 100} direction="scale">
+        {skillCategories.map((category) => (
+          <div key={category.title}>
             <div className="bg-surface-container-high p-10 group hover:bg-surface-container-highest transition-all duration-300 h-full card-lift">
               <span 
                 className="material-symbols-outlined text-primary text-4xl mb-6 block transition-transform duration-300 group-hover:scale-110" 
@@ -64,7 +62,7 @@ export function TechnicalMatrix() {
                 ))}
               </div>
             </div>
-          </ScrollReveal>
+          </div>
         ))}
       </div>
     </section>

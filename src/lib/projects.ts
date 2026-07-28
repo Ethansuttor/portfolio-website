@@ -8,14 +8,14 @@ export type Project = {
   featuredIndex?: number;
   title: string;
   tag: string;
-  subtitle?: string;
   techStack: TechChip[];
   summary: string;
   description: string;
   technicalDetails?: TechDetail[];
+  /** Long-form prose sections. Each renders only when present. */
   objective?: string;
   architecture?: string;
-  iteration?: string | null;
+  iteration?: string;
   images: ProjectImage[];
   githubHref: string;
 };
@@ -27,7 +27,6 @@ export const allProjects: Project[] = [
     featuredIndex: 1,
     title: "Custom Drone Flight Controller PCB",
     tag: "Personal Project — PCB Design",
-    subtitle: "Personal Project — PCB Design",
     techStack: [
       { label: "STM32F405", category: "MCU" },
       { label: "KiCad", category: "EDA" },
@@ -61,7 +60,6 @@ export const allProjects: Project[] = [
     featuredIndex: 2,
     title: "Dual-Factor Hardware Security System",
     tag: "Academic Project — Microcontrollers",
-    subtitle: "Academic Project — Microcontrollers",
     techStack: [
       { label: "ATmega328PB", category: "MCU" },
       { label: "Bare-Metal C", category: "LANGUAGE" },
@@ -91,7 +89,6 @@ export const allProjects: Project[] = [
     featuredIndex: 3,
     title: "FPGA Hierarchical ALU & 7-Segment Display Controller",
     tag: "Academic Capstone — Digital Design",
-    subtitle: "Academic Capstone — Digital Design",
     techStack: [
       { label: "Artix-7 Basys3", category: "BOARD" },
       { label: "VHDL", category: "LANGUAGE" },
@@ -132,11 +129,8 @@ export const allProjects: Project[] = [
       "Full CMOS cell library designed in Tanner EDA targeting a 250nm process — from manual inverter layout through a 2-bit parallel adder placed in a pad frame, verified with DRC/LVS.",
     description:
       "Designed and verified a complete CMOS cell library from scratch in Tanner EDA, targeting a 250nm process (Generic_250nm_Devices, W/L = 1.5μm/250nm), progressing from individual transistor layouts up to a 2-bit parallel adder placed within a full pad frame.",
-    objective:
-      "Designed and verified a complete CMOS cell library from scratch in Tanner EDA, targeting a 250nm process (Generic_250nm_Devices, W/L = 1.5μm/250nm), progressing from individual transistor layouts up to a 2-bit parallel adder placed within a full pad frame.",
     architecture:
       "The CMOS inverter cell was laid out manually at 21.3 × 12.5 μm, confirmed with DRC, then re-generated via Schematic Driven Layout (SDL) from a T-Spice netlist export to cross-validate both flows. DC sweep produced a VTC with a switching threshold near 1.7V — below the ideal 2.5V midpoint due to the NMOS electron mobility advantage over the matched-width PMOS. Transient simulation at 50 MHz (20ns period, 1ns rise/fall) confirmed clean inversion. Subsequent labs added NAND/NOR, transmission gate, and D flip-flop cells, all reused as subcomponents in the final design: a 2-bit parallel adder (2 FA, 8 DFF, 3 TG, 1 inverter) placed within a pad frame, with a WRITE-controlled transmission gate output buffer and synchronous CK/_CK control interface.",
-    iteration: null,
     images: [
       { src: "/assets/tanner_ledit_inverter.png", alt: "CMOS Inverter Physical Layout in Tanner L-Edit", caption: "Inverter Physical Layout" },
     ],
@@ -156,8 +150,6 @@ export const allProjects: Project[] = [
     summary:
       "1st place — C-based firmware for an autonomous mobile robot using Braitenberg light-following, PID wall-following, and QR-guided cube collection on a 4×6 ft competition arena.",
     description:
-      "Wrote the C-based control firmware for an autonomous mobile robot on a Wallaby controller (kipr/wombat.h) with touch sensors, IR reflectance, CdS photoresistors, an E.T. distance sensor, and a USB camera.",
-    objective:
       "Wrote the C-based control firmware for an autonomous mobile robot on a Wallaby controller (kipr/wombat.h) with touch sensors, IR reflectance, CdS photoresistors, an E.T. distance sensor, and a USB camera.",
     architecture:
       "Labs built up through reactive, Braitenberg, and closed-loop control paradigms. Lab 3 fused touch-sensor obstacle avoidance with IR-based line following into a single behavior-priority loop. Lab 4 implemented a Braitenberg light-follower: raw CdS readings (100–4000 range) normalized to 0–100% motor power, with a meta-sensing counter that detected repetitive bump cycles within a fixed time window and injected a random escape maneuver to break the loop. Lab 5 added a PID wall-following controller using the E.T./IR sensor, with data logged to arrays and plotted in MATLAB to compare P-gain values.",

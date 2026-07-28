@@ -2,18 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { allProjects, type Project } from "@/lib/projects";
 import { BorderGlow } from "@/components/BorderGlow";
+import { projectGlow } from "@/lib/glowTheme";
 
 function HeroProjectCard({ project }: { project: Project }) {
   return (
     <BorderGlow
       className="mb-6"
-      glowColor="355 85 60"
+      {...projectGlow}
       backgroundColor="#161313"
-      borderRadius={8}
       glowRadius={32}
-      glowIntensity={1.2}
-      edgeSensitivity={35}
-      colors={["#ff4d4d", "#e60000", "#990000"]}
     >
       <Link
         href={`/projects#${project.slug}`}
@@ -99,13 +96,9 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <BorderGlow
       className="h-full"
-      glowColor="355 85 60"
+      {...projectGlow}
       backgroundColor="#161313"
-      borderRadius={8}
       glowRadius={25}
-      glowIntensity={1.0}
-      edgeSensitivity={35}
-      colors={["#ff4d4d", "#e60000", "#990000"]}
     >
       <Link
         href={`/projects#${project.slug}`}

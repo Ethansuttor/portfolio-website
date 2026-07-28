@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from "react";
+import { RESUME_HREF } from "@/lib/site";
 
 const navItems = [
   { label: "Projects", href: "#projects" },
@@ -10,7 +11,6 @@ const navItems = [
 ];
 
 export function Header() {
-  const resumeLink = "/ethan-suttor-resume.pdf";
   const [activeSection, setActiveSection] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -37,8 +37,14 @@ export function Header() {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Take the initial measurement in a rAF rather than calling handleScroll()
+    // straight from the effect body. A synchronous setState there triggers a
+    // cascading re-render; rAF still runs before paint, so there's no flash.
+    const raf = requestAnimationFrame(handleScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [handleScroll]);
 
   // Lock body scroll when mobile menu is open
@@ -87,7 +93,7 @@ export function Header() {
         
         {/* Desktop CTA */}
         <a 
-          href={resumeLink}
+          href={RESUME_HREF}
           download
           className="hidden md:flex cta-primary bg-primary-container text-on-primary-container px-6 py-2 font-sans uppercase tracking-widest text-[0.75rem] items-center justify-center font-bold"
         >
@@ -132,7 +138,7 @@ export function Header() {
         
         <div className="mt-auto mb-8">
           <a 
-            href={resumeLink}
+            href={RESUME_HREF}
             download
             className="cta-primary block w-full bg-primary-container text-on-primary-container px-6 py-4 font-sans uppercase tracking-widest text-[0.75rem] text-center font-bold"
           >
