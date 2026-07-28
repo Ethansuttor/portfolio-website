@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -11,26 +12,26 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ethansuttor.com"),
+  metadataBase: new URL(SITE_URL),
   title: "Ethan Suttor | Electrical Engineering Portfolio",
   description: "Ethan Suttor — Electrical Engineering student at the University of Louisville specializing in FPGA architecture, embedded systems, and hardware/software co-design.",
   alternates: { canonical: "/" },
   keywords: ["Ethan Suttor", "Electrical Engineering", "FPGA", "Embedded Systems", "University of Louisville", "Hardware Software Co-Design"],
   authors: [{ name: "Ethan Suttor", url: "https://ethansuttor.com" }],
   creator: "Ethan Suttor",
+  // og:image / twitter:image come from the opengraph-image.tsx file convention,
+  // per route — setting `images` here would override the per-project cards.
   openGraph: {
     type: "website",
-    url: "https://ethansuttor.com",
+    url: SITE_URL,
     title: "Ethan Suttor | Electrical Engineering Portfolio",
     description: "Electrical Engineering student at U of L. FPGA, embedded systems, hardware/software co-design.",
     siteName: "Ethan Suttor",
-    images: [{ url: "/assets/hero-photo.jpg", width: 1200, height: 630, alt: "Ethan Suttor" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ethan Suttor | Electrical Engineering Portfolio",
     description: "Electrical Engineering student at U of L. FPGA, embedded systems, hardware/software co-design.",
-    images: ["/assets/hero-photo.jpg"],
   },
   robots: { index: true, follow: true },
 };
