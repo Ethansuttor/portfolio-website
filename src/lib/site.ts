@@ -6,6 +6,7 @@ export const SITE_URL = "https://ethansuttor.com";
 
 export const GITHUB_URL = "https://github.com/Ethansuttor";
 export const LINKEDIN_URL = "https://linkedin.com/in/ethan-suttor";
+export const INSTAGRAM_URL = "https://instagram.com/ethansuttor";
 
 /** Shown on the site and in structured data. */
 export const EMAIL = "ethan.suttor@louisville.edu";

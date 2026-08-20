@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { INSTAGRAM_URL } from "./src/lib/site";
 
 /**
  * Content-Security-Policy.
@@ -67,6 +68,13 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
+  },
+  // Vanity links. Served ahead of the filesystem, so they cost no page render.
+  // 307 rather than 308 on purpose: a permanent redirect is cached by the
+  // browser forever, which would strand anyone who followed it if a handle
+  // ever changes.
+  async redirects() {
+    return [{ source: "/instagram", destination: INSTAGRAM_URL, permanent: false }];
   },
 };
 
