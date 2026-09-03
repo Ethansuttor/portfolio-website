@@ -12,11 +12,10 @@ function HeroProjectCard({ project }: { project: Project }) {
       backgroundColor="#161313"
       glowRadius={32}
     >
-      <Link
-        href={`/projects#${project.slug}`}
-        className="group flex flex-col bg-surface-container-high hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer overflow-hidden h-full"
-        aria-label={`View project: ${project.title}`}
-      >
+      {/* The whole card is clickable via the stretched "View Project" link
+          below, so the secondary build-log link can sit alongside it instead of
+          being nested inside an anchor. */}
+      <div className="group relative flex flex-col bg-surface-container-high hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 overflow-hidden h-full">
         {/* Card header banner - Red Featured Project Header */}
         <div className="px-5 py-2.5 flex items-center justify-between border-b bg-primary-container/10 border-primary-container/20">
           <div className="flex items-center gap-2.5">
@@ -79,16 +78,41 @@ function HeroProjectCard({ project }: { project: Project }) {
             </div>
 
             {/* CTA */}
-            <div className="flex items-center gap-3 text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all duration-200 pt-5 border-t border-outline-variant/25 mt-auto">
-              <span>View Project</span>
-              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs md:text-sm font-bold uppercase tracking-[0.2em] pt-5 border-t border-outline-variant/25 mt-auto">
+              <Link
+                href={`/projects#${project.slug}`}
+                className="inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4 after:absolute after:inset-0 after:content-['']"
+                aria-label={`View project: ${project.title}`}
+              >
+                <span>View Project</span>
+                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+              {project.blogHref && <BuildLogLink href={project.blogHref} />}
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </BorderGlow>
+  );
+}
+
+/**
+ * Secondary CTA on a project card. Sits above the stretched "View Project"
+ * overlay via `relative z-10`, so clicking it doesn't fall through to the card.
+ */
+function BuildLogLink({ href }: { href: string }) {
+  return (
+    <Link
+      href={href}
+      className="relative z-10 inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4"
+    >
+      <span>Read Build Blog</span>
+      <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
   );
 }
 
@@ -100,11 +124,7 @@ function ProjectCard({ project }: { project: Project }) {
       backgroundColor="#161313"
       glowRadius={25}
     >
-      <Link
-        href={`/projects#${project.slug}`}
-        className="group flex flex-col bg-surface-container-high hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer h-full"
-        aria-label={`View project: ${project.title}`}
-      >
+      <div className="group relative flex flex-col bg-surface-container-high hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 h-full">
         {/* Card header badge */}
         <div className={`px-5 py-3 flex items-center justify-between border-b ${project.featured ? "bg-primary-container/10 border-primary-container/20" : "bg-background border-outline-variant/15"}`}>
           <div className="flex items-center gap-2.5">
@@ -163,14 +183,21 @@ function ProjectCard({ project }: { project: Project }) {
           </div>
 
           {/* CTA */}
-          <div className="flex items-center gap-3 text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all duration-200 mt-auto pt-4 border-t border-outline-variant/20">
-            <span>View Project</span>
-            <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2.5 text-xs md:text-sm font-bold uppercase tracking-[0.2em] mt-auto pt-4 border-t border-outline-variant/20">
+            <Link
+              href={`/projects#${project.slug}`}
+              className="inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4 after:absolute after:inset-0 after:content-['']"
+              aria-label={`View project: ${project.title}`}
+            >
+              <span>View Project</span>
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            {project.blogHref && <BuildLogLink href={project.blogHref} />}
           </div>
         </div>
-      </Link>
+      </div>
     </BorderGlow>
   );
 }

@@ -18,6 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${SITE_URL}/blog/drone-flight-controller`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
     ...allProjects.map((project) => ({
       url: `${SITE_URL}/projects/${project.slug}`,
       lastModified,

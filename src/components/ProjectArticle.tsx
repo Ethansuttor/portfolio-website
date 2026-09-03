@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Project } from "@/lib/projects";
 import { ProjectDetailGallery } from "@/components/ProjectDetailGallery";
 import { Pcb3DViewer } from "@/components/Pcb3DViewer";
@@ -188,6 +189,7 @@ export function ProjectArticle({ project, headingLevel = "h2" }: ProjectArticleP
             </div>
           )}
 
+          <div className="flex flex-wrap gap-3">
           <a
             href={project.githubHref}
             target="_blank"
@@ -199,6 +201,24 @@ export function ProjectArticle({ project, headingLevel = "h2" }: ProjectArticleP
             </svg>
             View Code on GitHub
           </a>
+
+            {project.blogHref && (
+              <Link
+                href={project.blogHref}
+                className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest w-fit shadow-md"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.8}
+                    d="M4 5.5A1.5 1.5 0 015.5 4H9a3 3 0 013 3v13a2.5 2.5 0 00-2.5-2.5h-4A1.5 1.5 0 014 16V5.5zM20 5.5A1.5 1.5 0 0018.5 4H15a3 3 0 00-3 3v13a2.5 2.5 0 012.5-2.5h4A1.5 1.5 0 0020 16V5.5z"
+                  />
+                </svg>
+                Read Build Blog
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </>

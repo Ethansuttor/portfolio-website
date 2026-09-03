@@ -82,9 +82,9 @@ Currently I am working an electrical engineering co-op at Gaylor Electric in sou
 - PCB & Fab: ~60×60mm 4-layer stackup (ENIG finish for LGA gyro) with single-sided SMD layout for hotplate reflow; mated to Flycolor Raptor BLS-04 ESC via 10-pin JST SH1.0 harness
 
 **Images:**
-- `/assets/3D-angled.png` — 3D Board Render
+- `/assets/drone-pcb-assembled.jpeg` — Assembled Board
 - `/assets/STM32.png` — MCU & Core Logic
-- `/assets/3d-viewer-PDB.png` — Power Tree & Buck Converter
+- `/assets/drone-motor-spin.mp4` — Motor Spin-Up Test (video, poster `/assets/drone-motor-spin-poster.jpg`)
 - `/assets/PCB-Back.png` — PCB Bottom Layer
 
 ---
