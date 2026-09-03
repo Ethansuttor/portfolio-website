@@ -205,7 +205,7 @@ export function ProjectArticle({ project, headingLevel = "h2" }: ProjectArticleP
             {project.blogHref && (
               <Link
                 href={project.blogHref}
-                className="inline-flex items-center gap-2.5 px-5 py-3 border border-primary-container/60 hover:border-primary text-primary bg-primary-container/10 hover:bg-primary-container/20 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest w-fit shadow-md"
+                className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest w-fit shadow-md"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                   <path

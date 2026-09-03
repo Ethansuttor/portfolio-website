@@ -106,17 +106,12 @@ function BuildLogLink({ href }: { href: string }) {
   return (
     <Link
       href={href}
-      className="relative z-10 inline-flex items-center gap-2 text-on-surface-variant hover:text-primary cursor-pointer transition-colors duration-200 underline-offset-4 hover:underline decoration-primary/40"
+      className="relative z-10 inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4"
     >
-      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.8}
-          d="M4 5.5A1.5 1.5 0 015.5 4H9a3 3 0 013 3v13a2.5 2.5 0 00-2.5-2.5h-4A1.5 1.5 0 014 16V5.5zM20 5.5A1.5 1.5 0 0018.5 4H15a3 3 0 00-3 3v13a2.5 2.5 0 012.5-2.5h4A1.5 1.5 0 0020 16V5.5z"
-        />
-      </svg>
       <span>Read Build Blog</span>
+      <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </Link>
   );
 }
