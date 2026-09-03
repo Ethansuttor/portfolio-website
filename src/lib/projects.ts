@@ -1,4 +1,12 @@
-export type ProjectImage = { src: string; alt: string; caption: string };
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  caption: string;
+  /** Set when the slot holds a clip instead of a still. */
+  video?: boolean;
+  /** Still frame for a clip — used by thumbnails and before the video loads. */
+  poster?: string;
+};
 export type TechChip = { label: string; category: string };
 export type TechDetail = { label: string; detail: string };
 
@@ -18,6 +26,8 @@ export type Project = {
   iteration?: string;
   images: ProjectImage[];
   githubHref: string;
+  /** Set when the project has a dated build log to link out to. */
+  blogHref?: string;
 };
 
 export const allProjects: Project[] = [
@@ -47,12 +57,19 @@ export const allProjects: Project[] = [
       { label: "PCB & Fab", detail: "~60×60mm 4-layer stackup (ENIG finish for LGA gyro) with single-sided SMD layout for hotplate reflow; mated to Flycolor Raptor BLS-04 ESC via 10-pin JST SH1.0 harness" },
     ],
     images: [
-      { src: "/assets/3D-angled.png", alt: "Custom Drone Flight Controller PCB 3D Angled View", caption: "3D Board Render" },
+      { src: "/assets/drone-pcb-assembled.jpeg", alt: "Assembled STM32F405 flight controller PCB after hotplate reflow", caption: "Assembled Board" },
       { src: "/assets/STM32.png", alt: "STM32 MCU Schematic & Signal Routing", caption: "MCU & Core Logic" },
-      { src: "/assets/3d-viewer-PDB.png", alt: "Power Architecture & TPS5450 Buck Converter", caption: "Power Tree & Buck Converter" },
+      {
+        src: "/assets/drone-motor-spin.mp4",
+        alt: "Bench test: the flight controller spins a brushless motor from FlySky transmitter throttle input",
+        caption: "Motor Spin-Up Test",
+        video: true,
+        poster: "/assets/drone-motor-spin-poster.jpg",
+      },
       { src: "/assets/PCB-Back.png", alt: "Flight Controller PCB Bottom Layer", caption: "PCB Bottom Layer" },
     ],
     githubHref: "https://github.com/Ethansuttor/drone_PCB",
+    blogHref: "/blog/drone-flight-controller",
   },
   {
     slug: "dual-factor-hardware-security",

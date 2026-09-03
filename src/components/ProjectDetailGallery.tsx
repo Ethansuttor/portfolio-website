@@ -67,25 +67,47 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
     <div className="flex flex-col gap-3">
       {/* Main Image Container */}
       <div className="relative w-full aspect-[4/3] border border-outline-variant/20 hover:border-primary-container/40 transition-colors duration-300 overflow-hidden bg-background p-3 flex items-center justify-center group">
-        <button
-          type="button"
-          onClick={() => setIsFullscreen(true)}
-          className="absolute inset-0 w-full h-full cursor-zoom-in text-left z-0"
-          aria-label={`Open full screen view for ${images[active].caption}`}
-        >
-          <Image
+        {images[active].video ? (
+          // No click-to-zoom overlay on a clip — it would swallow the transport
+          // controls. The Full Screen button in the corner still works.
+          <video
+            key={images[active].src}
             src={images[active].src}
-            alt={images[active].alt}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+            poster={images[active].poster}
+            aria-label={images[active].alt}
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls
+            preload="metadata"
+            className="absolute inset-0 w-full h-full object-contain p-2"
           />
-        </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsFullscreen(true)}
+            className="absolute inset-0 w-full h-full cursor-zoom-in text-left z-0"
+            aria-label={`Open full screen view for ${images[active].caption}`}
+          >
+            <Image
+              src={images[active].src}
+              alt={images[active].alt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+            />
+          </button>
+        )}
 
         <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent pointer-events-none z-1" />
 
-        {/* Caption badge */}
-        <span className="absolute bottom-3 left-3 text-[0.6rem] font-sans font-bold uppercase tracking-widest text-primary bg-background/80 px-2 py-1 z-1 pointer-events-none">
+        {/* Caption badge — moves up out of the way of a clip's transport bar */}
+        <span
+          className={`absolute left-3 text-[0.6rem] font-sans font-bold uppercase tracking-widest text-primary bg-background/80 px-2 py-1 z-1 pointer-events-none ${
+            images[active].video ? "top-3" : "bottom-3"
+          }`}
+        >
           {images[active].caption}
         </span>
 
@@ -94,7 +116,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
           type="button"
           onClick={() => setIsFullscreen(true)}
           className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1 bg-background/85 hover:bg-background text-on-surface border border-outline-variant/30 hover:border-primary text-[0.65rem] font-bold uppercase tracking-wider transition-all duration-200 shadow-md group/btn cursor-pointer"
-          aria-label="View photo full screen"
+          aria-label="View full screen"
         >
           <svg
             className="w-3.5 h-3.5 text-primary group-hover/btn:scale-110 transition-transform"
@@ -137,7 +159,8 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
                   : "border-outline-variant/20 opacity-50 hover:opacity-80 hover:border-outline-variant/50"
               }`}
             >
-              <Image src={img.src} alt={img.alt} fill sizes="160px" className="object-cover" />
+              <Image src={img.poster ?? img.src} alt={img.alt} fill sizes="160px" className="object-cover" />
+              {img.video && <PlayBadge />}
             </button>
           ))}
         </div>
@@ -203,15 +226,31 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
                 </button>
               )}
 
-              <Image
-                src={images[active].src}
-                alt={images[active].alt}
-                fill
-                priority
-                sizes="100vw"
-                className="object-contain"
-                onClick={(e) => e.stopPropagation()}
-              />
+              {images[active].video ? (
+                <video
+                  key={images[active].src}
+                  src={images[active].src}
+                  poster={images[active].poster}
+                  aria-label={images[active].alt}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  className="absolute inset-0 w-full h-full object-contain"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <Image
+                  src={images[active].src}
+                  alt={images[active].alt}
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="object-contain"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              )}
 
               {images.length > 1 && (
                 <button
@@ -248,7 +287,8 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
                     }`}
                     aria-label={`Switch to image ${i + 1}`}
                   >
-                    <Image src={img.src} alt={img.alt} fill sizes="64px" className="object-cover" />
+                    <Image src={img.poster ?? img.src} alt={img.alt} fill sizes="64px" className="object-cover" />
+                    {img.video && <PlayBadge />}
                   </button>
                 ))}
               </div>
@@ -260,3 +300,14 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
   );
 }
 
+
+/** Marks a thumbnail whose slot holds a clip rather than a still. */
+function PlayBadge() {
+  return (
+    <span className="absolute inset-0 flex items-center justify-center bg-background/30 pointer-events-none">
+      <svg className="w-1/3 h-1/3 max-w-8 max-h-8 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    </span>
+  );
+}
