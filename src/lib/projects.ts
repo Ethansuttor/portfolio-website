@@ -67,6 +67,16 @@ export const allProjects: Project[] = [
         poster: "/assets/drone-motor-spin-poster.jpg",
       },
       { src: "/assets/PCB-Back.png", alt: "Flight Controller PCB Bottom Layer", caption: "PCB Bottom Layer" },
+      {
+        src: "/assets/drone-airframe-bench.jpg",
+        alt: "Flight controller board mounted to the quadcopter frame on the bench, motors and receiver wired in",
+        caption: "Airframe Wiring",
+      },
+      {
+        src: "/assets/drone-airframe-assembled.jpg",
+        alt: "Completed quadcopter with the custom flight controller, props and LiPo pack fitted, sitting on a tripod",
+        caption: "Assembled Quadcopter",
+      },
     ],
     githubHref: "https://github.com/Ethansuttor/drone_PCB",
     blogHref: "/blog/drone-flight-controller",
