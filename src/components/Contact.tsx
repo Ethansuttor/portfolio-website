@@ -186,7 +186,7 @@ export function Contact() {
           <span className="text-primary">Touch</span>
         </h2>
         <p className="text-on-surface-variant mb-12 max-w-md text-base md:text-lg leading-relaxed">
-          Currently working as an Electrical Engineering Co-op at Gaylor Electric.
+          Currently working part-time as a Project Engineer at Gaylor Electric.
         </p>
 
         <DirectLinks />

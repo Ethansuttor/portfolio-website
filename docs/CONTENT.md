@@ -4,7 +4,7 @@
 
 - **Name:** Ethan Suttor
 - **Title:** Electrical Engineering Student
-- **Current Role:** Electrical Engineering Co-op at Gaylor Electric
+- **Current Role:** Project Engineer (part-time) at Gaylor Electric
 - **Email:** ethan.suttor@louisville.edu
 - **School:** University of Louisville (Speed School)
 - **GitHub:** https://github.com/Ethansuttor
@@ -28,20 +28,23 @@ Electrical Engineering candidate at the University of Louisville specializing in
 
 ## About Me
 
-I'm a junior Electrical Engineering student at the University of Louisville's Speed School, where most of my coursework has pulled me toward the hardware side: embedded systems, FPGA design, and VLSI physical layout. I like knowing what the silicon is actually doing.
+I'm a senior Electrical Engineering student at the University of Louisville's Speed School, where most of my coursework has pulled me toward the hardware side: embedded systems, FPGA design, and VLSI physical layout. I like knowing what the silicon is actually doing.
 
-Outside of class I work at the Speed Center for Innovation as an electrical engineering bench tech, helping students debug embedded systems and bring up PCBs. I also competed at SoutheastCon 2026, building a closed-loop motor controller with current sensing and IR encoder feedback for an autonomous competition platform.
+Before joining Gaylor Electric, I worked at the Speed Center for Innovation as an electrical engineering bench tech, helping students debug embedded systems and bring up PCBs.
 
-Currently I am working an electrical engineering co-op at Gaylor Electric in southern Indiana.
+Currently I am working part-time as a project engineer at Gaylor Electric in southern Indiana.
 
 ---
 
 ## Skills
 
 ### Hardware Design & Analysis
+- PCB Design (KiCad, Altium)
+- Power Tree Design
 - System Architecture
 - Tanner EDA (L-Edit, S-Edit, T-Spice)
-- PCB Design (Altium, KiCAD)
+- DRC / LVS Verification
+- SolidWorks
 - Oscilloscopes
 - Logic Analyzers
 
@@ -49,14 +52,22 @@ Currently I am working an electrical engineering co-op at Gaylor Electric in sou
 - C
 - C++
 - VHDL
+- STM32 (Cortex-M4)
+- AVR (ATmega328PB)
+- ESP32 / Arduino
+- SPI / UART / PWM
+- DMA & Timers
 - ISR / Hardware-level Interrupts
+- Betaflight
 
 ### Systems & Tooling
 - Xilinx Vivado 2024.2
 - Linux OS (POSIX/IPC)
 - Python
+- MATLAB
+- OpenCV
 - Git
-- Soldering
+- Soldering & SMD Reflow
 
 ---
 
@@ -86,12 +97,16 @@ Currently I am working an electrical engineering co-op at Gaylor Electric in sou
 - `/assets/STM32.png` — MCU & Core Logic
 - `/assets/drone-motor-spin.mp4` — Motor Spin-Up Test (video, poster `/assets/drone-motor-spin-poster.jpg`)
 - `/assets/PCB-Back.png` — PCB Bottom Layer
+- `/assets/drone-airframe-bench.jpg` — Airframe Wiring
+- `/assets/drone-airframe-assembled.jpg` — Assembled Quadcopter
+
+**Build Log:** /blog/drone-flight-controller
 
 ---
 
 ### 2. Dual-Factor Hardware Security System
 **Tag:** Academic Project — Microcontrollers
-**Featured:** Yes (Index 01)
+**Featured:** Yes (Index 02)
 **GitHub:** https://github.com/Ethansuttor/ECE-412-Microcontrollers
 
 **Tech Stack:** ATmega328PB (MCU) · Bare-Metal C · AVR-GCC · UART + PWM
@@ -113,9 +128,9 @@ Currently I am working an electrical engineering co-op at Gaylor Electric in sou
 
 ---
 
-### 2. FPGA Hierarchical ALU & 7-Segment Display Controller
+### 3. FPGA Hierarchical ALU & 7-Segment Display Controller
 **Tag:** Academic Capstone — Digital Design
-**Featured:** Yes (Index 02)
+**Featured:** Yes (Index 03)
 **GitHub:** https://github.com/Ethansuttor/ECE-510-511-FPGA
 
 **Tech Stack:** Artix-7 Basys3 · VHDL · Xilinx Vivado 2024.2 · ILA
@@ -139,7 +154,7 @@ Currently I am working an electrical engineering co-op at Gaylor Electric in sou
 
 ---
 
-### 3. CMOS VLSI Physical Layout & Delay Analysis
+### 4. CMOS VLSI Physical Layout & Delay Analysis
 **Tag:** Academic Project — Integrated Circuits
 **Featured:** No
 **GitHub:** https://github.com/Ethansuttor/ECE-515-VLSI
@@ -157,7 +172,7 @@ The CMOS inverter cell was laid out manually at 21.3 × 12.5 μm, confirmed with
 
 ---
 
-### 4. Autonomous Vision-Guided Robotics Platform
+### 5. Autonomous Vision-Guided Robotics Platform
 **Tag:** Competition Build — Autonomous Systems
 **Featured:** No
 **GitHub:** https://github.com/Ethansuttor/ECE-565
@@ -181,8 +196,24 @@ Final competition: the robot autonomously collected color-coded cubes on a 4×6 
 
 ## Experience / Timeline
 
+### Gaylor Electric — Engineering Co-op, then Project Engineer (Part-Time)
+**Period:** May 2026 – Present
+**Location:** Sellersburg, IN
+**Type:** Professional
+
+Supporting active electrical construction projects, first as an engineering co-op and now part-time as a project engineer.
+
+**Key Contributions:**
+- Safety: Built a Safety and Performance Token Initiative to track and incentivize jobsite safety performance
+- Projects: Supported proposal budgeting, material procurement, and jobsite safety tracking on active electrical construction projects
+- Automation: Developed AI automation tools using Microsoft Copilot Studio
+
+**Tags:** Electrical Construction · Proposal Budgeting · Procurement · Jobsite Safety · Copilot Studio
+
+---
+
 ### Speed Center for Innovation — SCI Student Worker
-**Period:** Jan 2026 – Present
+**Period:** Jan 2026 – May 2026
 **Location:** University of Louisville
 **Type:** Professional
 
@@ -192,25 +223,25 @@ Driving hands-on electronics innovation through rapid hardware prototyping and e
 
 ---
 
+### IEEE Student Chapter — Executive Officer
+**Period:** Feb 2025 – Aug 2026
+**Location:** University of Louisville
+**Type:** Leadership
+
+Managed PCB assembly lab operations for 15+ personnel. Organized technical workshops focused on hardware design and enforced strict IPC assembly standards to ensure professional-grade production.
+
+**Tags:** IPC Standards · Lab Management · Technical Workshops
+
+---
+
 ### Engineering Living-Learning Community — Peer Mentor
-**Period:** Aug 2025 – Present
+**Period:** Jan 2025 – Present
 **Location:** University of Louisville
 **Type:** Leadership
 
 Mentored a cohort of 40 first-year engineering students through their transition to university-level coursework. Planned and facilitated 2 community-building events with 20 attendees each, fostering collaboration and peer networking within the residential engineering program.
 
 **Tags:** Mentorship · Event Planning · First-Year Support
-
----
-
-### IEEE Student Chapter — Treasurer
-**Period:** Active (ongoing)
-**Location:** University of Louisville
-**Type:** Leadership
-
-Managing PCB assembly lab operations for 15+ personnel. Orchestrating technical workshops focused on hardware design and enforcing strict IPC assembly standards to ensure professional-grade production.
-
-**Tags:** IPC Standards · Lab Management · Technical Workshops
 
 ---
 
@@ -234,7 +265,7 @@ Learned design processes from professional engineers. Designed mechanical parts 
 ## Contact Section
 
 **Header:** Get in Touch
-**Description:** Currently working as an Electrical Engineering Co-op at Gaylor Electric.
+**Description:** Currently working part-time as a Project Engineer at Gaylor Electric.
 **Email:** ethan.suttor@louisville.edu
 **LinkedIn:** linkedin.com/in/ethan-suttor
 
@@ -253,5 +284,5 @@ Learned design processes from professional engineers. Designed mechanical parts 
 
 ## Navigation
 
-**Nav Links:** Projects · Skills · Experience · Contact
+**Nav Links:** Projects · Skills · Experience · Contact · Build Log
 **Footer Links:** GitHub · LinkedIn · Back to Top

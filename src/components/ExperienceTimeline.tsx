@@ -15,8 +15,25 @@ type TimelineEntry = {
 
 const entries: TimelineEntry[] = [
   {
-    period: "JAN 2026",
+    period: "MAY 2026",
     active: true,
+    type: "PROFESSIONAL",
+    role: "Engineering Co-op, then Project Engineer (Part-Time)",
+    company: "Gaylor Electric",
+    location: "Sellersburg, IN",
+    description:
+      "Supporting active electrical construction projects, first as an engineering co-op and now part-time as a project engineer.",
+    tags: ["Electrical Construction", "Proposal Budgeting", "Procurement", "Jobsite Safety", "Copilot Studio"],
+    contributions: [
+      { label: "Safety", detail: "Built a Safety and Performance Token Initiative to track and incentivize jobsite safety performance" },
+      { label: "Projects", detail: "Supported proposal budgeting, material procurement, and jobsite safety tracking on active electrical construction projects" },
+      { label: "Automation", detail: "Developed AI automation tools using Microsoft Copilot Studio" },
+    ],
+  },
+  {
+    period: "JAN 2026",
+    periodEnd: "MAY 2026",
+    active: false,
     type: "PROFESSIONAL",
     role: "SCI Student Worker",
     company: "Speed Center for Innovation",
@@ -26,7 +43,19 @@ const entries: TimelineEntry[] = [
     tags: ["Prototyping", "Embedded Debug", "Hardware Test"],
   },
   {
-    period: "AUG 2025",
+    period: "FEB 2025",
+    periodEnd: "AUG 2026",
+    active: false,
+    type: "LEADERSHIP",
+    role: "Executive Officer",
+    company: "IEEE Student Chapter",
+    location: "University of Louisville",
+    description:
+      "Managed PCB assembly lab operations for 15+ personnel. Organized technical workshops focused on hardware design and enforced strict IPC assembly standards to ensure professional-grade production.",
+    tags: ["IPC Standards", "Lab Management", "Technical Workshops"],
+  },
+  {
+    period: "JAN 2025",
     active: true,
     type: "LEADERSHIP",
     role: "Peer Mentor",
@@ -35,18 +64,6 @@ const entries: TimelineEntry[] = [
     description:
       "Mentored a cohort of 40 first-year engineering students through their transition to university-level coursework. Planned and facilitated 2 community-building events with 20 attendees each, fostering collaboration and peer networking within the residential engineering program.",
     tags: ["Mentorship", "Event Planning", "First-Year Support"],
-
-  },
-  {
-    period: "ACTIVE",
-    active: true,
-    type: "LEADERSHIP",
-    role: "Treasurer",
-    company: "IEEE Student Chapter",
-    location: "University of Louisville",
-    description:
-      "Managing PCB assembly lab operations for 15+ personnel. Orchestrating technical workshops focused on hardware design and enforcing strict IPC assembly standards to ensure professional-grade production.",
-    tags: ["IPC Standards", "Lab Management", "Technical Workshops"],
   },
   {
     period: "AUG 2022",
