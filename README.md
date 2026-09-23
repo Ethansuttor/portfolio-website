@@ -63,10 +63,11 @@ replying in your mail client reaches them rather than yourself.
   field. The limiter is instance-local, so it throttles a single abusive client
   but is not authoritative across a distributed flood; swap in Vercel KV or
   Upstash Redis if that ever matters.
-- `npm audit` reports high-severity findings in `postcss` via Next's bundled
-  copy, and in the eslint plugin tree. Both are build-time only and neither is
-  reachable at runtime; the postcss one cannot be fixed without downgrading
-  Next.js to 9.x. Re-check after each Next.js upgrade.
+- `npm audit` is clean as of Next.js 16.3.6. Re-check after each upgrade.
+- Everything under `public/` is downloadable by anyone who guesses the URL, so
+  keep unpublished files in `assets-raw/` instead. The public resume has the
+  street address and phone number removed. Re-export it the same way when you
+  update it.
 
 ## Project layout
 
@@ -75,10 +76,13 @@ src/
   app/
     page.tsx              Home page — assembles the section components
     layout.tsx            Root layout, fonts, site-wide metadata
+    not-found.tsx         Branded 404 page
     globals.css           Design tokens + shared utility classes
     projects/
       page.tsx            All projects, one card each
       [slug]/page.tsx     Standalone page per project (statically generated)
+    blog/drone-flight-controller/
+      page.tsx            Flight controller build log (content in lib/buildLog.ts)
     api/contact/route.ts  Contact form handler
     sitemap.ts robots.ts  SEO routes
   components/             Section and UI components
@@ -88,7 +92,7 @@ src/
     contact.ts            Field limits shared by the form and its API route
     glowTheme.ts          BorderGlow tuning for the project cards
 public/assets/            Images, PDFs, and the .glb board model
-assets-raw/               Unoptimized 3D source exports (git-ignored)
+assets-raw/               Unoptimized 3D exports and unpublished photos (git-ignored)
 docs/                     Long-form source copy and the original design mockup
 ```
 
@@ -98,7 +102,10 @@ Project write-ups are data, not markup — edit `src/lib/projects.ts` and both t
 `/projects` list and the per-project pages update together, since both render
 the shared `ProjectArticle` component. `docs/CONTENT.md` and
 `docs/01_Content_Master_Doc.md` hold the long-form source copy, including
-material not currently published. Unused photos are still under `public/assets/`.
+material not currently published. Unused photos live in `assets-raw/unpublished/`
+(git-ignored) rather than `public/`, since everything under `public/` is served
+to anyone who guesses the URL. Before moving a phone photo into `public/`, strip
+its EXIF (GPS included) and resize it — see commit `70d83bd` for the settings.
 
 Adding a project: append an entry to `allProjects`. `featured: true` promotes it
 to the home page; the first entry renders as the large hero card. `images` may be
@@ -106,12 +113,14 @@ empty, in which case the write-up renders full width.
 
 ## Notes
 
-- `AGENTS.md` pins this repo to a pre-release Next.js canary. Check
+- Next.js 16 changed enough that `AGENTS.md` asks agents to read
   `node_modules/next/dist/docs/` before relying on framework behavior.
-- That prerelease pin is also why `.npmrc` sets `legacy-peer-deps=true`. Semver
-  says a prerelease never satisfies a plain range like `>= 13`, so any package
-  declaring `next` as a peer fails to install with `ERESOLVE`. Vercel reads
-  `.npmrc` at build time, so removing it breaks deploys, not just local installs.
+- The site is on stable Next.js (16.3.x). It used to run a prerelease, which
+  needed `legacy-peer-deps=true` in an `.npmrc` because packages declaring
+  `next` as a peer rejected prerelease versions. On a stable release that file
+  is no longer needed, so it's gone. Don't add it back when upgrading.
+- `.github/workflows/ci.yml` runs lint (zero warnings allowed), `tsc` and a full
+  build on every PR and push to `main`.
 - Vercel Analytics and Speed Insights mount in `layout.tsx`. Both inject their
   scripts client-side and no-op off Vercel, so the `/_vercel/*` 404s you see
   running locally are expected.
