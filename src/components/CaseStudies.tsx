@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { allProjects, type Project } from "@/lib/projects";
+import { buildLog } from "@/lib/buildLog";
+import { BUILD_LOG_HREF } from "@/lib/site";
 import { BorderGlow } from "@/components/BorderGlow";
+import { TechChips } from "@/components/TechChips";
+import { ArrowRightIcon } from "@/components/icons";
 import { projectGlow } from "@/lib/glowTheme";
 
 function HeroProjectCard({ project }: { project: Project }) {
@@ -58,18 +62,7 @@ function HeroProjectCard({ project }: { project: Project }) {
                 {project.title}
               </h3>
 
-              {/* Tech chips */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.techStack.map((chip) => (
-                  <span
-                    key={chip.label}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-background/90 border border-outline-variant/40 text-xs md:text-sm font-sans tracking-wide shadow-sm"
-                  >
-                    <span className="text-primary font-black uppercase text-[0.7rem]">{chip.category}</span>
-                    <span className="text-on-surface font-semibold">{chip.label}</span>
-                  </span>
-                ))}
-              </div>
+              <TechChips chips={project.techStack} className="mb-6" />
 
               {/* Summary */}
               <p className="text-on-surface/90 text-base md:text-lg leading-relaxed font-normal mb-8 flex-1">
@@ -79,22 +72,30 @@ function HeroProjectCard({ project }: { project: Project }) {
 
             {/* CTA */}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs md:text-sm font-bold uppercase tracking-[0.2em] pt-5 border-t border-outline-variant/25 mt-auto">
-              <Link
-                href={`/projects#${project.slug}`}
-                className="inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4 after:absolute after:inset-0 after:content-['']"
-                aria-label={`View project: ${project.title}`}
-              >
-                <span>View Project</span>
-                <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
+              <ViewProjectLink project={project} />
               {project.blogHref && <BuildLogLink href={project.blogHref} />}
             </div>
           </div>
         </div>
       </div>
     </BorderGlow>
+  );
+}
+
+/**
+ * Primary CTA on a project card. Its `::after` is stretched over the whole card
+ * (the card body is `relative`), which is what makes the entire card clickable.
+ */
+function ViewProjectLink({ project }: { project: Project }) {
+  return (
+    <Link
+      href={`/projects/${project.slug}`}
+      className="inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4 after:absolute after:inset-0 after:content-['']"
+      aria-label={`View project: ${project.title}`}
+    >
+      <span>View Project</span>
+      <ArrowRightIcon className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" />
+    </Link>
   );
 }
 
@@ -109,9 +110,38 @@ function BuildLogLink({ href }: { href: string }) {
       className="relative z-10 inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4"
     >
       <span>Read Build Blog</span>
-      <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-        <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <ArrowRightIcon className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" />
+    </Link>
+  );
+}
+
+/**
+ * The newest build-log entry, so the home page shows the drone is still in
+ * progress. Server-rendered from buildLog.ts — only these few fields reach the
+ * page, not the whole log.
+ */
+function LatestBuildLogEntry() {
+  const latest = buildLog[0];
+  if (!latest) return null;
+
+  return (
+    <Link
+      href={`${BUILD_LOG_HREF}#${latest.slug}`}
+      className="group flex flex-col md:flex-row md:items-center gap-3 md:gap-6 mb-6 px-5 py-4 bg-background/60 border border-outline-variant/25 border-l-2 border-l-primary-container hover:bg-background/90 hover:border-outline-variant/50 transition-colors duration-200"
+    >
+      <span className="flex items-center gap-2.5 shrink-0">
+        <span className="h-1.5 w-1.5 rounded-full bg-primary-container animate-pulse" />
+        <span className="text-[0.6rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant">
+          Latest build log · <time dateTime={latest.date}>{latest.dateLabel}</time>
+        </span>
+      </span>
+      <span className="flex-1 min-w-0 text-sm md:text-base font-semibold text-on-surface group-hover:text-primary transition-colors duration-200">
+        {latest.title}
+      </span>
+      <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary shrink-0">
+        Read entry
+        <ArrowRightIcon className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+      </span>
     </Link>
   );
 }
@@ -163,18 +193,7 @@ function ProjectCard({ project }: { project: Project }) {
               {project.title}
             </h3>
 
-            {/* Tech chips */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.techStack.slice(0, 4).map((chip) => (
-                <span
-                  key={chip.label}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-background/90 border border-outline-variant/40 text-xs md:text-sm font-sans tracking-wide shadow-sm"
-                >
-                  <span className="text-primary font-black uppercase text-[0.7rem]">{chip.category}</span>
-                  <span className="text-on-surface font-semibold">{chip.label}</span>
-                </span>
-              ))}
-            </div>
+            <TechChips chips={project.techStack.slice(0, 4)} className="mb-4" />
 
             {/* Summary */}
             <p className="text-on-surface/90 text-base md:text-lg leading-relaxed font-normal flex-1 mb-4">
@@ -184,16 +203,7 @@ function ProjectCard({ project }: { project: Project }) {
 
           {/* CTA */}
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2.5 text-xs md:text-sm font-bold uppercase tracking-[0.2em] mt-auto pt-4 border-t border-outline-variant/20">
-            <Link
-              href={`/projects#${project.slug}`}
-              className="inline-flex items-center gap-3 text-primary cursor-pointer transition-all duration-200 group-hover:gap-4 after:absolute after:inset-0 after:content-['']"
-              aria-label={`View project: ${project.title}`}
-            >
-              <span>View Project</span>
-              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
+            <ViewProjectLink project={project} />
             {project.blogHref && <BuildLogLink href={project.blogHref} />}
           </div>
         </div>
@@ -216,6 +226,8 @@ export function CaseStudies() {
       {/* Hero project — full-width prominent card */}
       <HeroProjectCard project={heroProject} />
 
+      <LatestBuildLogEntry />
+
       {/* Top 2 featured grid projects */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         {featuredGridProjects.map((project) => (
@@ -230,23 +242,9 @@ export function CaseStudies() {
           className="inline-flex items-center gap-3 px-8 py-4 bg-background/80 border border-primary/40 hover:border-primary text-primary hover:text-white hover:bg-primary-container/20 font-bold text-sm md:text-base uppercase tracking-[0.2em] transition-all duration-300 shadow-xl group"
         >
           <span>View All Projects</span>
-          <svg
-            className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5"
-            viewBox="0 0 12 12"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M1 6h10M7 2l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
         </Link>
       </div>
     </section>
   );
 }
-

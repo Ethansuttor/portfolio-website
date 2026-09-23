@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { allProjects, getProjectBySlug } from "@/lib/projects";
 import { ProjectArticle } from "@/components/ProjectArticle";
+import { SubpageFooter, SubpageNav } from "@/components/SubpageNav";
 import { GITHUB_URL, SITE_URL } from "@/lib/site";
 
 type Props = {
@@ -80,44 +80,13 @@ export default async function ProjectPage({ params }: Props) {
         }}
       />
 
-      {/* Nav bar */}
-      <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-outline-variant/20 px-8 md:px-24 py-4 flex items-center justify-between">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors duration-200"
-        >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M11 6H1M5 10L1 6l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          All Projects
-        </Link>
-        <span className="text-[0.6rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 hidden sm:block truncate max-w-xs">
-          {project.title}
-        </span>
-      </nav>
+      <SubpageNav backHref="/projects" backLabel="All Projects" label={project.title} />
 
       <article className="px-8 md:px-24 py-16 max-w-7xl mx-auto">
         <ProjectArticle project={project} headingLevel="h1" />
       </article>
 
-      {/* Footer nav */}
-      <div className="border-t border-outline-variant/15 px-8 md:px-24 py-8 flex items-center justify-between">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors duration-200"
-        >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M11 6H1M5 10L1 6l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Back to All Projects
-        </Link>
-        <Link
-          href="/#top"
-          className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant/40 hover:text-on-surface-variant transition-colors duration-200"
-        >
-          ↑ Top
-        </Link>
-      </div>
+      <SubpageFooter backHref="/projects" backLabel="Back to All Projects" />
     </main>
   );
 }

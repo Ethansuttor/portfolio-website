@@ -37,6 +37,10 @@ export type BuildLogEntry = {
   blocks: LogBlock[];
 };
 
+/** Where the build stands, shown in the log's header band. Kept beside the
+ *  entries so it gets updated in the same edit as each new one. */
+export const buildStatus = "Bench bring-up, not flying";
+
 export const buildLog: BuildLogEntry[] = [
   {
     slug: "one-motor-full-throttle",

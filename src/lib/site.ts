@@ -2,6 +2,10 @@
 
 export const RESUME_HREF = "/ethan-suttor-resume.pdf";
 
+/** The flight controller build log. Lives here rather than in buildLog.ts so
+ *  client components (the header) can link to it without bundling the log. */
+export const BUILD_LOG_HREF = "/blog/drone-flight-controller";
+
 export const SITE_URL = "https://ethansuttor.com";
 
 export const GITHUB_URL = "https://github.com/Ethansuttor";

@@ -3,9 +3,12 @@ const skillCategories = [
     icon: "memory",
     title: "Hardware Design & Analysis",
     skills: [
+      "PCB Design (KiCad, Altium)",
+      "Power Tree Design",
       "System Architecture",
       "Tanner EDA (L-Edit, S-Edit, T-Spice)",
-      "PCB Design (Altium, KiCAD)",
+      "DRC / LVS Verification",
+      "SolidWorks",
       "Oscilloscopes",
       "Logic Analyzers",
     ]
@@ -17,7 +20,13 @@ const skillCategories = [
       "C",
       "C++",
       "VHDL",
+      "STM32 (Cortex-M4)",
+      "AVR (ATmega328PB)",
+      "ESP32 / Arduino",
+      "SPI / UART / PWM",
+      "DMA & Timers",
       "ISR / Hardware-level Interrupts",
+      "Betaflight",
     ]
   },
   {
@@ -27,8 +36,10 @@ const skillCategories = [
       "Xilinx Vivado 2024.2",
       "Linux OS (POSIX/IPC)",
       "Python",
+      "MATLAB",
+      "OpenCV",
       "Git",
-      "Soldering",
+      "Soldering & SMD Reflow",
     ]
   }
 ];
@@ -36,11 +47,8 @@ const skillCategories = [
 export function TechnicalMatrix() {
   return (
     <section className="section-divider py-24 px-8 md:px-24 bg-surface-container-low border-b border-outline-variant/10" id="skills">
-      <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
-        <div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-on-surface">Skills</h2>
-          <p className="text-xs uppercase tracking-[0.3em] font-bold text-primary">University of Louisville</p>
-        </div>
+      <div className="mb-16">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-on-surface">Skills</h2>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-1 bg-outline-variant/10 border border-outline-variant/10">
