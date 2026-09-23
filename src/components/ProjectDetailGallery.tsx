@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { ProjectImage } from "@/lib/projects";
@@ -8,6 +8,8 @@ import type { ProjectImage } from "@/lib/projects";
 export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
   const [active, setActive] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const handlePrev = useCallback(() => {
     setActive((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -41,6 +43,12 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
     body.style.right = "0";
     body.style.overflow = "hidden";
 
+    // Move keyboard focus into the viewer, and hand it back to whatever opened
+    // it on close — otherwise focus stays on the page underneath, and a
+    // keyboard user tabs through controls they can't see.
+    const opener = document.activeElement as HTMLElement | null;
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsFullscreen(false);
@@ -48,6 +56,21 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
         handlePrev();
       } else if (e.key === "ArrowRight") {
         handleNext();
+      } else if (e.key === "Tab") {
+        // Keep Tab cycling inside the dialog.
+        const items = Array.from(
+          dialogRef.current?.querySelectorAll<HTMLElement>("button, video[controls]") ?? [],
+        );
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
 
@@ -60,6 +83,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
       body.style.overflow = originalStyle.overflow;
       window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", handleKeyDown);
+      opener?.focus({ preventScroll: true });
     };
   }, [isFullscreen, handlePrev, handleNext]);
 
@@ -174,6 +198,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
       {isFullscreen &&
         createPortal(
           <div
+            ref={dialogRef}
             className="fixed inset-0 h-dvh z-[100] bg-black/95 backdrop-blur-md flex flex-col p-3 sm:p-4 md:p-6 animate-in fade-in duration-200 select-none"
             role="dialog"
             aria-modal="true"
@@ -195,12 +220,13 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
               </div>
 
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={() => setIsFullscreen(false)}
                 className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold uppercase tracking-widest transition-colors duration-200 cursor-pointer shrink-0"
                 aria-label="Close full screen viewer"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 <span className="hidden sm:inline">Close (ESC)</span>
