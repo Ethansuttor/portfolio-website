@@ -294,7 +294,7 @@ export const buildLog: BuildLogEntry[] = [
     date: "2026-07-30",
     dateLabel: "July 30, 2026",
     phase: "Sourcing",
-    title: "The IMU stopped existing, and the flash is a quarter the size I ordered",
+    title: "The IMU stopped existing, and the flash is an eighth the size I ordered",
     standfirst:
       "The entire ICM-426xx family went reel-only in one week. Then I found out I had ordered a 2 MB flash chip instead of a 16 MB one.",
     blocks: [
