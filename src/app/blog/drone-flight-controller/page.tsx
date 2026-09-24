@@ -152,7 +152,7 @@ export default function DroneBuildLogPage() {
             </p>
             <p className="text-on-surface/70 text-sm md:text-base leading-relaxed">
               I&apos;ve been keeping this log since May, and I&apos;ve kept the entries that make me look
-              bad. A gyro that stopped existing mid-design, a flash chip a quarter the size I ordered, and
+              bad. A gyro that stopped existing mid-design, a flash chip an eighth the size I ordered, and
               a DMA collision that read as a hardware fault for a full day. Those are the interesting parts.
             </p>
           </div>

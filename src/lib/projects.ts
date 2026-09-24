@@ -50,7 +50,7 @@ export const allProjects: Project[] = [
       { label: "MCU", detail: "STM32F405RGT6 (168MHz Cortex-M4 with FPU), running custom Betaflight target ETHANF405 with motor 4 remapped to PB5 (TIM3_CH2) to prevent DMA1 Stream 3 collisions" },
       { label: "Power Tree", detail: "TPS5450DDAR buck converter (VBAT to 5V/5A) with Panasonic POSCAP 220µF ESR-matched output cap; dual-LDO architecture (AP2112K for logic/VDDIO, TLV733P for dedicated quiet IMU VDD)" },
       { label: "IMU", detail: "Bosch BMI270 6-axis MEMS gyro/accelerometer on isolated 3.3V sensor rail, mounted at the center of the board" },
-      { label: "Blackbox", detail: "BOYAMICRO BY25Q128ES 16MB SPI NOR Flash for high-rate flight telemetry and PID tuning log capture" },
+      { label: "Blackbox", detail: "GigaDevice GD25Q16E, 2 MB of SPI NOR flash for blackbox logs. The BOM called for the 16 MB BY25Q128ES and the wrong part got ordered, so logging runs at a 1/4 sample rate to fit about 87 seconds per log" },
       { label: "Bring-Up", detail: "Normally-open solder jumpers split the power tree across 4 stages for current-limited bench testing; test points on all rails and scope ground loops" },
       { label: "PCB & Fab", detail: "~60×60mm 4-layer stackup (ENIG finish for LGA gyro) with single-sided SMD layout for hotplate reflow; mated to Flycolor Raptor BLS-04 ESC via 10-pin JST SH1.0 harness" },
     ],
