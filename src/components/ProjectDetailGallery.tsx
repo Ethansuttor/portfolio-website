@@ -90,10 +90,10 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
   return (
     <div className="flex flex-col gap-3">
       {/* Main Image Container */}
-      <div className="relative w-full aspect-[4/3] border border-outline-variant/20 hover:border-primary-container/40 transition-colors duration-300 overflow-hidden bg-background p-3 flex items-center justify-center group">
+      <div className="relative w-full aspect-[4/3] rounded-md border border-outline-variant hover:border-primary/50 transition-colors duration-300 overflow-hidden bg-background p-3 flex items-center justify-center group">
         {images[active].video ? (
           // No click-to-zoom overlay on a clip — it would swallow the transport
-          // controls. The Full Screen button in the corner still works.
+          // controls. The full screen button in the corner still works.
           <video
             key={images[active].src}
             src={images[active].src}
@@ -156,7 +156,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
               d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
             />
           </svg>
-          <span className="hidden sm:inline">Full Screen</span>
+          <span className="hidden sm:inline">Full screen</span>
         </button>
       </div>
 
@@ -177,7 +177,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
               onClick={() => setActive(i)}
               aria-label={`View ${img.caption}`}
               aria-pressed={i === active}
-              className={`relative aspect-[4/3] border overflow-hidden transition-all duration-200 cursor-pointer bg-transparent p-0 ${
+              className={`relative aspect-[4/3] rounded-md border overflow-hidden transition-all duration-200 cursor-pointer bg-transparent p-0 ${
                 i === active
                   ? "border-primary-container ring-1 ring-primary-container/50"
                   : "border-outline-variant/20 opacity-50 hover:opacity-80 hover:border-outline-variant/50"
@@ -191,8 +191,8 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
       )}
 
       {/* Fullscreen Lightbox Modal — rendered through a portal into document.body
-          so it escapes any ancestor with a `transform`/`filter` (e.g. the
-          BorderGlow project card), which would otherwise trap `position: fixed`
+          so it escapes any ancestor with a `transform`/`filter` (e.g. a
+          transformed or filtered card), which would otherwise trap `position: fixed`
           inside that card instead of the real browser viewport and leave the
           close button unreachable. */}
       {isFullscreen &&
@@ -229,7 +229,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span className="hidden sm:inline">Close (ESC)</span>
+                <span className="hidden sm:inline">Close (Esc)</span>
               </button>
             </div>
 
@@ -243,7 +243,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
                     e.stopPropagation();
                     handlePrev();
                   }}
-                  className="absolute left-1 sm:left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-primary text-white border border-white/20 hover:border-primary transition-all duration-200 cursor-pointer shadow-lg group"
+                  className="absolute left-1 sm:left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-primary hover:text-on-primary-container text-white border border-white/20 hover:border-primary transition-all duration-200 cursor-pointer shadow-lg group"
                   aria-label="Previous image"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -285,7 +285,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  className="absolute right-1 sm:right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-primary text-white border border-white/20 hover:border-primary transition-all duration-200 cursor-pointer shadow-lg group"
+                  className="absolute right-1 sm:right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/60 hover:bg-primary hover:text-on-primary-container text-white border border-white/20 hover:border-primary transition-all duration-200 cursor-pointer shadow-lg group"
                   aria-label="Next image"
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

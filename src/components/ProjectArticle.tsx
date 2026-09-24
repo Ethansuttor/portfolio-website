@@ -10,16 +10,15 @@ import { GitHubIcon } from "@/components/icons";
 const VIEWER_3D_SLUG = "custom-drone-flight-controller";
 
 const detailCardClass =
-  "flex flex-col gap-2 p-5 bg-surface-container-high/70 border border-outline-variant/20 border-l-4 border-l-primary hover:bg-surface-container-high/90 hover:border-outline-variant/40 transition-all duration-200 shadow-sm rounded-r";
+  "flex flex-col gap-2 p-5 rounded-md bg-background/50 border border-outline-variant hover:border-outline transition-colors duration-200";
 
 const compactDetailCardClass =
-  "flex flex-col gap-1.5 p-3.5 bg-surface-container-high/60 border-l-2 border-primary/60 hover:bg-surface-container-high/90 transition-colors duration-200";
+  "flex flex-col gap-1.5 p-4 rounded-md bg-background/50 border border-outline-variant hover:border-outline transition-colors duration-200";
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+/** One level below the article's own heading, so the outline never skips a level. */
+function SectionLabel({ as: Tag, children }: { as: "h2" | "h3"; children: React.ReactNode }) {
   return (
-    <span className="block text-xs font-bold text-primary uppercase tracking-[0.25em] mb-3">
-      {children}
-    </span>
+    <Tag className="font-semibold text-on-surface text-lg mb-3">{children}</Tag>
   );
 }
 
@@ -34,13 +33,7 @@ function DetailCard({
 }) {
   return (
     <div className={expanded ? detailCardClass : compactDetailCardClass}>
-      <span
-        className={
-          expanded
-            ? "text-xs font-black text-primary uppercase tracking-widest"
-            : "text-xs font-black text-primary uppercase tracking-wider"
-        }
-      >
+      <span className="silk text-primary">
         {label}
       </span>
       <span
@@ -72,6 +65,7 @@ export type ProjectArticleProps = {
  */
 export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectArticleProps) {
   const Heading = headingLevel;
+  const Sub = headingLevel === "h1" ? "h2" : "h3";
   const hasViewer = project.slug === VIEWER_3D_SLUG;
   const details = project.technicalDetails ?? [];
 
@@ -86,18 +80,10 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
     <>
       {/* Header */}
       <header className="mb-6">
-        {project.featured && (
-          <div className="flex items-center gap-2 mb-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary-container animate-pulse" />
-            <span className="text-[0.6rem] font-bold uppercase tracking-[0.25em] text-on-primary-container">
-              Featured Project {String(project.featuredIndex).padStart(2, "0")}
-            </span>
-          </div>
-        )}
-        <span className="text-primary font-sans text-xs font-bold uppercase tracking-[0.2em] block mb-2">
+        <span className="text-sm text-on-surface-variant block mb-4">
           {project.tag}
         </span>
-        <Heading className="text-2xl md:text-4xl font-extrabold text-on-surface tracking-tight leading-tight mb-4">
+        <Heading className="display text-on-surface text-[clamp(1.9rem,4.4vw,3.6rem)] leading-[0.95] mb-6">
           {href ? (
             <Link
               href={href}
@@ -127,7 +113,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
             {leftDetails.length > 0 && (
               <section className="mt-2">
-                <SectionLabel>System Implementation</SectionLabel>
+                <SectionLabel as={Sub}>System Implementation</SectionLabel>
                 <div className="flex flex-col gap-3.5">
                   {leftDetails.map((item) => (
                     <DetailCard key={item.label} label={item.label} detail={item.detail} expanded />
@@ -141,7 +127,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
         {/* Right: text content */}
         <div className={`${hasImages ? "lg:col-span-7" : "lg:col-span-12"} flex flex-col gap-6`}>
           <section>
-            <SectionLabel>Overview</SectionLabel>
+            <SectionLabel as={Sub}>Overview</SectionLabel>
             <p className="text-on-surface/90 leading-relaxed text-base md:text-lg font-normal">
               {project.description}
             </p>
@@ -149,7 +135,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
           {project.objective && (
             <section>
-              <SectionLabel>Objective</SectionLabel>
+              <SectionLabel as={Sub}>Objective</SectionLabel>
               <p className="text-on-surface/90 leading-relaxed text-base md:text-lg font-normal">
                 {project.objective}
               </p>
@@ -158,7 +144,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
           {rightDetails.length > 0 && (
             <section>
-              <SectionLabel>{hasViewer ? "Hardware & Telemetry" : "Implementation"}</SectionLabel>
+              <SectionLabel as={Sub}>{hasViewer ? "Hardware & Telemetry" : "Implementation"}</SectionLabel>
               <div className={hasViewer ? "flex flex-col gap-3.5" : "grid grid-cols-1 md:grid-cols-2 gap-3"}>
                 {rightDetails.map((item) => (
                   <DetailCard
@@ -174,7 +160,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
           {project.architecture && (
             <section>
-              <SectionLabel>Architecture</SectionLabel>
+              <SectionLabel as={Sub}>Architecture</SectionLabel>
               <p className="text-on-surface/90 leading-relaxed text-base md:text-lg font-normal">
                 {project.architecture}
               </p>
@@ -182,9 +168,9 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
           )}
 
           {project.iteration && (
-            <div className="p-5 bg-primary-container/10 border-l-2 border-primary-container">
-              <span className="block text-xs font-black text-primary uppercase tracking-widest mb-2">
-                Competition Notes
+            <div className="p-6 rounded-md bg-primary/[0.07] border border-primary/30">
+              <span className="block font-semibold text-primary mb-2">
+                Competition result
               </span>
               <p className="text-on-surface/90 text-sm md:text-base leading-relaxed">
                 {project.iteration}
@@ -197,7 +183,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
             href={project.githubHref}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest w-fit shadow-md"
+            className="btn-ghost px-5 py-3 text-sm w-fit"
           >
             <GitHubIcon />
             View Code on GitHub
@@ -206,7 +192,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
             {project.blogHref && (
               <Link
                 href={project.blogHref}
-                className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest w-fit shadow-md"
+                className="btn-ghost px-5 py-3 text-sm w-fit"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                   <path

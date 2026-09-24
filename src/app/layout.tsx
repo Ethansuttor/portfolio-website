@@ -1,20 +1,34 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Archivo, Hanken_Grotesk, Martian_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const display = Archivo({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: 'swap',
+  variable: "--font-display",
+  axes: ["wdth"],
+  display: "swap",
+});
+
+const body = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+const mono = Martian_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  axes: ["wdth"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Ethan Suttor | Electrical Engineering Portfolio",
-  description: "Ethan Suttor — Electrical Engineering student at the University of Louisville specializing in FPGA architecture, embedded systems, and hardware/software co-design.",
+  description: "Ethan Suttor is an electrical engineering student at the University of Louisville. He designs PCBs, writes embedded firmware and works in VHDL.",
   alternates: { canonical: "/" },
   keywords: ["Ethan Suttor", "Electrical Engineering", "FPGA", "Embedded Systems", "University of Louisville", "Hardware Software Co-Design"],
   authors: [{ name: "Ethan Suttor", url: "https://ethansuttor.com" }],
@@ -42,19 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable}`} data-scroll-behavior="smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* Material Symbols is an icon font and isn't in next/font/google's
-            font data, so it has to be linked. The no-page-custom-font rule
-            targets the Pages Router (it checks for pages/_document.js); in an
-            App Router root layout this link already applies to every page. */}
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        />
-      </head>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`} data-scroll-behavior="smooth">
       <body className="antialiased font-sans">
         {children}
         {/* Both no-op in development and on non-Vercel hosts, so they don't

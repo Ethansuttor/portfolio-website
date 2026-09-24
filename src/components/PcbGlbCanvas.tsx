@@ -127,14 +127,14 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-1">
         <div className="flex items-center gap-2 min-w-0">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse shrink-0" />
-          <span className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-primary truncate">
-            Interactive 3D PCB Model
+          <span className="text-sm font-semibold text-on-surface truncate">
+            3D model of the board
           </span>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          <span className="text-[0.6rem] font-sans text-on-surface-variant/60 uppercase tracking-widest hidden sm:inline">
-            Drag to rotate • Pinch/Scroll to zoom
+          <span className="text-sm text-on-surface-variant hidden sm:inline">
+            Drag to rotate, scroll or pinch to zoom
           </span>
           <button
             type="button"
@@ -160,7 +160,7 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
 
       {/* 3D Canvas Box */}
       <div
-        className="relative w-full h-[300px] sm:h-[420px] md:h-[560px] bg-[#120f17] border border-outline-variant/30 rounded overflow-hidden shadow-2xl overscroll-contain"
+        className="relative w-full h-[300px] sm:h-[420px] md:h-[560px] bg-[radial-gradient(ellipse_at_center,#163826,#081610)] border border-outline-variant rounded-md overflow-hidden shadow-2xl overscroll-contain"
         style={{ touchAction: 'none' }}
       >
         <Canvas
@@ -170,7 +170,8 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
             powerPreference: 'high-performance',
             antialias: true,
             precision: 'mediump',
-            alpha: false,
+            // Transparent, so the container's soldermask gradient shows through.
+            alpha: true,
           }}
           camera={{ position: [0, 1.2, 3.2], fov: 45 }}
           className="w-full h-full cursor-grab active:cursor-grabbing"

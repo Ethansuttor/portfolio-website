@@ -8,11 +8,10 @@ type Status = "idle" | "loading" | "success" | "error";
 
 const EMPTY_FORM = { name: "", email: "", subject: "", message: "" };
 
-const labelClass =
-  "block font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3";
+const labelClass = "block text-sm font-medium text-on-surface mb-2";
 
 const controlClass =
-  "w-full bg-transparent border-b border-outline-variant py-4 focus:outline-none focus:border-primary transition-colors duration-300 text-on-surface placeholder:text-on-surface/20 disabled:opacity-40";
+  "w-full rounded-md bg-background/70 border border-outline-variant px-4 py-3.5 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-[border-color,box-shadow] duration-200 text-on-surface placeholder:text-on-surface-variant/40 disabled:opacity-40";
 
 function Field({
   id,
@@ -30,7 +29,7 @@ function Field({
       <label htmlFor={id} className={labelClass}>
         {label}
         {hint && (
-          <span className="ml-2 text-on-surface-variant/40 tracking-normal">{hint}</span>
+          <span className="ml-2 text-on-surface-variant/50 normal-case tracking-normal">{hint}</span>
         )}
       </label>
       {children}
@@ -59,19 +58,19 @@ function DirectLinks() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-surface-container-high p-8 border-l-4 border-primary-container group hover:bg-surface-container-highest transition-all duration-300">
-        <p className="text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary mb-3">Email</p>
+    <div className="space-y-4">
+      <div className="rounded-md border border-outline-variant bg-surface-container-low p-7">
+        <p className="text-sm text-on-surface-variant mb-2">Email</p>
         <a
           href={`mailto:${EMAIL}`}
-          className="block text-lg sm:text-xl md:text-2xl font-bold select-all text-on-surface group-hover:text-primary transition-colors duration-300 break-all"
+          className="block text-xl sm:text-2xl font-semibold text-on-surface hover:text-primary transition-colors duration-300 break-all"
         >
           {EMAIL}
         </a>
         <button
           type="button"
           onClick={copyEmail}
-          className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 border border-outline-variant/50 hover:border-primary text-[0.65rem] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer"
+          className="mt-5 btn-ghost px-4 py-2 text-sm cursor-pointer"
         >
           {copied ? (
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -90,10 +89,10 @@ function DirectLinks() {
         href={LINKEDIN_URL}
         target="_blank"
         rel="noreferrer"
-        className="block bg-surface-container-high p-8 border-l-4 border-primary-container group hover:bg-surface-container-highest transition-all duration-300 card-lift"
+        className="group block rounded-md border border-outline-variant bg-surface-container-low p-7 hover:border-primary/60 transition-colors duration-300"
       >
-        <p className="text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary mb-3">LinkedIn</p>
-        <span className="text-lg sm:text-xl md:text-2xl font-bold text-on-surface group-hover:text-primary transition-colors duration-300 break-all">
+        <p className="text-sm text-on-surface-variant mb-2">LinkedIn</p>
+        <span className="text-xl sm:text-2xl font-semibold text-on-surface group-hover:text-primary transition-colors duration-300 break-all">
           {LINKEDIN_LABEL}
         </span>
       </a>
@@ -159,42 +158,39 @@ export function Contact() {
   };
 
   const buttonLabel = {
-    idle: "Send Message",
+    idle: "Send message",
     loading: "Sending...",
-    success: "Message Sent!",
-    error: "Try Again",
+    success: "Message sent",
+    error: "Try again",
   }[status];
 
   const buttonClass = {
-    idle: "bg-primary text-background hover:bg-white hover:text-black",
-    loading: "bg-primary/50 text-background cursor-not-allowed",
-    success: "bg-green-700 text-white",
-    error: "bg-red-900 text-white",
+    idle: "bg-primary text-on-primary-container hover:bg-[#f3cf7a]",
+    loading: "bg-primary/50 text-on-primary-container cursor-not-allowed",
+    success: "bg-led text-on-primary-container",
+    error: "bg-tertiary text-on-primary-container",
   }[status];
 
   const isBusy = status === "loading";
   const remaining = CONTACT_LIMITS.message - formData.message.length;
 
   return (
-    <section
-      className="section-divider py-24 px-8 md:px-24 bg-surface flex flex-col md:flex-row gap-12 md:gap-20 border-t border-outline-variant/10"
-      id="contact"
-    >
-      <div className="w-full md:w-1/2">
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter mb-8 leading-[0.85] text-on-surface">
-          Get in<br />
-          <span className="text-primary">Touch</span>
-        </h2>
-        <p className="text-on-surface-variant mb-12 max-w-md text-base md:text-lg leading-relaxed">
-          Currently working part-time as a Project Engineer at Gaylor Electric.
+    <section id="contact" className="relative py-24 md:py-32 px-5 sm:px-8 lg:px-16 border-t border-outline-variant">
+      <div className="mx-auto max-w-[1400px] grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div className="lg:col-span-5">
+        <h2 className="display text-on-surface text-[clamp(2.2rem,5vw,4rem)] mb-6">Get in touch</h2>
+        <p className="text-on-surface-variant mb-10 max-w-md text-base md:text-lg leading-relaxed">
+          If you&apos;re hiring for hardware or embedded work, or you just want to talk about a board, email me.
+          The form goes to the same inbox.
         </p>
 
         <DirectLinks />
       </div>
 
-      <div className="w-full md:w-1/2">
-        <div className="bg-surface-container-low p-6 sm:p-8 md:p-12 border border-outline-variant/10 h-full">
-          <form className="space-y-8" onSubmit={handleSubmit} noValidate>
+      <div className="lg:col-span-7">
+        <div className="rounded-md border border-outline-variant bg-surface-container-low p-6 sm:p-10 md:p-12 h-full">
+          <form className="space-y-6" onSubmit={handleSubmit} noValidate>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <Field id="contact-name" label="Name">
               <input
                 id="contact-name"
@@ -226,11 +222,13 @@ export function Contact() {
               />
             </Field>
 
+            </div>
+
             <Field id="contact-subject" label="Subject" hint="(optional)">
               <input
                 id="contact-subject"
                 className={controlClass}
-                placeholder="Project or general inquiry"
+                placeholder="What it's about"
                 type="text"
                 maxLength={CONTACT_LIMITS.subject}
                 value={formData.subject}
@@ -244,7 +242,7 @@ export function Contact() {
                 id="contact-message"
                 className={`${controlClass} resize-none`}
                 placeholder="What are you working on?"
-                rows={4}
+                rows={6}
                 maxLength={CONTACT_LIMITS.message}
                 value={formData.message}
                 onChange={setField("message")}
@@ -252,7 +250,7 @@ export function Contact() {
                 disabled={isBusy}
               />
               {remaining < 300 && (
-                <p className="mt-2 text-right text-[0.6rem] uppercase tracking-widest text-on-surface-variant/50">
+                <p className="mt-2 text-right text-sm text-on-surface-variant">
                   {remaining} characters left
                 </p>
               )}
@@ -281,13 +279,13 @@ export function Contact() {
 
             <div aria-live="polite" className="empty:hidden">
               {status === "error" && (
-                <p className="text-[0.65rem] text-red-400 uppercase tracking-widest -mt-4">
+                <p className="text-sm text-tertiary">
                   {errorMsg}
                 </p>
               )}
               {status === "success" && (
-                <p className="text-[0.65rem] text-green-400 uppercase tracking-widest -mt-4">
-                  Message sent — I&apos;ll get back to you soon.
+                <p className="text-sm text-led">
+                  Sent. I&apos;ll reply from my email.
                 </p>
               )}
             </div>
@@ -295,12 +293,13 @@ export function Contact() {
             <button
               type="submit"
               disabled={isBusy || status === "success"}
-              className={`cta-primary w-full font-black uppercase tracking-[0.3em] py-5 transition-all duration-300 shadow-xl ${buttonClass}`}
+              className={`w-full rounded-[6px] font-bold text-base py-4 transition-all duration-300 ${buttonClass}`}
             >
               {buttonLabel}
             </button>
           </form>
         </div>
+      </div>
       </div>
     </section>
   );
