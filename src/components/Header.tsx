@@ -14,10 +14,18 @@ const sectionItems = [
   { label: "Contact", id: "contact" },
 ];
 
+/** The home page's build log preview. Tracked for the active state, but the nav
+ *  link itself goes to the full log page. */
+const BUILD_LOG_SECTION_ID = "build-log";
+
+/** Every home section, in page order. About has no nav link, so nothing lights
+ *  up while it is on screen instead of the section above staying lit. */
+const trackedIds = ["projects", BUILD_LOG_SECTION_ID, "about", "skills", "experience", "contact"];
+
 const MOBILE_MENU_ID = "mobile-menu";
 
 const desktopLinkClass =
-  "nav-link font-sans uppercase tracking-[0.2em] text-[0.75rem] text-[#e2e2e2] opacity-70 hover:text-primary hover:opacity-100";
+  "nav-link text-[0.9rem] font-medium text-on-surface-variant hover:text-on-surface";
 
 export function Header() {
   const [activeSection, setActiveSection] = useState("");
@@ -32,7 +40,7 @@ export function Header() {
 
     // Determine active section
     let current = '';
-    for (const { id } of sectionItems) {
+    for (const id of trackedIds) {
       const el = document.getElementById(id);
       if (el && el.getBoundingClientRect().top <= 120) {
         current = id;
@@ -110,16 +118,29 @@ export function Header() {
 
   return (
     <>
-      <nav className={`fixed top-0 w-full z-50 h-16 flex justify-between items-center px-8 border-none transition-all duration-300 ${
-        scrolled ? 'bg-[#131313]/95 backdrop-blur-xl shadow-lg shadow-black/20' : 'bg-[#131313]/80 backdrop-blur-xl'
-      }`}>
-        {/* Logo */}
-        <a href="#top" className="text-xl font-bold tracking-tighter text-[#e2e2e2] hover:text-primary transition-colors">
-          Ethan Suttor
+      <nav
+        className={`fixed top-0 inset-x-0 z-50 h-[72px] flex items-center justify-between px-5 sm:px-8 lg:px-16 transition-all duration-300 ${
+          scrolled || mobileMenuOpen
+            ? 'bg-background border-b border-outline-variant'
+            : 'bg-transparent border-b border-transparent'
+        }`}
+      >
+        {/* Logo: the monogram in a QFP-style package */}
+        <a href="#top" className="group flex items-center gap-3 text-on-surface" aria-label="Ethan Suttor, back to top">
+          <span className="relative grid place-items-center w-9 h-9 rounded-[7px] bg-surface-container-highest border border-outline group-hover:border-primary transition-colors">
+            <span className="display text-[0.8rem] tracking-tight text-primary">ES</span>
+            <span aria-hidden="true" className="absolute -left-[5px] top-1/2 -translate-y-1/2 flex flex-col gap-[3px]">
+              <span className="block w-[4px] h-[2px] bg-primary/70" /><span className="block w-[4px] h-[2px] bg-primary/70" /><span className="block w-[4px] h-[2px] bg-primary/70" />
+            </span>
+            <span aria-hidden="true" className="absolute -right-[5px] top-1/2 -translate-y-1/2 flex flex-col gap-[3px]">
+              <span className="block w-[4px] h-[2px] bg-primary/70" /><span className="block w-[4px] h-[2px] bg-primary/70" /><span className="block w-[4px] h-[2px] bg-primary/70" />
+            </span>
+          </span>
+          <span className="hidden sm:block font-semibold tracking-tight">Ethan Suttor</span>
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-8">
+        <div className="hidden md:flex items-center gap-5 lg:gap-8">
           {sectionItems.map(({ label, id }) => (
             <a
               key={id}
@@ -130,21 +151,20 @@ export function Header() {
               {label}
             </a>
           ))}
-          {/* A fifth link doesn't fit beside the logo and resume button at
-              tablet widths — everything wraps to two lines at 768px — so it
-              waits for lg. The home page's latest-entry strip links there too. */}
-          <Link href={BUILD_LOG_HREF} className={`${desktopLinkClass} hidden lg:inline`}>
-            Build Log
+          <Link
+            href={BUILD_LOG_HREF}
+            className={`${desktopLinkClass} ${activeSection === BUILD_LOG_SECTION_ID ? 'active' : ''}`}
+          >
+            Build log
           </Link>
         </div>
 
         {/* Desktop CTA */}
-        <a
-          href={RESUME_HREF}
-          download
-          className="hidden md:flex cta-primary bg-primary-container text-on-primary-container px-6 py-2 font-sans uppercase tracking-widest text-[0.75rem] items-center justify-center font-bold"
-        >
-          Download Resume
+        <a href={RESUME_HREF} download className="hidden md:inline-flex btn-gold px-5 py-2.5 text-sm">
+          Résumé
+          <svg className="w-3.5 h-3.5" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M6 1v8M2.5 5.5 6 9l3.5-3.5M1.5 11h9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </a>
 
         {/* Mobile Hamburger */}
@@ -166,7 +186,7 @@ export function Header() {
       {/* Mobile Menu Overlay */}
       <div
         aria-hidden="true"
-        className={`mobile-menu-overlay fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden ${mobileMenuOpen ? 'open' : ''}`}
+        className={`mobile-menu-overlay fixed inset-0 z-40 bg-black/60 md:hidden ${mobileMenuOpen ? 'open' : ''}`}
         onClick={closeMenu}
       />
 
@@ -175,41 +195,31 @@ export function Header() {
         id={MOBILE_MENU_ID}
         ref={menuRef}
         inert={!mobileMenuOpen}
-        className={`mobile-menu fixed top-0 right-0 w-72 h-full z-50 bg-surface-container-high border-l border-outline-variant/20 flex flex-col pt-20 px-8 md:hidden ${mobileMenuOpen ? 'open' : ''}`}
+        className={`mobile-menu fixed top-0 right-0 w-[82vw] max-w-xs h-full z-50 bg-surface-container-low border-l border-outline-variant flex flex-col pt-24 px-6 md:hidden ${mobileMenuOpen ? 'open' : ''}`}
       >
-        <div className="flex flex-col gap-2">
-          {sectionItems.map(({ label, id }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              onClick={closeMenu}
-              aria-current={activeSection === id ? 'true' : undefined}
-              className={`py-4 px-4 font-sans uppercase tracking-[0.2em] text-sm transition-all ${
-                activeSection === id
-                  ? 'text-primary bg-primary-container/10 border-l-2 border-l-primary-container'
-                  : 'text-on-surface/70 hover:text-primary hover:bg-surface-container-highest/50'
-              }`}
-            >
-              {label}
-            </a>
-          ))}
-          <Link
-            href={BUILD_LOG_HREF}
-            onClick={closeMenu}
-            className="py-4 px-4 font-sans uppercase tracking-[0.2em] text-sm transition-all text-on-surface/70 hover:text-primary hover:bg-surface-container-highest/50"
-          >
-            Build Log
-          </Link>
+        <div className="flex flex-col">
+          {[...sectionItems.map(({ label, id }) => ({ label, href: `#${id}`, id })), { label: "Build log", href: BUILD_LOG_HREF, id: "" }].map(
+            ({ label, href, id }) => {
+              const active = id !== "" && activeSection === id;
+              const className = `display text-3xl uppercase py-3 border-b border-outline-variant/60 transition-colors ${
+                active ? 'text-primary' : 'text-on-surface hover:text-primary'
+              }`;
+              return id ? (
+                <a key={label} href={href} onClick={closeMenu} aria-current={active ? 'true' : undefined} className={className}>
+                  {label}
+                </a>
+              ) : (
+                <Link key={label} href={href} onClick={closeMenu} className={className}>
+                  {label}
+                </Link>
+              );
+            },
+          )}
         </div>
 
         <div className="mt-auto mb-8">
-          <a
-            href={RESUME_HREF}
-            download
-            onClick={closeMenu}
-            className="cta-primary block w-full bg-primary-container text-on-primary-container px-6 py-4 font-sans uppercase tracking-widest text-[0.75rem] text-center font-bold"
-          >
-            Download Resume
+          <a href={RESUME_HREF} download onClick={closeMenu} className="btn-gold w-full px-6 py-4">
+            Download résumé
           </a>
         </div>
       </div>

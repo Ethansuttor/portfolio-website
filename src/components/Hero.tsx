@@ -1,85 +1,173 @@
 import Image from "next/image";
-import { GITHUB_URL, LINKEDIN_URL, RESUME_HREF } from "@/lib/site";
-import { GitHubIcon } from "@/components/icons";
+import Link from "next/link";
+import { BUILD_LOG_HREF, GITHUB_URL, LINKEDIN_URL, RESUME_HREF } from "@/lib/site";
+import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+
+/**
+ * Parts called out on the hero photo. x/y are percentages of the cropped
+ * hero-board.jpg, measured off the real board; `side` is which way the label
+ * reaches from its probe point.
+ */
+const callouts = [
+  { x: 48.3, y: 39.8, side: "left", dy: -30, ref: "MCU", part: "STM32F405", note: "168 MHz Cortex-M4" },
+  { x: 88.7, y: 42.2, side: "left", dy: 0, ref: "J2", part: "USB-C", note: "Flashing and config" },
+  { x: 18, y: 49.5, side: "right", dy: 18, ref: "U3", part: "SPI flash", note: "Blackbox logging" },
+  { x: 52.7, y: 65.5, side: "right", dy: 0, ref: "IMU", part: "BMI270", note: "Its own quiet 3.3 V rail" },
+  { x: 74.7, y: 78.8, side: "left", dy: 0, ref: "U5", part: "TPS5450", note: "4S LiPo to 5 V / 5 A" },
+] as const;
+
+/** Copper routed across the background at 45°, each ending on a pad. Kept to
+ *  the margins and the gutter between columns so none of it runs under text. */
+const traces = [
+  { d: "M-10 842 H300 L340 802 H560", pad: [560, 802] },
+  { d: "M-10 876 H420 L452 844 H690", pad: [690, 844] },
+  { d: "M1450 300 H1418 L1398 320 V540", pad: [1398, 540] },
+  { d: "M1450 866 H1190 L1150 826 H960", pad: [960, 826] },
+  { d: "M1010 -10 V26 L1062 78 H1200", pad: [1200, 78] },
+  { d: "M1060 -10 V10 L1098 48 H1240", pad: [1240, 48] },
+  { d: "M26 -10 V150", pad: [26, 150] },
+  { d: "M712 -10 V380 L690 402 V560", pad: [690, 560] },
+  { d: "M738 -10 V300", pad: [738, 300] },
+] as const;
+
+function HeroTraces() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block"
+      viewBox="0 0 1440 900"
+      preserveAspectRatio="xMidYMid slice"
+      fill="none"
+    >
+      {traces.map((t, i) => (
+        <g key={t.d}>
+          <path
+            d={t.d}
+            pathLength={1}
+            className="trace-route"
+            stroke="var(--trace)"
+            strokeWidth={3}
+            strokeLinejoin="round"
+            style={{ animationDelay: `${i * 90}ms` }}
+          />
+          <circle
+            cx={t.pad[0]}
+            cy={t.pad[1]}
+            r={7}
+            className="trace-pad"
+            fill="var(--background)"
+            stroke="var(--primary)"
+            strokeOpacity={0.45}
+            strokeWidth={3}
+            style={{ animationDelay: `${1300 + i * 90}ms` }}
+          />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function BoardPhoto() {
+  return (
+    <figure className="relative w-full max-w-[640px] mx-auto lg:mr-0">
+      <div className="relative aspect-square rounded-md overflow-hidden border border-outline-variant">
+        <Image
+          src="/assets/hero-board.jpg"
+          alt="The STM32F405 flight controller I designed, assembled after hotplate reflow"
+          fill
+          priority
+          sizes="(max-width: 1024px) 92vw, 640px"
+          className="object-cover"
+        />
+        {/* Pull the photo's dark table edge into the page. */}
+        <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_80px_30px_rgba(10,28,20,0.85)]" />
+
+        {callouts.map((c, i) => (
+          <div
+            key={c.ref}
+            className="callout absolute"
+            style={{ left: `${c.x}%`, top: `${c.y}%`, animationDelay: `${1100 + i * 160}ms` }}
+          >
+            <span className="absolute -left-[6px] -top-[6px] block w-3 h-3 rounded-full border-2 border-primary bg-background" />
+            <span
+              className={`absolute top-0 flex items-center ${c.side === "left" ? "right-2 flex-row-reverse" : "left-2"}`}
+              style={{ transform: `translateY(calc(-50% + ${c.dy}px))` }}
+            >
+              <span className="block w-4 sm:w-8 h-px bg-primary/80" />
+              <span className="whitespace-nowrap rounded-sm border border-primary/50 bg-background px-2 py-1 sm:px-2.5 sm:py-1.5">
+                <span className="silk block text-[0.55rem] sm:text-[0.625rem] text-primary leading-tight">
+                  {c.ref} · {c.part}
+                </span>
+                <span className="hidden sm:block text-[0.72rem] text-on-surface/85 leading-tight mt-0.5">
+                  {c.note}
+                </span>
+              </span>
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <figcaption className="mt-4 text-sm text-on-surface-variant">
+        My flight controller after hotplate reflow. It&apos;s in the airframe now, and it flips the moment it lifts off.{" "}
+        <Link href={BUILD_LOG_HREF} className="text-primary underline-offset-4 hover:underline">
+          Read the build log
+        </Link>
+      </figcaption>
+    </figure>
+  );
+}
+
+const facts = [
+  { label: "Working", value: "Project engineer (part-time), Gaylor Electric" },
+  { label: "Most interested in", value: "PCB design, embedded firmware, FPGAs" },
+];
 
 export function Hero() {
   return (
-    <section className="relative min-h-[85vh] flex flex-col justify-center px-8 md:px-24 technical-grid overflow-hidden border-b border-outline-variant/20">
-      <div className="max-w-6xl z-10 pt-16 flex flex-col md:flex-row items-center gap-12 md:gap-16 my-auto">
-        {/* Text content */}
-        <div className="flex-1">
-          <span className="hero-badge inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high text-on-surface-variant font-sans text-[0.7rem] tracking-[0.1em] mb-6 border border-outline-variant/30">
-            <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-            Currently at Gaylor Electric
-          </span>
+    <section className="relative min-h-[100svh] flex items-center overflow-hidden mask-texture pt-28 pb-20 px-5 sm:px-8 lg:px-16">
+      <HeroTraces />
 
-          <h1 className="hero-name text-4xl sm:text-6xl md:text-[7rem] font-bold leading-[0.85] tracking-tighter mb-2 text-on-surface">
-            Ethan Suttor
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-14 lg:gap-12 items-center">
+        <div>
+          <p className="text-on-surface-variant mb-6">Electrical engineering student, University of Louisville</p>
+
+          <h1 className="display uppercase text-on-surface text-[clamp(2.4rem,12.4vw,7rem)] lg:text-[min(6.6vw,7rem)]">
+            <span className="block">Ethan</span>
+            <span className="block">Suttor</span>
           </h1>
-          <h2 className="hero-title text-4xl sm:text-6xl md:text-[7rem] font-bold leading-[0.85] tracking-tighter mb-8 text-primary-container">
-            Electrical Engineering Student
-          </h2>
 
-          <p className="hero-description text-base sm:text-lg md:text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed font-sans">
-            Electrical Engineering candidate at the University of Louisville specializing in hardware/software co-design, FPGA architecture, and embedded control systems. Designing, verifying, and debugging physical logic for real-time applications.
+          <p className="mt-8 max-w-xl text-lg sm:text-xl md:text-[1.35rem] leading-snug text-on-surface">
+            I lay out circuit boards and write the firmware that runs on them. The board in the photo is a drone flight
+            controller I designed in KiCad and soldered myself.
           </p>
 
-          <div className="hero-buttons flex flex-wrap gap-4 sm:gap-6">
-            <a
-              href={RESUME_HREF}
-              download
-              className="cta-primary bg-primary-container text-on-primary-container px-6 sm:px-8 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2"
-            >
-              <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>download</span>
-              Download Resume
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <a href="#projects" className="btn-gold px-6 py-3.5 text-[0.95rem]">
+              See my projects
             </a>
-            <a
-              href="#projects"
-              className="cta-secondary border border-outline-variant text-on-surface px-6 sm:px-8 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2"
-            >
-              <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>schema</span>
-              View Projects
+            <a href={RESUME_HREF} download className="btn-ghost px-6 py-3.5 text-[0.95rem]">
+              Download résumé
             </a>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="cta-secondary border border-outline-variant text-on-surface px-4 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center transition-all duration-300"
-              aria-label="GitHub"
-            >
+            <a href={GITHUB_URL} target="_blank" rel="noreferrer" aria-label="GitHub" className="btn-ghost w-[50px] h-[50px]">
               <GitHubIcon className="w-5 h-5" />
             </a>
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="cta-secondary border border-outline-variant text-on-surface px-4 py-4 font-bold uppercase tracking-widest text-sm flex items-center justify-center transition-all duration-300"
-              aria-label="LinkedIn"
-            >
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
+            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="btn-ghost w-[50px] h-[50px]">
+              <LinkedInIcon className="w-[18px] h-[18px]" />
             </a>
           </div>
+
+          <dl className="mt-12 pt-6 border-t border-outline-variant grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl">
+            {facts.map((f) => (
+              <div key={f.label}>
+                <dt className="text-sm text-on-surface-variant mb-1">{f.label}</dt>
+                <dd className="text-on-surface text-[0.95rem]">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        {/* Headshot */}
-        <div className="relative flex-shrink-0 order-first md:order-last my-auto">
-          <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden ring-2 ring-outline-variant/20 ring-offset-4 ring-offset-background">
-            <Image
-              src="/assets/hero-photo.jpg"
-              alt="Ethan Suttor"
-              fill
-              sizes="(max-width: 768px) 192px, (max-width: 1024px) 256px, 288px"
-              className="object-cover object-center grayscale-[30%] hover:grayscale-0 transition-all duration-700"
-              priority
-            />
-          </div>
-        </div>
+        <BoardPhoto />
       </div>
-
-      {/* Subtle accent gradient */}
-      <div className="absolute bottom-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary-container/5 to-transparent pointer-events-none"></div>
     </section>
   );
 }

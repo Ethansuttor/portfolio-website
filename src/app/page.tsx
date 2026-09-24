@@ -3,18 +3,22 @@ import { Hero } from "@/components/Hero";
 import { TechnicalMatrix } from "@/components/TechnicalMatrix";
 import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { CaseStudies } from "@/components/CaseStudies";
+import { BuildLogPreview } from "@/components/BuildLogPreview";
 import { AboutMe } from "@/components/AboutMe";
 import { Contact } from "@/components/Contact";
-import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_URL } from "@/lib/site";
+import Link from "next/link";
+import { BUILD_LOG_HREF, EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_URL } from "@/lib/site";
 
 const footerLinks = [
   { label: "GitHub", href: GITHUB_URL },
   { label: "LinkedIn", href: LINKEDIN_URL },
 ];
 
+const footerLinkClass = "text-sm text-on-surface-variant hover:text-primary transition-colors";
+
 export default function Home() {
   return (
-    <main id="top" className="min-h-screen bg-background text-on-background selection:bg-primary-container selection:text-white">
+    <main id="top" className="min-h-screen bg-background text-on-background">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -34,46 +38,34 @@ export default function Home() {
           }),
         }}
       />
-      <div className="flex flex-col">
-        <Header />
-        
-        <div className="w-full">
-          <Hero />
-          <AboutMe />
-          <CaseStudies />
-          <TechnicalMatrix />
-          <ExperienceTimeline />
-          <Contact />
-        </div>
-        
-        {/* Footer */}
-        <footer className="bg-[#131313] w-full border-t border-outline-variant/15 flex flex-col md:flex-row justify-between items-center px-8 lg:px-24 py-12 md:py-16 gap-6 md:gap-8">
-          <div className="font-sans text-[0.6875rem] font-black uppercase tracking-[0.2em] text-[#e2e2e2] opacity-50 flex items-center gap-2">
-            <span className="h-2 w-2 bg-primary-container animate-pulse rounded-full"></span>
-            © {new Date().getFullYear()} Ethan Suttor
-          </div>
-          
-          <div className="flex gap-8 md:gap-10">
+      <Header />
+
+      <Hero />
+      <CaseStudies />
+      <BuildLogPreview />
+      <AboutMe />
+      <TechnicalMatrix />
+      <ExperienceTimeline />
+      <Contact />
+
+      <footer className="border-t border-outline-variant px-5 sm:px-8 lg:px-16 py-10">
+        <div className="mx-auto max-w-[1400px] flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-sm text-on-surface-variant">© {new Date().getFullYear()} Ethan Suttor</p>
+          <nav aria-label="Elsewhere" className="flex items-center gap-8">
             {footerLinks.map((link) => (
-              <a 
-                key={link.label}
-                className="font-sans text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-[#e2e2e2] opacity-50 hover:text-primary hover:opacity-100 transition-all duration-300" 
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a key={link.label} className={footerLinkClass} href={link.href} target="_blank" rel="noreferrer">
                 {link.label}
               </a>
             ))}
-            <a 
-              className="font-sans text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-[#e2e2e2] opacity-50 hover:text-primary hover:opacity-100 transition-all duration-300" 
-              href="#top"
-            >
+            <Link className={footerLinkClass} href={BUILD_LOG_HREF}>
+              Build log
+            </Link>
+            <a className={footerLinkClass} href="#top">
               ↑ Top
             </a>
-          </div>
-        </footer>
-      </div>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

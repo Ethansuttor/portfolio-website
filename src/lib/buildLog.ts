@@ -39,9 +39,102 @@ export type BuildLogEntry = {
 
 /** Where the build stands, shown in the log's header band. Kept beside the
  *  entries so it gets updated in the same edit as each new one. */
-export const buildStatus = "Bench bring-up, not flying";
+export const buildStatus = "Airframe built, flips on liftoff";
 
 export const buildLog: BuildLogEntry[] = [
+  {
+    slug: "flash-was-never-dead",
+    date: "2026-09-14",
+    dateLabel: "September 14, 2026",
+    phase: "Debug",
+    title: "The flash chip was fine the whole time",
+    standfirst:
+      "The quad flips the moment it lifts off, so I finally went after the blackbox flash. Two days blaming the chip, one night thinking I'd killed the board, and the real problem was a missing line in Betaflight.",
+    media: {
+      kind: "image",
+      src: "/assets/drone-airframe-assembled.jpg",
+      alt: "The finished quadcopter with the custom flight controller, props and LiPo fitted, sitting on a tripod",
+      caption: "Airframe done on September 12. All four motors spin. It flips the instant it gets light on its feet.",
+    },
+    blocks: [
+      {
+        kind: "text",
+        text: "The airframe went together on the 12th and all four motors spin. It also tries to flip over the moment it starts to lift, every single time. I don't think it's the frame. The gyro alignment in my target is still a placeholder I guessed for the old IMU, and I've never checked which motor each output drives or which way they turn. Any one of those makes a quad do exactly this. Worse, a gyro that's 180° out and a mirrored motor map look identical from the air, so I can't reason my way to the answer. It has to be a props-off tilt test on the bench, which I should have done before I ever armed it.",
+      },
+      {
+        kind: "text",
+        text: "That flip is what made the flash urgent. Without a blackbox log I'm diagnosing from what I can see, and what I can see is a quad on its back. So the chip I'd written off on September 3 went to the top of the list.",
+      },
+      {
+        kind: "text",
+        text: "Going back over why I'd called it dead, the reasoning didn't hold up. A JEDEC ID of all zeros fits a dead die. It also fits a chip that's never selected, or a MISO line something else is holding low. Three of the checks I'd counted as passes would pass in all three cases:",
+      },
+      {
+        kind: "list",
+        items: [
+          "/CS idles at 3.3 V. With the pull-up fitted it reads 3.3 V whether the MCU ever drives it or not.",
+          "Continuity from each U3 pin to the MCU. That proves the net is connected, not that it's connected to nothing else.",
+          "MISO to ground measured 1.4 MΩ, unpowered. That can't see anything that only pulls the line low once the board is on.",
+        ],
+      },
+      {
+        kind: "text",
+        text: "Then I thought I'd killed the board. I was poking at pins on the powered 0.5 mm LQFP with a handheld meter, and shortly after it stopped enumerating. Power LED on, status LED off, no USB, and the F405 was hot to the touch. Unpowered, I measured about 3 Ω from VCAP_1 to ground. I pulled C12, measured again, still 3 Ω. Short inside the die, I decided. I wrote the board off and started planning a respin.",
+      },
+      {
+        kind: "callout",
+        label: "It wasn't dead",
+        text: "The next day I plugged it in with a scope attached and it booted like nothing had happened. The 3 Ω was me probing the ground-side pad of C12's now-empty footprint, which is ground against ground. 2.4 Ω raw against 1.6 Ω of lead resistance was never a short. The actual fault was C12 itself, a flex-cracked MLCC that shorted the core regulator's output. That's why the chip got hot and never started, and pulling it fixed the board on the spot. I should have powered it back up before writing a verdict.",
+      },
+      {
+        kind: "text",
+        text: "With C12 replaced and a working board again, I spent the evening clearing the flash hardware properly. This time every test had to give a real answer either way:",
+      },
+      {
+        kind: "list",
+        items: [
+          "Drove /CS from Betaflight as a PINIO and watched it swing cleanly between 3.3 V and 0 V. The chip select path is fine.",
+          "Put 10 kΩ from MISO up to 3.3 V. The net sat at 3.3 V, so the chip wasn't holding it low.",
+          "Reassigned PC2, the MISO pin, as a battery voltage input. It read 3.3 V, so the pin, its trace and its solder joint all work.",
+        ],
+      },
+      {
+        kind: "text",
+        text: "MISO was high, the MCU could read it as high, and flash_info still printed zeros. That put the problem in firmware. To find where, I built a debug version of Betaflight that records which exit flashSpiInit() takes and prints the raw ID bytes instead of the tidied-up result. First boot:",
+      },
+      {
+        kind: "code",
+        caption: "flash_info debug",
+        code: "stage: 4 TRANSACTED\nresolved pins: sck=B13 sdi=C02 sdo=B15 regbase=0x40003800\nspi regs: cr1=0x0357  spe=1 mstr=1 br=2\nsdi pin: moder=2 (alternate function) af=5 (SPI2 on F4)\nrdid: issued=1 raw=c8 40 15 c8",
+      },
+      {
+        kind: "text",
+        text: "C8 40 15 is the ID straight out of the GigaDevice datasheet. The chip had been answering correctly since September 3. Betaflight 4.5.5 just doesn't have a GD25Q16E in its chip table, so the driver didn't recognise the reply, gave up, and flash_info printed an empty struct. That 0x00000000 was never read off the wire at all.",
+      },
+      {
+        kind: "text",
+        text: "My July 30 entry says the part is already in that table. It isn't, not in the release I'm running. That one wrong line in my notes is what aimed two days of debugging at the hardware.",
+      },
+      {
+        kind: "code",
+        caption: "The fix, in flash_m25p16.c",
+        code: "{ 0xC84015, 104, 50, 32, 256 },   // GigaDevice GD25Q16E, 2 MB\n// geometry copied from the Winbond W25Q16 entry above it",
+      },
+      {
+        kind: "text",
+        text: "One line. The Winbond W25Q16 right above it has the same 2 MB layout, so I copied its geometry rather than guessing. It isn't upstream, so I have to re-apply it after every clean build or fresh clone.",
+      },
+      {
+        kind: "callout",
+        label: "What I'd tell past me",
+        text: "Don't reason about what a bus returned unless you're looking at the raw bytes. \"Nothing detected\" and \"read a zero\" printed exactly the same, and I treated one as the other for two days. Also: no meter probes on a powered 0.5 mm package. Probe a via, a pad or a passive, or tack on a wire.",
+      },
+      {
+        kind: "text",
+        text: "Blackbox works now. Next: set the sample rate to 1/4 so the 2 MB chip doesn't fill in 22 seconds, check motor mapping and direction, test failsafe, and then log a flight so I can diagnose the flip from data instead of guessing.",
+      },
+    ],
+  },
   {
     slug: "one-motor-full-throttle",
     date: "2026-09-03",

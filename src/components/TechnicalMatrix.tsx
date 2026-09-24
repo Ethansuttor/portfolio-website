@@ -1,21 +1,21 @@
+import { SectionHeading } from "@/components/SectionHeading";
+
 const skillCategories = [
   {
-    icon: "memory",
-    title: "Hardware Design & Analysis",
+    title: "Hardware design and analysis",
     skills: [
-      "PCB Design (KiCad, Altium)",
-      "Power Tree Design",
-      "System Architecture",
+      "PCB design (KiCad, Altium)",
+      "Power tree design",
+      "System architecture",
       "Tanner EDA (L-Edit, S-Edit, T-Spice)",
-      "DRC / LVS Verification",
+      "DRC and LVS checks",
       "SolidWorks",
       "Oscilloscopes",
-      "Logic Analyzers",
+      "Logic analyzers",
     ]
   },
   {
-    icon: "developer_board",
-    title: "Firmware & Logic",
+    title: "Firmware and logic",
     skills: [
       "C",
       "C++",
@@ -24,54 +24,48 @@ const skillCategories = [
       "AVR (ATmega328PB)",
       "ESP32 / Arduino",
       "SPI / UART / PWM",
-      "DMA & Timers",
-      "ISR / Hardware-level Interrupts",
+      "DMA and timers",
+      "Interrupt handlers (ISRs)",
       "Betaflight",
     ]
   },
   {
-    icon: "settings_input_component",
-    title: "Systems & Tooling",
+    title: "Systems and tools",
     skills: [
       "Xilinx Vivado 2024.2",
-      "Linux OS (POSIX/IPC)",
+      "Linux (POSIX, IPC)",
       "Python",
       "MATLAB",
       "OpenCV",
       "Git",
-      "Soldering & SMD Reflow",
+      "Soldering and SMD reflow",
     ]
   }
 ];
 
 export function TechnicalMatrix() {
   return (
-    <section className="section-divider py-24 px-8 md:px-24 bg-surface-container-low border-b border-outline-variant/10" id="skills">
-      <div className="mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-on-surface">Skills</h2>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-1 bg-outline-variant/10 border border-outline-variant/10">
-        {skillCategories.map((category) => (
-          <div key={category.title}>
-            <div className="bg-surface-container-high p-10 group hover:bg-surface-container-highest transition-all duration-300 h-full card-lift">
-              <span 
-                className="material-symbols-outlined text-primary text-4xl mb-6 block transition-transform duration-300 group-hover:scale-110" 
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                {category.icon}
-              </span>
-              <h3 className="text-xl font-bold mb-6 text-on-surface uppercase tracking-tight">{category.title}</h3>
-              <div className="flex flex-wrap gap-2">
+    <section id="skills" className="relative py-28 md:py-36 px-5 sm:px-8 lg:px-16">
+      <div className="mx-auto max-w-[1400px]">
+        <SectionHeading title="Skills" />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+          {skillCategories.map((category) => (
+            <div key={category.title}>
+              <h3 className="display text-on-surface text-[1.3rem] leading-[1] mb-5">{category.title}</h3>
+              <ul className="border-t border-outline-variant">
                 {category.skills.map((skill) => (
-                  <span key={skill} className="skill-pill bg-background text-on-surface/80 px-3 py-1.5 text-[0.65rem] font-mono tracking-wider border border-outline-variant/30 uppercase cursor-default">
+                  <li
+                    key={skill}
+                    className="py-2.5 border-b border-outline-variant/70 text-on-surface/90"
+                  >
                     {skill}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

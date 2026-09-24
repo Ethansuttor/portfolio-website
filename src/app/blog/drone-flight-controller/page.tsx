@@ -51,9 +51,9 @@ function Block({ block }: { block: LogBlock }) {
 
     case "code":
       return (
-        <figure className="border border-outline-variant/25 bg-background">
+        <figure className="rounded-md overflow-hidden border border-outline-variant bg-background">
           {block.caption && (
-            <figcaption className="px-4 py-2 border-b border-outline-variant/20 text-[0.6rem] font-bold uppercase tracking-[0.18em] text-on-surface-variant/70">
+            <figcaption className="px-4 py-2 border-b border-outline-variant/20 silk text-on-surface-variant">
               {block.caption}
             </figcaption>
           )}
@@ -65,8 +65,8 @@ function Block({ block }: { block: LogBlock }) {
 
     case "callout":
       return (
-        <aside className="p-5 bg-primary-container/10 border-l-2 border-primary-container">
-          <span className="block text-[0.62rem] font-black text-primary uppercase tracking-[0.18em] mb-2">
+        <aside className="p-5 rounded-md bg-primary/[0.07] border border-primary/30">
+          <span className="block silk text-primary mb-2">
             {block.label}
           </span>
           <p className="text-on-surface/90 text-sm md:text-base leading-relaxed">{block.text}</p>
@@ -78,7 +78,7 @@ function Block({ block }: { block: LogBlock }) {
 function Media({ media }: { media: LogMedia }) {
   return (
     <figure className="flex flex-col gap-2">
-      <div className="relative w-full aspect-[4/3] border border-outline-variant/20 bg-background overflow-hidden">
+      <div className="relative w-full aspect-[4/3] rounded-md border border-outline-variant bg-background overflow-hidden">
         {media.kind === "video" ? (
           <video
             src={media.src}
@@ -135,15 +135,13 @@ export default function DroneBuildLogPage() {
         }}
       />
 
-      <SubpageNav backHref={`/projects/${PROJECT_SLUG}`} backLabel="The Project" label="Build Log" />
+      <SubpageNav backHref={`/projects/${PROJECT_SLUG}`} backLabel="The Project" label="Build log" />
 
       <div className="px-6 md:px-24 py-14 max-w-5xl mx-auto">
         {/* Header */}
         <header className="mb-14">
-          <span className="text-primary font-sans text-xs font-bold uppercase tracking-[0.2em] block mb-3">
-            Build Log — Custom Flight Controller
-          </span>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-on-surface tracking-tight leading-tight mb-6">
+          <p className="text-on-surface-variant mb-5">Build log for my flight controller</p>
+          <h1 className="display text-on-surface text-[clamp(2rem,4.6vw,3.6rem)] leading-[0.95] mb-8">
             Designing a flight controller, and everything that went wrong on the way
           </h1>
           <div className="flex flex-col gap-4 max-w-3xl">
@@ -160,23 +158,23 @@ export default function DroneBuildLogPage() {
           </div>
 
           {/* Status band */}
-          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 py-4 border-y border-outline-variant/20">
-            <div>
-              <span className="block text-[0.58rem] font-bold uppercase tracking-[0.18em] text-on-surface-variant/60 mb-1">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 rounded-md border border-outline-variant bg-surface-container-low divide-y sm:divide-y-0 sm:divide-x divide-outline-variant">
+            <div className="px-5 py-4">
+              <span className="block silk text-on-surface-variant mb-1.5">
                 Last update
               </span>
               <time dateTime={latest.date} className="text-sm font-semibold text-on-surface">
                 {latest.dateLabel}
               </time>
             </div>
-            <div>
-              <span className="block text-[0.58rem] font-bold uppercase tracking-[0.18em] text-on-surface-variant/60 mb-1">
+            <div className="px-5 py-4">
+              <span className="block silk text-on-surface-variant mb-1.5">
                 Status
               </span>
               <span className="text-sm font-semibold text-on-surface">{buildStatus}</span>
             </div>
-            <div>
-              <span className="block text-[0.58rem] font-bold uppercase tracking-[0.18em] text-on-surface-variant/60 mb-1">
+            <div className="px-5 py-4">
+              <span className="block silk text-on-surface-variant mb-1.5">
                 Entries
               </span>
               <span className="text-sm font-semibold text-on-surface">{buildLog.length}</span>
@@ -185,7 +183,7 @@ export default function DroneBuildLogPage() {
 
           {/* Jump list */}
           <nav aria-label="Log entries" className="mt-8">
-            <span className="block text-[0.58rem] font-bold uppercase tracking-[0.18em] text-on-surface-variant/60 mb-3">
+            <span className="block silk text-on-surface-variant mb-3">
               Jump to
             </span>
             <ol className="flex flex-col gap-1.5">
@@ -221,12 +219,12 @@ export default function DroneBuildLogPage() {
                 >
                   {entry.dateLabel}
                 </time>
-                <span className="px-2 py-0.5 bg-surface-container-high border border-outline-variant/30 text-[0.58rem] font-bold uppercase tracking-[0.16em] text-primary">
+                <span className="silk rounded-sm border border-primary/40 px-2 py-0.5 text-primary">
                   {entry.phase}
                 </span>
               </div>
 
-              <h2 className="text-xl md:text-3xl font-bold text-on-surface tracking-tight leading-snug mb-3">
+              <h2 className="display text-on-surface text-[clamp(1.5rem,3vw,2.3rem)] leading-[1] mb-4">
                 {entry.title}
               </h2>
               <p className="text-on-surface-variant text-sm md:text-base leading-relaxed mb-6 max-w-3xl">
@@ -259,7 +257,7 @@ export default function DroneBuildLogPage() {
         <div className="mt-14 pt-10 border-t border-outline-variant/20 flex flex-wrap gap-3">
           <Link
             href={`/projects/${PROJECT_SLUG}`}
-            className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest shadow-md"
+            className="btn-ghost px-5 py-3 text-sm"
           >
             The full project write-up
           </Link>
@@ -268,7 +266,7 @@ export default function DroneBuildLogPage() {
               href={project.githubHref}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2.5 px-5 py-3 border border-outline-variant/50 hover:border-primary text-on-surface hover:text-primary bg-background hover:bg-primary-container/5 transition-all duration-200 text-xs md:text-sm font-bold uppercase tracking-widest shadow-md"
+              className="btn-ghost px-5 py-3 text-sm"
             >
               <GitHubIcon />
               Repo
