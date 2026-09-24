@@ -56,7 +56,7 @@ export default async function Image() {
           <div style={{ display: "flex", fontSize: 26, color: og.gold }}>ethansuttor.com</div>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element -- Satori renders plain <img>, not next/image */}
+        {/* Satori renders plain <img>, not next/image. */}
         <img
           src={board}
           alt=""
