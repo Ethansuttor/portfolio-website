@@ -96,7 +96,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         </div>
 
         {photo && (
-          // eslint-disable-next-line @next/next/no-img-element -- Satori renders plain <img>, not next/image
           <img
             src={photo}
             alt=""
