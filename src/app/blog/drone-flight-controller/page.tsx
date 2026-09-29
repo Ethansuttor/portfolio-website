@@ -10,7 +10,7 @@ import { GitHubIcon } from "@/components/icons";
 const PROJECT_SLUG = "custom-drone-flight-controller";
 const TITLE = "Flight Controller Build Log";
 const DESCRIPTION =
-  "A dated log of designing, fabricating and bringing up a custom STM32F405 flight controller PCB — including the sourcing failure, the wrong flash chip, and the DMA collision that cost a day.";
+  "A dated log of designing, fabricating and bringing up a custom STM32F405 flight controller PCB, including the sourcing failure, the wrong flash chip, and the DMA collision that cost a day.";
 
 export const metadata: Metadata = {
   title: `${TITLE} | Ethan Suttor`,
@@ -151,9 +151,9 @@ export default function DroneBuildLogPage() {
               schematic to something that actually flies.
             </p>
             <p className="text-on-surface/70 text-sm md:text-base leading-relaxed">
-              I&apos;ve been keeping this log since May, and I&apos;ve kept the entries that make me look
-              bad. A gyro that stopped existing mid-design, a flash chip an eighth the size I ordered, and
-              a DMA collision that read as a hardware fault for a full day. Those are the interesting parts.
+              I&apos;ve been keeping this log since May, including the entries that make me look bad: a
+              gyro that went out of stock mid-design, a flash chip an eighth the size I ordered, and a DMA
+              collision that looked like a hardware fault for a full day.
             </p>
           </div>
 
