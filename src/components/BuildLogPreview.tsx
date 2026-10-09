@@ -37,7 +37,7 @@ export function BuildLogPreview() {
                   {entry.dateLabel}
                 </time>
                 <span>
-                  <span className="block display text-on-surface text-xl md:text-2xl leading-[1.05] mb-2 group-hover:text-primary">
+                  <span className="block font-semibold text-on-surface text-lg md:text-xl leading-tight mb-2 group-hover:text-primary">
                     {entry.title}
                   </span>
                   <span className="block text-on-surface-variant leading-relaxed max-w-3xl">{entry.standfirst}</span>
