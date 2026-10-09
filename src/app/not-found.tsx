@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const suggestions = [
-  { href: "/projects", label: "All Projects" },
+  { href: "/projects", label: "All projects" },
   { href: BUILD_LOG_HREF, label: "Build log" },
 ];
 
@@ -26,7 +26,7 @@ export default function NotFound() {
           Error 404 · open circuit
         </span>
 
-        <h1 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-on-surface mb-8">
+        <h1 className="display text-[min(11vw,4.5rem)] sm:text-[clamp(2.4rem,6vw,4.5rem)] text-on-surface mb-8">
           Nothing at this address
         </h1>
 

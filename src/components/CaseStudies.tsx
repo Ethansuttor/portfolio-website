@@ -15,7 +15,7 @@ function ViewProjectLink({ project }: { project: Project }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="inline-flex items-center gap-2 font-semibold text-primary underline-offset-4 group-hover:underline after:absolute after:inset-0 after:content-['']"
+      className="inline-flex items-center gap-2 py-1 font-semibold text-primary underline-offset-4 group-hover:underline after:absolute after:inset-0 after:content-['']"
       aria-label={`Read the write-up: ${project.title}`}
     >
       Read the write-up
@@ -37,6 +37,8 @@ function FeaturedProject({ project }: { project: Project }) {
             poster={clip.poster}
             label={clip.alt}
             className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
+            // The figcaption covers the bottom edge, so the pause button goes top-right.
+            controlClassName="top-3 right-3"
           />
         ) : (
           <Image src={project.images[0].src} alt={project.images[0].alt} fill sizes="(max-width: 1024px) 100vw, 40vw" className="object-cover" />
@@ -53,7 +55,7 @@ function FeaturedProject({ project }: { project: Project }) {
           {project.tag} · <span className="text-led">{buildStatus}</span>
         </p>
 
-        <h3 className="display text-on-surface text-[clamp(2rem,4vw,3.4rem)] mb-6">{project.title}</h3>
+        <h3 className="display display-title wrap-break-word text-on-surface text-[clamp(2rem,4vw,3.4rem)] mb-6">{project.title}</h3>
 
         <p className="text-on-surface-variant text-base md:text-lg leading-relaxed max-w-2xl mb-9">{project.summary}</p>
 
@@ -84,7 +86,7 @@ function FeaturedProject({ project }: { project: Project }) {
           {project.blogHref && (
             <Link
               href={project.blogHref}
-              className="relative z-10 font-semibold text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline"
+              className="relative z-10 inline-block py-1 font-semibold text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline"
             >
               Full build log
             </Link>
@@ -95,18 +97,31 @@ function FeaturedProject({ project }: { project: Project }) {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+/** Also the /projects index, which passes `id` so old `/projects#slug` links
+ *  still land on the right card, and `h2` since the page has its own `h1`. */
+export function ProjectCard({
+  project,
+  id,
+  headingLevel: Heading = "h3",
+}: {
+  project: Project;
+  id?: string;
+  headingLevel?: "h2" | "h3";
+}) {
   const cover = project.images[0];
 
   return (
-    <article className="group relative flex flex-col rounded-md border border-outline-variant bg-surface-container-low overflow-hidden hover:border-outline transition-colors">
+    <article
+      id={id}
+      className="group relative flex flex-col rounded-md border border-outline-variant bg-surface-container-low overflow-hidden hover:border-outline transition-colors scroll-mt-20"
+    >
       <div className="relative aspect-[16/11] bg-background border-b border-outline-variant">
         <Image src={cover.src} alt={cover.alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
       </div>
 
       <div className="flex flex-col flex-1 p-7 sm:p-8">
         <p className="text-sm text-on-surface-variant mb-3">{project.tag}</p>
-        <h3 className="display text-on-surface text-[clamp(1.5rem,2.4vw,2rem)] leading-[0.98] mb-4">{project.title}</h3>
+        <Heading className="display display-title wrap-break-word text-on-surface text-[clamp(1.5rem,2.4vw,2rem)] mb-4">{project.title}</Heading>
         <p className="text-on-surface-variant leading-relaxed mb-5">{project.summary}</p>
         <p className="text-sm text-on-surface/70 mb-6">{project.techStack.map((c) => c.label).join(", ")}</p>
         <div className="mt-auto">
@@ -143,9 +158,9 @@ export function CaseStudies() {
                 <li key={project.slug}>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="group grid grid-cols-[1fr_auto] md:grid-cols-[1fr_18rem_auto] items-center gap-x-6 gap-y-1 py-5 border-b border-outline-variant"
+                    className="group grid grid-cols-[minmax(0,1fr)_auto] md:grid-cols-[minmax(0,1fr)_18rem_auto] items-center gap-x-6 gap-y-1 py-5 border-b border-outline-variant"
                   >
-                    <span className="display text-xl md:text-2xl text-on-surface group-hover:text-primary">
+                    <span className="display wrap-break-word text-xl md:text-2xl text-on-surface group-hover:text-primary">
                       {project.title}
                     </span>
                     <span className="text-sm text-on-surface-variant hidden md:block">{project.tag}</span>

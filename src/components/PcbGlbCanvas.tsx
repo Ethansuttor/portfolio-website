@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo, useEffect, useRef, useState } from 'react';
+import { Suspense, useMemo, useEffect, useRef, useState, type ComponentRef } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useProgress, Html, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
@@ -11,7 +11,7 @@ function Loader() {
     <Html center>
       <div className="flex flex-col items-center justify-center gap-2 p-3.5 bg-black/90 text-white rounded border border-white/20 shadow-2xl backdrop-blur-md min-w-[160px]">
         <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <span className="text-[0.65rem] font-mono tracking-widest font-bold text-primary">
+        <span className="text-[0.6875rem] font-mono tracking-widest font-bold text-primary">
           LOADING 3D PCB... {Math.round(progress)}%
         </span>
       </div>
@@ -98,6 +98,14 @@ function FitCameraToAspect({
   return null;
 }
 
+type OrbitControlsHandle = ComponentRef<typeof OrbitControls>;
+
+/** Each +/− press moves the camera this much closer or farther. */
+const ZOOM_STEP = 0.8;
+
+const controlButtonClass =
+  "silk inline-flex items-center justify-center gap-1.5 min-w-8 min-h-8 px-2 bg-surface-container-high border border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary transition-colors duration-200 cursor-pointer";
+
 /** The only board model on the site; kept here so the preload and the component
  *  default can't point at different files. */
 const DEFAULT_MODEL_URL = "/assets/FC_PC_1.glb";
@@ -108,6 +116,7 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(true);
   const [isSpinning, setIsSpinning] = useState(true);
+  const controlsRef = useRef<OrbitControlsHandle>(null);
 
   // Stop the render loop entirely while the viewer is scrolled off-screen
   useEffect(() => {
@@ -132,16 +141,32 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
           </span>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-3">
           <span className="text-sm text-on-surface-variant hidden sm:inline">
-            Drag to rotate, scroll or pinch to zoom
+            Drag to rotate, use + and − to zoom
           </span>
+          <button
+            type="button"
+            onClick={() => controlsRef.current?.dollyIn(ZOOM_STEP)}
+            aria-label="Zoom in"
+            className={controlButtonClass}
+          >
+            <span aria-hidden="true" className="text-sm leading-none">+</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => controlsRef.current?.dollyOut(ZOOM_STEP)}
+            aria-label="Zoom out"
+            className={controlButtonClass}
+          >
+            <span aria-hidden="true" className="text-sm leading-none">−</span>
+          </button>
           <button
             type="button"
             onClick={() => setIsSpinning((v) => !v)}
             aria-pressed={isSpinning}
             aria-label={isSpinning ? "Pause auto-rotation" : "Resume auto-rotation"}
-            className="inline-flex items-center gap-1.5 px-2 py-1 bg-surface-container-high border border-outline-variant/30 hover:border-primary text-on-surface-variant hover:text-primary text-[0.6rem] font-bold uppercase tracking-wider transition-colors duration-200 cursor-pointer"
+            className={controlButtonClass}
           >
             {isSpinning ? (
               <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -161,7 +186,7 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
       {/* 3D Canvas Box */}
       <div
         className="relative w-full h-[300px] sm:h-[420px] md:h-[560px] bg-[radial-gradient(ellipse_at_center,#163826,#081610)] border border-outline-variant rounded-md overflow-hidden shadow-2xl overscroll-contain"
-        style={{ touchAction: 'none' }}
+        style={{ touchAction: 'pan-y' }}
       >
         <Canvas
           frameloop={inView ? 'always' : 'never'}
@@ -174,7 +199,10 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
             alpha: true,
           }}
           camera={{ position: [0, 1.2, 3.2], fov: 45 }}
-          className="w-full h-full cursor-grab active:cursor-grabbing"
+          // OrbitControls sets an inline `touch-action: none` on this element,
+          // which would trap every swipe that starts on the board. The important
+          // rule hands vertical swipes back to the page; horizontal drags still rotate.
+          className="w-full h-full cursor-grab active:cursor-grabbing [touch-action:pan-y]!"
         >
           <FitCameraToAspect />
 
@@ -189,9 +217,13 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
             <ContactShadows frames={1} position={[0, -1.2, 0]} opacity={0.5} scale={5} blur={1.5} far={2} />
           </Suspense>
 
+          {/* Zoom is off so the wheel always scrolls the page; the +/− buttons
+              above dolly the camera instead. */}
           <OrbitControls
+            ref={controlsRef}
             makeDefault
             enablePan={false}
+            enableZoom={false}
             autoRotate={isSpinning}
             autoRotateSpeed={1.0}
             minDistance={0.8}

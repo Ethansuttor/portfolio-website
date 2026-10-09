@@ -18,6 +18,17 @@ export const CONTACT_LIMITS = {
  */
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+export type RequiredContactField = "name" | "email" | "message";
+export type ContactErrors = Partial<Record<RequiredContactField, string>>;
+
+export function validateContactField(field: RequiredContactField, value: string): string | undefined {
+  const trimmed = value.trim();
+  if (field === "email") {
+    return EMAIL_PATTERN.test(trimmed) ? undefined : "Enter an email like name@example.com";
+  }
+  if (!trimmed) return field === "name" ? "Enter your name" : "Write a message";
+}
+
 /**
  * Hidden field name. Real visitors never see it, so anything filled in here
  * came from a bot walking the DOM.

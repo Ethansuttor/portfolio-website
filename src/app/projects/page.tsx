@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { allProjects } from "@/lib/projects";
-import { ProjectArticle } from "@/components/ProjectArticle";
+import { ProjectCard } from "@/components/CaseStudies";
 import { ProjectScrollHandler } from "@/components/ProjectScrollHandler";
 import { SubpageFooter, SubpageNav } from "@/components/SubpageNav";
 
@@ -16,31 +16,27 @@ export default function ProjectsPage() {
     <main className="min-h-screen bg-background text-on-background">
       <ProjectScrollHandler />
 
-      <SubpageNav backHref="/#projects" backLabel="Home" label="All Projects" />
+      <SubpageNav backHref="/#projects" backLabel="Home" label="All projects" />
 
       <header className="mask-texture px-5 sm:px-8 lg:px-16 pt-20 pb-16 border-b border-outline-variant">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="display text-on-surface text-[clamp(2.4rem,6vw,4.5rem)] mb-4">All projects</h1>
+        <div className="mx-auto max-w-[1400px]">
+          <h1 className="display text-on-surface text-[min(11vw,4.5rem)] sm:text-[clamp(2.4rem,6vw,4.5rem)] mb-4">All projects</h1>
           <p className="text-on-surface-variant text-lg max-w-2xl">
-            Every write-up in one place. Each title links to a page of its own if you want to share one.
+            Every project in one place. Each card links to its own write-up if you want to share one.
           </p>
         </div>
       </header>
 
-      {/* Project list */}
-      <div className="flex flex-col gap-8 py-12 px-4 sm:px-8 max-w-7xl mx-auto w-full">
-        {allProjects.map((project) => (
-          <article
-            key={project.slug}
-            id={project.slug}
-            className="rounded-md border border-outline-variant bg-surface-container-low px-6 md:px-14 py-10 md:py-14 w-full scroll-mt-20"
-          >
-            <ProjectArticle project={project} headingLevel="h2" href={`/projects/${project.slug}`} />
-          </article>
-        ))}
+      {/* Project index. Each card keeps id={slug} so old /projects#slug links still land. */}
+      <div className="px-5 sm:px-8 lg:px-16 py-12">
+        <div className="mx-auto max-w-[1400px] grid grid-cols-1 md:grid-cols-2 gap-6">
+          {allProjects.map((project) => (
+            <ProjectCard key={project.slug} id={project.slug} project={project} headingLevel="h2" />
+          ))}
+        </div>
       </div>
 
-      <SubpageFooter backHref="/#projects" backLabel="Back to Home" />
+      <SubpageFooter backHref="/#projects" backLabel="Back to home" />
     </main>
   );
 }

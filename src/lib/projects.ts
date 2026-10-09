@@ -2,6 +2,7 @@ export type ProjectImage = {
   src: string;
   alt: string;
   caption: string;
+  aspect?: "portrait" | "landscape";
   /** Set when the slot holds a clip instead of a still. */
   video?: boolean;
   /** Still frame for a clip — used by thumbnails and before the video loads. */
@@ -41,6 +42,7 @@ export const allProjects: Project[] = [
       { label: "Betaflight", category: "FIRMWARE" },
       { label: "Bosch BMI270", category: "IMU" },
       { label: "TPS5450", category: "POWER" },
+      { label: "GD25Q16E", category: "FLASH" },
     ],
     summary:
       "An STM32F405 flight controller for a 4S FPV quad, running Betaflight on a target I wrote (ETHANF405). The gyro gets its own LDO so logic noise stays off its rail, and a TPS5450 buck makes 5 V straight from the pack. Solder jumpers split the power tree, so I could bring the board up one stage at a time.",
@@ -55,12 +57,13 @@ export const allProjects: Project[] = [
       { label: "PCB & Fab", detail: "~60×60mm 4-layer stackup (ENIG finish for LGA gyro) with single-sided SMD layout for hotplate reflow; mated to Flycolor Raptor BLS-04 ESC via 10-pin JST SH1.0 harness" },
     ],
     images: [
-      { src: "/assets/drone-pcb-assembled.jpeg", alt: "Assembled STM32F405 flight controller PCB after hotplate reflow", caption: "Assembled Board" },
+      { src: "/assets/drone-pcb-assembled.jpeg", alt: "Assembled STM32F405 flight controller PCB after hotplate reflow", caption: "Assembled Board", aspect: "portrait" },
       { src: "/assets/STM32.png", alt: "STM32 MCU Schematic & Signal Routing", caption: "MCU & Core Logic" },
       {
         src: "/assets/drone-motor-spin.mp4",
         alt: "Bench test: the flight controller spins a brushless motor from FlySky transmitter throttle input",
         caption: "Motor Spin-Up Test",
+        aspect: "portrait",
         video: true,
         poster: "/assets/drone-motor-spin-poster.jpg",
       },
@@ -69,11 +72,13 @@ export const allProjects: Project[] = [
         src: "/assets/drone-airframe-bench.jpg",
         alt: "Flight controller board mounted to the quadcopter frame on the bench, motors and receiver wired in",
         caption: "Airframe Wiring",
+        aspect: "portrait",
       },
       {
         src: "/assets/drone-airframe-assembled.jpg",
         alt: "Completed quadcopter with the custom flight controller, props and LiPo pack fitted, sitting on a tripod",
         caption: "Assembled Quadcopter",
+        aspect: "portrait",
       },
     ],
     githubHref: "https://github.com/Ethansuttor/drone_PCB",
@@ -101,16 +106,16 @@ export const allProjects: Project[] = [
       { label: "Actuation", detail: "Timer1 Fast PWM, 2.0ms pulse to Datan B1122 servo, 5-second unlock window" },
     ],
     images: [
-      { src: "/assets/doorlock_hardware.jpeg", alt: "ATmega328PB Door Lock Hardware Prototype", caption: "Hardware Prototype" },
+      { src: "/assets/doorlock_hardware.jpeg", alt: "ATmega328PB Door Lock Hardware Prototype", caption: "Hardware Prototype", aspect: "portrait" },
       { src: "/assets/doorlock_schematic.png", alt: "ATmega328PB Wiring Schematic", caption: "Wiring Schematic" },
-      { src: "/assets/doorlock_flowchart.png", alt: "Program Flow Chart", caption: "Program Flow" },
+      { src: "/assets/doorlock_flowchart.png", alt: "Program Flow Chart", caption: "Program Flow", aspect: "portrait" },
     ],
     githubHref: "https://github.com/Ethansuttor/ECE-412-Microcontrollers",
   },
   {
     slug: "fpga-hierarchical-alu",
     featured: true,
-    title: "FPGA Hierarchical ALU & 7-Segment Display Controller",
+    title: "FPGA Hierarchical ALU & 7‑Segment Display Controller",
     tag: "Class capstone · Digital design",
     techStack: [
       { label: "Artix-7 Basys3", category: "BOARD" },
@@ -119,9 +124,9 @@ export const allProjects: Project[] = [
       { label: "ILA", category: "DEBUG" },
     ],
     summary:
-      "A 0 to 1000 up/down counter in VHDL on a Basys3. The debouncer, counter, BCD converter and 7-segment driver each got their own testbench before I wired them together. The whole thing fits in 117 of the Artix-7's 20,800 slices.",
+      "A 0 to 1000 up/down counter in VHDL on a Basys3. The debouncer, counter, BCD converter and 7‑segment driver each got their own testbench before I wired them together. The whole thing fits in 117 of the Artix-7's 20,800 slices.",
     description:
-      "A 10-bit synchronous up/down counter in VHDL for the Artix-7 on a Basys3 board, built from four submodules under one top-level design. It counts from 0 to 1000, one step per press of the debounced center button (BTNC). Direction (SW13), synchronous preset from SW0–SW9 (SW14), and asynchronous reset (SW15) are all switch-controlled. The binary output is converted to four-digit BCD by a standalone converter, then displayed on the 7-segment array via time-division multiplexing.",
+      "A 10-bit synchronous up/down counter in VHDL for the Artix-7 on a Basys3 board, built from four submodules under one top-level design. It counts from 0 to 1000, one step per press of the debounced center button (BTNC). Direction (SW13), synchronous preset from SW0–SW9 (SW14), and asynchronous reset (SW15) are all switch-controlled. The binary output is converted to four-digit BCD by a standalone converter, then displayed on the 7‑segment array via time-division multiplexing.",
     technicalDetails: [
       { label: "Debouncer", detail: "16-bit shift register clocked at 100MHz; output changes state only on all-high or all-low shift register, suppressing contact bounce on BTNC" },
       { label: "Counter", detail: "10-bit synchronous design with async reset priority, synchronous preset with overflow clamping to 1000, and up/down wraparound logic" },
@@ -131,9 +136,9 @@ export const allProjects: Project[] = [
       { label: "Footprint", detail: "117 / 20,800 Artix-7 logic slices utilized post-synthesis" },
     ],
     images: [
-      { src: "/assets/basys3jpg.jpg", alt: "Basys3 FPGA Production Board", caption: "Basys3 board" },
+      { src: "/assets/basys3jpg.jpg", alt: "Basys3 FPGA Production Board", caption: "Basys3 board", aspect: "portrait" },
       { src: "/assets/counter_schematic.png", alt: "Synthesized Schematic", caption: "Synthesized Schematic" },
-      { src: "/assets/counter_device_layout.png", alt: "FPGA Device Utilization Layout", caption: "Artix-7 device layout" },
+      { src: "/assets/counter_device_layout.png", alt: "FPGA Device Utilization Layout", caption: "Artix-7 device layout", aspect: "portrait" },
     ],
     githubHref: "https://github.com/Ethansuttor/ECE-510-511-FPGA",
   },
@@ -179,9 +184,9 @@ export const allProjects: Project[] = [
     iteration:
       "Final competition: the robot autonomously collected color-coded cubes on a 4×6 ft arena, reading QR codes at the arena corners to determine the target cube color, and used a floor luminosity gradient to identify the home zone. 2-minute autonomous collection window. 1st place finish.",
     images: [
-      { src: "/assets/robot1.jpeg", alt: "The final competition robot, side view", caption: "Final Competition Chassis" },
-      { src: "/assets/robot2.jpeg", alt: "The final competition robot, front view", caption: "Front Assembly" },
-      { src: "/assets/robot3.jpeg", alt: "Inside the robot: control board and power distribution", caption: "Control Board & Power Distribution" },
+      { src: "/assets/robot1.jpeg", alt: "The final competition robot, side view", caption: "Final Competition Chassis", aspect: "portrait" },
+      { src: "/assets/robot2.jpeg", alt: "The final competition robot, front view", caption: "Front Assembly", aspect: "portrait" },
+      { src: "/assets/robot3.jpeg", alt: "Inside the robot: control board and power distribution", caption: "Control Board & Power Distribution", aspect: "portrait" },
     ],
     githubHref: "https://github.com/Ethansuttor/ECE-565",
   },

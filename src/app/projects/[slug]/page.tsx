@@ -80,13 +80,13 @@ export default async function ProjectPage({ params }: Props) {
         }}
       />
 
-      <SubpageNav backHref="/projects" backLabel="All Projects" label={project.title} />
+      <SubpageNav backHref="/projects" backLabel="All projects" label={project.title} />
 
       <article className="px-8 md:px-24 py-16 max-w-7xl mx-auto">
         <ProjectArticle project={project} headingLevel="h1" />
       </article>
 
-      <SubpageFooter backHref="/projects" backLabel="Back to All Projects" />
+      <SubpageFooter backHref="/projects" backLabel="Back to all projects" />
     </main>
   );
 }

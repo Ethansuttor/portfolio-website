@@ -14,7 +14,7 @@ const footerLinks = [
   { label: "LinkedIn", href: LINKEDIN_URL },
 ];
 
-const footerLinkClass = "text-sm text-on-surface-variant hover:text-primary transition-colors";
+const footerLinkClass = "inline-block py-3 text-sm text-on-surface-variant hover:text-primary transition-colors";
 
 export default function Home() {
   return (
@@ -41,17 +41,17 @@ export default function Home() {
       <Header />
 
       <Hero />
-      <CaseStudies />
-      <BuildLogPreview />
       <AboutMe />
-      <TechnicalMatrix />
+      <CaseStudies />
       <ExperienceTimeline />
+      <TechnicalMatrix />
+      <BuildLogPreview />
       <Contact />
 
       <footer className="border-t border-outline-variant px-5 sm:px-8 lg:px-16 py-10">
         <div className="mx-auto max-w-[1400px] flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-sm text-on-surface-variant">© {new Date().getFullYear()} Ethan Suttor</p>
-          <nav aria-label="Elsewhere" className="flex items-center gap-8">
+          <nav aria-label="Elsewhere" className="flex flex-wrap items-center justify-center gap-x-6">
             {footerLinks.map((link) => (
               <a key={link.label} className={footerLinkClass} href={link.href} target="_blank" rel="noreferrer">
                 {link.label}

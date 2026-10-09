@@ -47,17 +47,20 @@ export function TechnicalMatrix() {
   return (
     <section id="skills" className="relative py-28 md:py-36 px-5 sm:px-8 lg:px-16">
       <div className="mx-auto max-w-[1400px]">
-        <SectionHeading title="Skills" />
+        <SectionHeading
+          title="Skills"
+          note="Tools I've used on the projects above."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {skillCategories.map((category) => (
             <div key={category.title}>
               <h3 className="display text-on-surface text-[1.3rem] leading-[1] mb-5">{category.title}</h3>
-              <ul className="border-t border-outline-variant">
+              <ul className="flex flex-wrap gap-2">
                 {category.skills.map((skill) => (
                   <li
                     key={skill}
-                    className="py-2.5 border-b border-outline-variant/70 text-on-surface/90"
+                    className="rounded-sm border border-outline-variant px-3 py-1.5 text-sm text-on-surface"
                   >
                     {skill}
                   </li>

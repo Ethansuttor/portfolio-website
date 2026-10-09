@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { EMAIL, LINKEDIN_LABEL, LINKEDIN_URL } from "@/lib/site";
-import { CONTACT_LIMITS, EMAIL_PATTERN, HONEYPOT_FIELD } from "@/lib/contact";
+import { CONTACT_LIMITS, HONEYPOT_FIELD, validateContactField, type ContactErrors, type RequiredContactField } from "@/lib/contact";
 
 type Status = "idle" | "loading" | "success" | "error";
 
 const EMPTY_FORM = { name: "", email: "", subject: "", message: "" };
+const REQUIRED_FIELDS = ["name", "email", "message"] as const;
 
 const labelClass = "block text-sm font-medium text-on-surface mb-2";
 
 const controlClass =
-  "w-full rounded-md bg-background/70 border border-outline-variant px-4 py-3.5 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-[border-color,box-shadow] duration-200 text-on-surface placeholder:text-on-surface-variant/40 disabled:opacity-40";
+  "w-full rounded-md bg-background/70 border border-outline px-4 py-3.5 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/15 transition-[border-color,box-shadow] duration-200 text-on-surface placeholder:text-on-surface-variant/70 disabled:opacity-40";
 
 function Field({
   id,
@@ -28,8 +29,12 @@ function Field({
     <div>
       <label htmlFor={id} className={labelClass}>
         {label}
+        {/* A real space, so "Subject (optional)" can wrap at large text sizes. */}
         {hint && (
-          <span className="ml-2 text-on-surface-variant/50 normal-case tracking-normal">{hint}</span>
+          <>
+            {" "}
+            <span className="ml-1 text-on-surface-variant normal-case tracking-normal">{hint}</span>
+          </>
         )}
       </label>
       {children}
@@ -105,32 +110,35 @@ export function Contact() {
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
-
-  // Clear the result banner on a timer. Doing this in an effect rather than a
-  // bare setTimeout in the handler means unmounting mid-countdown can't fire a
-  // setState on a dead component.
-  useEffect(() => {
-    if (status !== "success" && status !== "error") return;
-    const timer = setTimeout(() => setStatus("idle"), 6000);
-    return () => clearTimeout(timer);
-  }, [status]);
+  const [errors, setErrors] = useState<ContactErrors>({});
 
   const setField = (field: keyof typeof EMPTY_FORM) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+  ) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field !== "subject") setErrors((prev) => ({ ...prev, [field]: undefined }));
+    if (status === "error" || status === "success") setStatus("idle");
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const validateField = (field: RequiredContactField) => {
+    setErrors((prev) => ({ ...prev, [field]: validateContactField(field, formData[field]) }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Catch the obvious problems before a round trip.
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setErrorMsg("Name, email, and message are all required.");
-      setStatus("error");
-      return;
-    }
-    if (!EMAIL_PATTERN.test(formData.email.trim())) {
-      setErrorMsg("That email address doesn't look right.");
-      setStatus("error");
+    const nextErrors: ContactErrors = {
+      name: validateContactField("name", formData.name),
+      email: validateContactField("email", formData.email),
+      message: validateContactField("message", formData.message),
+    };
+    setErrors(nextErrors);
+    const invalidField = REQUIRED_FIELDS.find((field) => nextErrors[field]);
+    if (invalidField) {
+      setStatus("idle");
+      e.currentTarget.querySelector<HTMLElement>(`#contact-${invalidField}`)?.focus();
       return;
     }
 
@@ -146,13 +154,15 @@ export function Contact() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong.");
+        setErrorMsg(res.status < 500 && typeof data.error === "string" ? data.error : "");
+        setStatus("error");
+        return;
       }
 
       setStatus("success");
       setFormData(EMPTY_FORM);
-    } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed to send. Please try again.");
+    } catch {
+      setErrorMsg("");
       setStatus("error");
     }
   };
@@ -201,9 +211,15 @@ export function Contact() {
                 maxLength={CONTACT_LIMITS.name}
                 value={formData.name}
                 onChange={setField("name")}
+                onBlur={() => validateField("name")}
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? "contact-name-error" : undefined}
                 required
                 disabled={isBusy}
               />
+              {errors.name && (
+                <p id="contact-name-error" className="mt-2 text-sm text-tertiary">{errors.name}</p>
+              )}
             </Field>
 
             <Field id="contact-email" label="Email">
@@ -217,9 +233,15 @@ export function Contact() {
                 maxLength={CONTACT_LIMITS.email}
                 value={formData.email}
                 onChange={setField("email")}
+                onBlur={() => validateField("email")}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? "contact-email-error" : undefined}
                 required
                 disabled={isBusy}
               />
+              {errors.email && (
+                <p id="contact-email-error" className="mt-2 text-sm text-tertiary">{errors.email}</p>
+              )}
             </Field>
 
             </div>
@@ -246,9 +268,15 @@ export function Contact() {
                 maxLength={CONTACT_LIMITS.message}
                 value={formData.message}
                 onChange={setField("message")}
+                onBlur={() => validateField("message")}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? "contact-message-error" : undefined}
                 required
                 disabled={isBusy}
               />
+              {errors.message && (
+                <p id="contact-message-error" className="mt-2 text-sm text-tertiary">{errors.message}</p>
+              )}
               {remaining < 300 && (
                 <p className="mt-2 text-right text-sm text-on-surface-variant">
                   {remaining} characters left
@@ -280,7 +308,10 @@ export function Contact() {
             <div aria-live="polite" className="empty:hidden">
               {status === "error" && (
                 <p className="text-sm text-tertiary">
-                  {errorMsg}
+                  {errorMsg && <>{errorMsg} </>}
+                  Couldn&apos;t send. Email me at{" "}
+                  <a href={`mailto:${EMAIL}`} className="underline underline-offset-4 break-all">{EMAIL}</a>{" "}
+                  instead.
                 </p>
               )}
               {status === "success" && (

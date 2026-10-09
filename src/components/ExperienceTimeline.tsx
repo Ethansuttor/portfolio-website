@@ -80,7 +80,7 @@ const entries: TimelineEntry[] = [
 
 function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
   return (
-    <li className="relative grid grid-cols-[1.75rem_1fr] md:grid-cols-[13rem_2.5rem_1fr] gap-x-4 md:gap-x-6">
+    <li className="relative grid grid-cols-[1.75rem_minmax(0,1fr)] md:grid-cols-[13rem_2.5rem_minmax(0,1fr)] gap-x-4 md:gap-x-6">
       {/* Date column (desktop) */}
       <div className="hidden md:block pt-1 text-right">
         <p className="text-sm text-on-surface tabular-nums">
@@ -115,8 +115,8 @@ function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
           </span>
         </p>
 
-        <h3 className="display text-on-surface text-[clamp(1.4rem,2.6vw,2rem)] leading-[1] mb-2">{entry.role}</h3>
-        <p className="text-primary font-medium mb-5">
+        <h3 className="wrap-break-word font-semibold text-on-surface text-xl md:text-2xl leading-tight mb-2">{entry.role}</h3>
+        <p className="text-on-surface font-semibold mb-5">
           {entry.company}
           {entry.location && <span className="text-on-surface-variant font-normal"> · {entry.location}</span>}
         </p>
@@ -127,7 +127,7 @@ function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
           <ul className="max-w-3xl space-y-2 text-on-surface/85">
             {entry.highlights.map((h) => (
               <li key={h} className="flex gap-3">
-                <span aria-hidden="true" className="mt-[0.6rem] block w-1.5 h-1.5 shrink-0 bg-primary" />
+                <span aria-hidden="true" className="mt-[0.6rem] block w-1.5 h-1.5 shrink-0 bg-outline" />
                 {h}
               </li>
             ))}
@@ -144,7 +144,6 @@ export function ExperienceTimeline() {
       <div className="mx-auto max-w-[1400px]">
         <SectionHeading
           title="Experience"
-          note="Gold dots are roles I still hold."
         />
 
         <ol className="max-w-5xl mx-auto">

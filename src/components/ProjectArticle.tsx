@@ -83,7 +83,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
         <span className="text-sm text-on-surface-variant block mb-4">
           {project.tag}
         </span>
-        <Heading className="display text-on-surface text-[clamp(1.9rem,4.4vw,3.6rem)] leading-[0.95] mb-6">
+        <Heading className="display display-title wrap-break-word text-on-surface text-[min(8.5vw,3.6rem)] sm:text-[clamp(1.9rem,4.4vw,3.6rem)] mb-6">
           {href ? (
             <Link
               href={href}
@@ -113,7 +113,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
             {leftDetails.length > 0 && (
               <section className="mt-2">
-                <SectionLabel as={Sub}>System Implementation</SectionLabel>
+                <SectionLabel as={Sub}>System implementation</SectionLabel>
                 <div className="flex flex-col gap-3.5">
                   {leftDetails.map((item) => (
                     <DetailCard key={item.label} label={item.label} detail={item.detail} expanded />
@@ -144,7 +144,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
           {rightDetails.length > 0 && (
             <section>
-              <SectionLabel as={Sub}>{hasViewer ? "Hardware & Telemetry" : "Implementation"}</SectionLabel>
+              <SectionLabel as={Sub}>{hasViewer ? "Hardware and telemetry" : "Implementation"}</SectionLabel>
               <div className={hasViewer ? "flex flex-col gap-3.5" : "grid grid-cols-1 md:grid-cols-2 gap-3"}>
                 {rightDetails.map((item) => (
                   <DetailCard
@@ -169,7 +169,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
 
           {project.iteration && (
             <div className="p-6 rounded-md bg-primary/[0.07] border border-primary/30">
-              <span className="block font-semibold text-primary mb-2">
+              <span className="block font-semibold text-on-surface mb-2">
                 Competition result
               </span>
               <p className="text-on-surface/90 text-sm md:text-base leading-relaxed">
@@ -186,7 +186,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
             className="btn-ghost px-5 py-3 text-sm w-fit"
           >
             <GitHubIcon />
-            View Code on GitHub
+            View the code on GitHub
           </a>
 
             {project.blogHref && (
@@ -202,7 +202,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
                     d="M4 5.5A1.5 1.5 0 015.5 4H9a3 3 0 013 3v13a2.5 2.5 0 00-2.5-2.5h-4A1.5 1.5 0 014 16V5.5zM20 5.5A1.5 1.5 0 0018.5 4H15a3 3 0 00-3 3v13a2.5 2.5 0 012.5-2.5h4A1.5 1.5 0 0020 16V5.5z"
                   />
                 </svg>
-                Read Build Blog
+                Read the build log
               </Link>
             )}
           </div>
