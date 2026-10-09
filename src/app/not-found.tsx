@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const suggestions = [
-  { href: "/projects", label: "All Projects" },
+  { href: "/projects", label: "All projects" },
   { href: BUILD_LOG_HREF, label: "Build log" },
 ];
 

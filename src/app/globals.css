@@ -25,6 +25,14 @@
   --led: #6dfa9c;
 }
 
+@media (prefers-contrast: more) {
+  :root {
+    --on-surface-variant: #c9d8cd; /* 11.93:1 */
+    --outline: #7fa891;            /* 6.65:1 */
+    --outline-variant: #4f7a62;    /* 3.34:1, so hairlines pass the 3:1 border rule */
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-on-background: var(--on-background);
@@ -94,7 +102,13 @@ body {
   line-height: 0.88;
 }
 
-/* Small mono labels, set the way KiCad prints reference designators. */
+.display-title {
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+/* Small mono labels, set the way KiCad prints reference designators.
+   Deliberate exception to the brand rule: mono labels remain gold despite not being interactive. */
 .silk {
   font-family: var(--font-mono), monospace;
   font-stretch: 87.5%;
