@@ -7,7 +7,8 @@ type BackLink = { backHref: string; backLabel: string };
 const backLinkClass =
   "btn-ghost group px-4 py-2 text-sm";
 
-/** Sticky top bar on the inner pages: a back link, and the page's name on the right. */
+/** Sticky top bar on the inner pages: a back link, and the résumé download on the
+ *  right. `label` names the page for screen readers. */
 export function SubpageNav({ backHref, backLabel, label }: BackLink & { label: string }) {
   return (
     <nav aria-label={label} className="sticky top-0 z-50 bg-background/85 backdrop-blur-xl border-b border-outline-variant px-5 sm:px-8 lg:px-16 h-[68px] flex items-center justify-between gap-6">
@@ -34,7 +35,7 @@ export function SubpageNav({ backHref, backLabel, label }: BackLink & { label: s
  *  point at /#top on project pages, which navigated to the home page instead. */
 export function SubpageFooter({ backHref, backLabel }: BackLink) {
   return (
-    <div className="border-t border-outline-variant px-5 sm:px-8 lg:px-16 py-8 flex items-center justify-between gap-4">
+    <div className="border-t border-outline-variant px-5 sm:px-8 lg:px-16 py-8 flex flex-wrap items-center justify-between gap-x-4">
       <Link href={backHref} className={backLinkClass}>
         <ArrowLeftIcon className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
         {backLabel}

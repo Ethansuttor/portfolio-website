@@ -80,7 +80,7 @@ const entries: TimelineEntry[] = [
 
 function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
   return (
-    <li className="relative grid grid-cols-[1.75rem_1fr] md:grid-cols-[13rem_2.5rem_1fr] gap-x-4 md:gap-x-6">
+    <li className="relative grid grid-cols-[1.75rem_minmax(0,1fr)] md:grid-cols-[13rem_2.5rem_minmax(0,1fr)] gap-x-4 md:gap-x-6">
       {/* Date column (desktop) */}
       <div className="hidden md:block pt-1 text-right">
         <p className="text-sm text-on-surface tabular-nums">
@@ -115,7 +115,7 @@ function Entry({ entry, isLast }: { entry: TimelineEntry; isLast: boolean }) {
           </span>
         </p>
 
-        <h3 className="font-semibold text-on-surface text-xl md:text-2xl leading-tight mb-2">{entry.role}</h3>
+        <h3 className="wrap-break-word font-semibold text-on-surface text-xl md:text-2xl leading-tight mb-2">{entry.role}</h3>
         <p className="text-on-surface font-semibold mb-5">
           {entry.company}
           {entry.location && <span className="text-on-surface-variant font-normal"> · {entry.location}</span>}

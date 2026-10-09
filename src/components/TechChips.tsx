@@ -10,7 +10,7 @@ const variants = {
   },
   article: {
     chip: "gap-1.5 px-2.5 py-1 bg-surface-container-high border-outline-variant/30 text-xs",
-    category: "text-[0.65rem]",
+    category: "text-[0.6875rem]",
     label: "text-on-surface/90 font-medium",
   },
 };

@@ -83,7 +83,7 @@ export function ProjectArticle({ project, headingLevel = "h2", href }: ProjectAr
         <span className="text-sm text-on-surface-variant block mb-4">
           {project.tag}
         </span>
-        <Heading className="display display-title text-on-surface text-[clamp(1.9rem,4.4vw,3.6rem)] mb-6">
+        <Heading className="display display-title wrap-break-word text-on-surface text-[min(8.5vw,3.6rem)] sm:text-[clamp(1.9rem,4.4vw,3.6rem)] mb-6">
           {href ? (
             <Link
               href={href}

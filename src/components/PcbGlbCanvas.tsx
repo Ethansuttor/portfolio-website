@@ -141,7 +141,7 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
           </span>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-3">
           <span className="text-sm text-on-surface-variant hidden sm:inline">
             Drag to rotate, use + and − to zoom
           </span>

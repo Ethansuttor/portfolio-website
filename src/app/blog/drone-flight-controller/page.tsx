@@ -34,14 +34,14 @@ function Block({ block }: { block: LogBlock }) {
   switch (block.kind) {
     case "text":
       return (
-        <p className="text-on-surface/85 text-sm md:text-base leading-relaxed">{block.text}</p>
+        <p className="wrap-break-word text-on-surface/85 text-sm md:text-base leading-relaxed">{block.text}</p>
       );
 
     case "list":
       return (
         <ul className="flex flex-col gap-2">
           {block.items.map((item) => (
-            <li key={item} className="flex gap-3 text-on-surface/85 text-sm md:text-base leading-relaxed">
+            <li key={item} className="flex gap-3 wrap-break-word text-on-surface/85 text-sm md:text-base leading-relaxed">
               <span aria-hidden="true" className="mt-2.5 h-1 w-1 shrink-0 bg-primary" />
               <span>{item}</span>
             </li>
@@ -53,7 +53,7 @@ function Block({ block }: { block: LogBlock }) {
       return (
         <figure className="rounded-md overflow-hidden border border-outline-variant bg-background">
           {block.caption && (
-            <figcaption className="px-4 py-2 border-b border-outline-variant/20 silk text-on-surface-variant">
+            <figcaption className="px-4 py-2 border-b border-outline-variant/20 silk text-on-surface-variant break-all">
               {block.caption}
             </figcaption>
           )}
@@ -141,7 +141,7 @@ export default function DroneBuildLogPage() {
         {/* Header */}
         <header className="mb-14">
           <p className="text-on-surface-variant mb-5">Build log for my flight controller</p>
-          <h1 className="display display-title text-on-surface text-[clamp(2rem,4.6vw,3.6rem)] mb-8">
+          <h1 className="display display-title wrap-break-word text-on-surface text-[min(9vw,3.6rem)] sm:text-[clamp(2rem,4.6vw,3.6rem)] mb-8">
             Designing a flight controller, and everything that went wrong on the way
           </h1>
           <div className="flex flex-col gap-4 max-w-3xl">
@@ -186,12 +186,12 @@ export default function DroneBuildLogPage() {
             <span className="block silk text-on-surface-variant mb-3">
               Jump to
             </span>
-            <ol className="flex flex-col gap-1.5">
+            <ol className="flex flex-col">
               {buildLog.map((entry) => (
                 <li key={entry.slug}>
                   <a
                     href={`#${entry.slug}`}
-                    className="group inline-flex flex-wrap items-baseline gap-x-3 text-sm text-on-surface-variant hover:text-primary transition-colors duration-200"
+                    className="group inline-flex flex-wrap items-baseline gap-x-3 py-1 text-sm text-on-surface-variant hover:text-primary transition-colors duration-200"
                   >
                     <time dateTime={entry.date} className="font-mono text-[0.7rem] text-on-surface-variant tabular-nums">
                       {entry.date}

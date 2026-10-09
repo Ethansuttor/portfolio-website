@@ -139,7 +139,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
         <button
           type="button"
           onClick={() => setIsFullscreen(true)}
-          className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1 bg-background/85 hover:bg-background text-on-surface border border-outline-variant/30 hover:border-primary text-[0.65rem] font-bold uppercase tracking-wider transition-all duration-200 shadow-md group/btn cursor-pointer"
+          className="absolute top-3 right-3 z-10 flex items-center gap-1.5 min-w-8 min-h-8 px-2.5 py-1 bg-background/85 hover:bg-background text-on-surface border border-outline-variant/30 hover:border-primary text-[0.6875rem] font-bold uppercase tracking-wider transition-all duration-200 shadow-md group/btn cursor-pointer"
           aria-label="View full screen"
         >
           <svg

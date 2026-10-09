@@ -29,8 +29,12 @@ function Field({
     <div>
       <label htmlFor={id} className={labelClass}>
         {label}
+        {/* A real space, so "Subject (optional)" can wrap at large text sizes. */}
         {hint && (
-          <span className="ml-2 text-on-surface-variant normal-case tracking-normal">{hint}</span>
+          <>
+            {" "}
+            <span className="ml-1 text-on-surface-variant normal-case tracking-normal">{hint}</span>
+          </>
         )}
       </label>
       {children}
