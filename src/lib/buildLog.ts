@@ -20,6 +20,7 @@ export type LogMedia = {
   poster?: string;
   alt: string;
   caption: string;
+  aspect?: "portrait" | "landscape";
 };
 
 export type BuildLogEntry = {
@@ -53,6 +54,7 @@ export const buildLog: BuildLogEntry[] = [
     media: {
       kind: "image",
       src: "/assets/drone-airframe-assembled.jpg",
+      aspect: "portrait",
       alt: "The finished quadcopter with the custom flight controller, props and LiPo fitted, sitting on a tripod",
       caption: "Airframe done on September 12. All four motors spin, and it flips as soon as it gets light on its feet.",
     },
@@ -145,6 +147,7 @@ export const buildLog: BuildLogEntry[] = [
     media: {
       kind: "video",
       src: "/assets/drone-motor-spin.mp4",
+      aspect: "portrait",
       poster: "/assets/drone-motor-spin-poster.jpg",
       alt: "Bench test: the flight controller spins a brushless motor from FlySky transmitter throttle input",
       caption: "Throttle up on the FlySky, board powered from the pack and USB at once.",
@@ -257,6 +260,7 @@ export const buildLog: BuildLogEntry[] = [
     media: {
       kind: "image",
       src: "/assets/drone-pcb-assembled.jpeg",
+      aspect: "portrait",
       alt: "Assembled STM32F405 flight controller PCB after hotplate reflow",
       caption: "Everything placed, one reflow pass, no rework yet.",
     },
