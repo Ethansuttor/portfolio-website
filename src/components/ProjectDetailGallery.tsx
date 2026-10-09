@@ -90,7 +90,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
   return (
     <div className="flex flex-col gap-3">
       {/* Main Image Container */}
-      <div className="relative w-full aspect-[4/3] rounded-md border border-outline-variant hover:border-primary/50 transition-colors duration-300 overflow-hidden bg-background p-3 flex items-center justify-center group">
+      <div className={`relative w-full ${images[active].aspect === "portrait" ? "mx-auto aspect-[3/4] max-h-[70vh] max-w-[52.5vh]" : "aspect-[4/3]"} rounded-md border border-outline-variant hover:border-primary/50 transition-colors duration-300 overflow-hidden bg-background p-3 flex items-center justify-center group`}>
         {images[active].video ? (
           // No click-to-zoom overlay on a clip — it would swallow the transport
           // controls. The full screen button in the corner still works.
@@ -128,7 +128,7 @@ export function ProjectDetailGallery({ images }: { images: ProjectImage[] }) {
 
         {/* Caption badge — moves up out of the way of a clip's transport bar */}
         <span
-          className={`absolute left-3 text-[0.6rem] font-sans font-bold uppercase tracking-widest text-primary bg-background/80 px-2 py-1 z-1 pointer-events-none ${
+          className={`absolute left-3 text-[0.6875rem] font-sans font-bold uppercase tracking-widest text-primary bg-background/80 px-2 py-1 z-1 pointer-events-none ${
             images[active].video ? "top-3" : "bottom-3"
           }`}
         >

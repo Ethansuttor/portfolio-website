@@ -77,8 +77,8 @@ function Block({ block }: { block: LogBlock }) {
 
 function Media({ media }: { media: LogMedia }) {
   return (
-    <figure className="flex flex-col gap-2">
-      <div className="relative w-full aspect-[4/3] rounded-md border border-outline-variant bg-background overflow-hidden">
+    <figure className={`flex flex-col gap-2 ${media.aspect === "portrait" ? "w-full max-w-sm" : ""}`}>
+      <div className={`relative w-full ${media.aspect === "portrait" ? "aspect-[3/4] max-h-[70vh] max-w-[52.5vh]" : "aspect-[4/3]"} rounded-md border border-outline-variant bg-background overflow-hidden`}>
         {media.kind === "video" ? (
           <video
             src={media.src}
@@ -96,12 +96,12 @@ function Media({ media }: { media: LogMedia }) {
             src={media.src}
             alt={media.alt}
             fill
-            sizes="(max-width: 1024px) 100vw, 640px"
+            sizes={media.aspect === "portrait" ? "(max-width: 432px) calc(100vw - 48px), 384px" : "(max-width: 1024px) 100vw, 640px"}
             className="object-contain p-2"
           />
         )}
       </div>
-      <figcaption className="text-xs text-on-surface-variant/70 leading-relaxed">{media.caption}</figcaption>
+      <figcaption className="text-xs text-on-surface-variant leading-relaxed">{media.caption}</figcaption>
     </figure>
   );
 }
@@ -135,13 +135,13 @@ export default function DroneBuildLogPage() {
         }}
       />
 
-      <SubpageNav backHref={`/projects/${PROJECT_SLUG}`} backLabel="The Project" label="Build log" />
+      <SubpageNav backHref={`/projects/${PROJECT_SLUG}`} backLabel="The project" label="Build log" />
 
       <div className="px-6 md:px-24 py-14 max-w-5xl mx-auto">
         {/* Header */}
         <header className="mb-14">
           <p className="text-on-surface-variant mb-5">Build log for my flight controller</p>
-          <h1 className="display text-on-surface text-[clamp(2rem,4.6vw,3.6rem)] leading-[0.95] mb-8">
+          <h1 className="display display-title text-on-surface text-[clamp(2rem,4.6vw,3.6rem)] mb-8">
             Designing a flight controller, and everything that went wrong on the way
           </h1>
           <div className="flex flex-col gap-4 max-w-3xl">
@@ -158,7 +158,7 @@ export default function DroneBuildLogPage() {
           </div>
 
           {/* Status band */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 rounded-md border border-outline-variant bg-surface-container-low divide-y sm:divide-y-0 sm:divide-x divide-outline-variant">
+          <div className="mt-10 max-w-3xl grid grid-cols-1 sm:grid-cols-3 rounded-md border border-outline-variant bg-surface-container-low divide-y sm:divide-y-0 sm:divide-x divide-outline-variant">
             <div className="px-5 py-4">
               <span className="block silk text-on-surface-variant mb-1.5">
                 Last update
@@ -193,7 +193,7 @@ export default function DroneBuildLogPage() {
                     href={`#${entry.slug}`}
                     className="group inline-flex flex-wrap items-baseline gap-x-3 text-sm text-on-surface-variant hover:text-primary transition-colors duration-200"
                   >
-                    <time dateTime={entry.date} className="font-mono text-[0.7rem] text-on-surface-variant/50 tabular-nums">
+                    <time dateTime={entry.date} className="font-mono text-[0.7rem] text-on-surface-variant tabular-nums">
                       {entry.date}
                     </time>
                     <span className="group-hover:underline underline-offset-4">{entry.title}</span>
@@ -215,7 +215,7 @@ export default function DroneBuildLogPage() {
               <div className="flex flex-wrap items-center gap-3 mb-3">
                 <time
                   dateTime={entry.date}
-                  className="font-mono text-[0.7rem] tracking-wide text-on-surface-variant/60 tabular-nums"
+                  className="font-mono text-[0.7rem] tracking-wide text-on-surface-variant tabular-nums"
                 >
                   {entry.dateLabel}
                 </time>
@@ -224,7 +224,7 @@ export default function DroneBuildLogPage() {
                 </span>
               </div>
 
-              <h2 className="display text-on-surface text-[clamp(1.5rem,3vw,2.3rem)] leading-[1] mb-4">
+              <h2 className="display-title font-semibold text-on-surface text-lg md:text-xl leading-tight mb-4">
                 {entry.title}
               </h2>
               <p className="text-on-surface-variant text-sm md:text-base leading-relaxed mb-6 max-w-3xl">
@@ -233,17 +233,17 @@ export default function DroneBuildLogPage() {
 
               <div
                 className={
-                  entry.media
+                  entry.media && entry.media.aspect !== "portrait"
                     ? "grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
-                    : "max-w-3xl"
+                    : "max-w-3xl flex flex-col gap-8"
                 }
               >
                 {entry.media && (
-                  <div className="lg:col-span-5 lg:sticky lg:top-24">
+                  <div className={entry.media.aspect === "portrait" ? "w-full" : "lg:col-span-5 lg:sticky lg:top-24"}>
                     <Media media={entry.media} />
                   </div>
                 )}
-                <div className={`flex flex-col gap-5 ${entry.media ? "lg:col-span-7" : ""}`}>
+                <div className={`flex flex-col gap-5 ${entry.media && entry.media.aspect !== "portrait" ? "lg:col-span-7" : ""}`}>
                   {entry.blocks.map((block, i) => (
                     <Block key={i} block={block} />
                   ))}
@@ -275,7 +275,7 @@ export default function DroneBuildLogPage() {
         </div>
       </div>
 
-      <SubpageFooter backHref="/projects" backLabel="All Projects" />
+      <SubpageFooter backHref="/projects" backLabel="All projects" />
     </main>
   );
 }
