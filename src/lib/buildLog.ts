@@ -50,7 +50,7 @@ export const buildLog: BuildLogEntry[] = [
     phase: "Debug",
     title: "The flash chip was fine the whole time",
     standfirst:
-      "The quad flips as soon as it lifts off, so I finally went after the blackbox flash. I spent two days blaming the chip and one night thinking I'd killed the board, and the actual problem was a missing line in Betaflight.",
+      "The quad flips as soon as it lifts off, so I finally went back to the blackbox flash. Two days of blaming the chip and one night of thinking I'd killed the board, and it ended up being a missing line in Betaflight.",
     media: {
       kind: "image",
       src: "/assets/drone-airframe-assembled.jpg",
@@ -61,35 +61,35 @@ export const buildLog: BuildLogEntry[] = [
     blocks: [
       {
         kind: "text",
-        text: "The airframe went together on the 12th and all four motors spin. It also tries to flip over as soon as it starts to lift, every time. I don't think it's the frame. The gyro alignment in my target is still a placeholder I guessed for the old IMU, and I've never checked which motor each output drives or which way they turn, and any one of those would make a quad do exactly this. On top of that, a gyro that's 180° out and a mirrored motor map look identical from the air, so I can't reason my way to the answer. It needs a props-off tilt test on the bench, which in hindsight I should have done before arming it the first time.",
+        text: "The airframe went together on the 12th and all four motors spin. It also tries to flip over as soon as it starts to lift, every time. I don't think it's the frame. The gyro alignment in my target is still a placeholder I guessed for the old IMU, and I've never checked which motor each output drives or which way they spin, and any one of those would make a quad do this. The annoying part is that a gyro that's 180° out and a mirrored motor map look the same from the air, so watching it flip doesn't tell me which one it is. I need to do a props-off tilt test on the bench (I hadn't done one before arming it the first time, which I probably should have).",
       },
       {
         kind: "text",
-        text: "The flip is also what made the flash urgent. Without a blackbox log I have nothing to diagnose it from except watching it flip, so the chip I'd written off on September 3 became the next thing to fix.",
+        text: "The flip is also why the flash suddenly mattered. Without a blackbox log all I've got is watching it flip, so the chip I'd written off on September 3 was the next thing to fix.",
       },
       {
         kind: "text",
-        text: "Going back over why I'd decided it was dead, the reasoning had holes in it. A JEDEC ID of all zeros fits a dead die, but it also fits a chip that never gets selected, or a MISO line that something else is holding low. Three of the checks I'd counted as passes would pass in all three cases:",
+        text: "When I went back over why I'd decided it was dead, it didn't hold up that well. A JEDEC ID of all zeros fits a dead die, but it also fits a chip that never gets selected, or a MISO line that something else is holding low. Three of the checks I'd counted as passes would have passed in all three cases:",
       },
       {
         kind: "list",
         items: [
           "/CS idles at 3.3 V. With the pull-up fitted it reads 3.3 V whether the MCU ever drives it or not.",
-          "Continuity from each U3 pin to the MCU. That shows each net is continuous, but it doesn't rule out a bridge to another net.",
-          "MISO to ground measured 1.4 MΩ, unpowered. That can't catch anything that only pulls the line low once the board is on.",
+          "Continuity from each U3 pin to the MCU. Fine for finding an open, but it wouldn't catch a bridge to another net.",
+          "MISO to ground measured 1.4 MΩ, unpowered. That won't catch anything that only pulls the line low once the board is on.",
         ],
       },
       {
         kind: "text",
-        text: "At one point I was also poking at pins on the powered 0.5 mm LQFP with a handheld meter, and shortly after that the board stopped enumerating: power LED on, status LED off, no USB, and the F405 hot to the touch. Unpowered, I measured about 3 Ω from VCAP_1 to ground. I pulled C12 and measured again, still about 3 Ω, so I figured the short was inside the die, wrote the board off and started planning a respin.",
+        text: "Somewhere in there I was also poking at pins on the powered 0.5 mm LQFP with a handheld meter, and not long after that the board stopped enumerating. Power LED on, status LED off, no USB, and the F405 hot to the touch. Unpowered, I got about 3 Ω from VCAP_1 to ground. I pulled C12, measured again and still got about 3 Ω, so I figured the short was inside the die, wrote the board off and started planning a respin.",
       },
       {
         kind: "text",
-        text: "The next day I plugged it in with a scope attached and it just booted, like nothing had happened. The 3 Ω was me probing the ground-side pad of C12's now-empty footprint, so ground against ground (2.4 Ω raw against 1.6 Ω of lead resistance was never a short). The actual fault was C12 itself, a flex-cracked MLCC shorting the core regulator's output, which is why the chip got hot and never started, and pulling it fixed the board on the spot. In hindsight I should have tried powering it again before deciding anything.",
+        text: "The next day I plugged it in with a scope attached and it just booted like nothing had happened. Turns out the 3 Ω was me probing the ground-side pad of C12's empty footprint, so I was measuring ground to ground (2.4 Ω raw, with 1.6 Ω of that being the leads, was never a short). The real fault was C12 itself, a flex-cracked MLCC shorting the core regulator's output. That's what made the chip hot and stopped it starting, and pulling it had already fixed the board. I should have just tried powering it again before deciding anything.",
       },
       {
         kind: "text",
-        text: "With C12 replaced and a working board again, I spent the evening checking the flash hardware properly, this time with tests that would give a real answer either way:",
+        text: "Once I had C12 replaced and a working board again, I spent the evening going back over the flash wiring, this time with tests that could actually fail:",
       },
       {
         kind: "list",
@@ -101,7 +101,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "So MISO was high, the MCU could read it as high, and flash_info still printed zeros, which pointed at firmware. To find where, I built a debug version of Betaflight that records which exit flashSpiInit() takes and prints the raw ID bytes instead of the tidied-up result. This is from the first boot:",
+        text: "So MISO was high, the MCU could read it as high, and flash_info still printed zeros. At that point it had to be firmware somewhere. I built a debug version of Betaflight that records which exit flashSpiInit() takes and prints the raw ID bytes instead of the tidied-up result. Output from the first boot is below, the last line is the one that matters:",
       },
       {
         kind: "code",
@@ -110,11 +110,11 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "C8 40 15 is the ID straight out of the GigaDevice datasheet, so the chip had been answering correctly since September 3. It turns out Betaflight 4.5.5 doesn't have the GD25Q16E in its chip table, so the driver didn't recognise the reply and gave up, and flash_info printed an empty struct. The 0x00000000 was never read off the wire at all.",
+        text: "C8 40 15 is the ID straight out of the GigaDevice datasheet, so the chip had been answering fine since September 3. Betaflight 4.5.5 just doesn't have the GD25Q16E in its chip table, so the driver didn't recognise the reply, gave up, and flash_info printed an empty struct. That's where the 0x00000000 came from, not from anything on the wire.",
       },
       {
         kind: "text",
-        text: "My July 30 entry says the part is already in that table. It isn't, at least not in the release I'm running, and that wrong line in my notes is why I spent two days debugging the hardware.",
+        text: "My July 30 entry says the part is already in that table. It isn't, at least not in the release I'm running. I'd been going off that note the whole time, which is a big part of why I spent two days on the hardware.",
       },
       {
         kind: "code",
@@ -123,16 +123,16 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "The Winbond W25Q16 entry right above it has the same 2 MB layout, so I copied its geometry rather than guessing. It isn't upstream, so I have to re-apply it after every clean build or fresh clone.",
+        text: "The Winbond W25Q16 entry right above it has the same 2 MB layout, so I copied its geometry rather than guessing. It isn't upstream, so I have to remember to re-apply it after every clean build or fresh clone.",
       },
       {
         kind: "callout",
         label: "What I'm doing differently",
-        text: "Looking at the raw bytes before deciding what a bus returned. \"Nothing detected\" and \"read a zero\" printed exactly the same, and I treated one as the other for two days. And no meter probes on a powered 0.5 mm package: I'll probe a via, a pad or a passive, or tack on a wire.",
+        text: "Printing the raw bytes before I decide what a bus returned. \"Nothing detected\" and \"read a zero\" looked exactly the same in flash_info, and I mixed them up for two days. Also no more meter probes on a powered 0.5 mm package. I'll probe a via, a pad or a passive, or tack a wire on.",
       },
       {
         kind: "text",
-        text: "Blackbox works now. Next is setting the sample rate to 1/4 so the 2 MB chip doesn't fill in 22 seconds, checking motor mapping and direction, testing failsafe, and then logging a flight so I can diagnose the flip from data instead of guessing.",
+        text: "Blackbox works now. Next up: set the sample rate to 1/4 so the 2 MB chip doesn't fill in 22 seconds, check motor mapping and direction, test failsafe, and then log a flight so I can look at the flip in actual data.",
       },
     ],
   },
@@ -155,11 +155,11 @@ export const buildLog: BuildLogEntry[] = [
     blocks: [
       {
         kind: "text",
-        text: "Spun a motor off the board today, with the LiPo in through CN1 and USB-C plugged in at the same time. Throttle up and it just ran, cleanly: no stutter, no brownout, no smoke.",
+        text: "Spun a motor off the board today, with the LiPo in through CN1 and USB-C plugged in at the same time. Throttled up and it just ran, no stutter or brownout, and nothing smoked.",
       },
       {
         kind: "text",
-        text: "The dual-source part is what I was really testing. Three ORing diodes (D3, D4, D7) sit between the buck's 5 V and USB's 5 V, and until today I'd never had both live at once. If I'd got those backwards, one source would have been pushing current into the other. Nothing happened, which is the right result and not a very exciting one.",
+        text: "The two-sources-at-once part is what I actually wanted to test. There are three ORing diodes (D3, D4, D7) between the buck's 5 V and USB's 5 V, and until today I'd never had both live together. If I'd got those backwards, one source would have been pushing current into the other. Nothing happened, so as far as I can tell they're the right way round.",
       },
       {
         kind: "text",
@@ -167,7 +167,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "The blackbox flash is dead, though, not miswired. I went back and re-checked every pin by hand: VCC, /HOLD, /WP, /CS, all four SPI2 continuity points, pin-1 orientation, and no MISO-to-ground short (1.4 MΩ). All of them are what they should be, and flash_info still returns nothing:",
+        text: "The blackbox flash is another story. I'm pretty sure it's dead rather than miswired. I went back and re-checked every pin by hand: VCC, /HOLD, /WP, /CS, all four SPI2 continuity points, pin-1 orientation, and no MISO-to-ground short (1.4 MΩ). Everything reads like it should, and flash_info still returns nothing:",
       },
       {
         kind: "code",
@@ -176,7 +176,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "All zeros rather than all ones is the giveaway. An open MISO floats high and reads 0xFFFFFF, whereas 0x000000 means the MCU clocked out the read command and the data line sat low the whole time, so the chip never answered. That leaves nothing to blame but the die. I have five spares, so it's a hot-air swap, keeping the nozzle narrow and well away from U7, since the BMI270 is the one part on this board I don't want to reflow twice.",
+        text: "The fact that it's all zeros and not all ones is what makes me think it's the chip. An open MISO floats high and reads 0xFFFFFF, whereas 0x000000 means the MCU clocked out the read command and the data line sat low the whole time, so the chip never answered, and with the wiring checked I can't see what else it would be. I have five spares, so it's a hot-air swap. I'll keep the nozzle narrow and well away from U7, since the BMI270 is the one part on this board I really don't want to reflow twice.",
       },
       {
         kind: "text",
@@ -205,20 +205,20 @@ export const buildLog: BuildLogEntry[] = [
           "Vref=3.28V, which is only readable if VDDA is live, so the FB1 wire link works.",
           "TPS5450 buck put out 4.98 V from a 15.58 V pack, 0.4% off target.",
           "Bridged JP10 and the gyro appeared immediately: GYRO=BMI270, ACC=BMI270, GYRO rate: 3225.",
-          "Four DShot outputs landed on DMA1 streams 7, 2, 6 and 1. Four distinct streams, no clash.",
+          "Four DShot outputs landed on DMA1 streams 7, 2, 6 and 1, so none of them share a stream.",
         ],
       },
       {
         kind: "text",
-        text: "That last one closes out the motor remap from June: the pin I moved to avoid a DMA collision is clear on real silicon too.",
+        text: "That last one was the check left over from the motor remap in June, and the pin I moved to dodge a DMA collision is clear on the real board too.",
       },
       {
         kind: "text",
-        text: "Then I lost a day to the ADC. status showed a healthy Vref=3.28V and a core temperature climbing normally, with Voltage: 0 * 0.01V (0S battery - NOT PRESENT) directly underneath, while my meter read 1.4 V on PA1. I checked the divider, JP8, battery_meter = ADC, adc_device = 1 and the resource mapping, and they were all correct. Everything downstream of that pin measured fine and the reading stayed at zero.",
+        text: "Then I lost a day to the ADC. status showed a healthy Vref=3.28V and a core temperature climbing normally, with Voltage: 0 * 0.01V (0S battery - NOT PRESENT) right underneath, while my meter read 1.4 V on PA1. I checked the divider, JP8, battery_meter = ADC, adc_device = 1 and the resource mapping, and they were all fine. Everything I could measure on that pin was right and the reading just stayed at zero.",
       },
       {
         kind: "text",
-        text: "It turned out to be DMA. On the F405, ADC1's regular-conversion DMA defaults to DMA2 Stream 0 Channel 0, and SPI1_RX (the gyro) defaults to DMA2 Stream 0 Channel 3, so they both want the same stream. SPI1 gets allocated first and wins, and then the ADC driver does this:",
+        text: "It ended up being DMA. On the F405, ADC1's regular-conversion DMA defaults to DMA2 Stream 0 Channel 0, and SPI1_RX (the gyro) defaults to DMA2 Stream 0 Channel 3, so they both want the same stream. SPI1 gets allocated first and wins, and then the ADC driver does this:",
       },
       {
         kind: "code",
@@ -227,11 +227,11 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "It just returns, with no error, no boot warning and no log line. The regular conversion sequence never runs and every external ADC channel reads zero, which here means both battery voltage and current.",
+        text: "It just returns. There's no error, no warning at boot and nothing in the log. The regular conversion sequence never runs, and every external ADC channel reads zero, which on this board means battery voltage and current.",
       },
       {
         kind: "text",
-        text: "It's hard to spot because on F4, Vref and core temperature come through injected channels triggered by software polling, and those don't need DMA at all. So the ADC looks healthy in status while the two channels I actually wanted are missing, which is why I went through the jumper, the divider and the pin mapping before I looked at DMA.",
+        text: "What made it hard to spot is that on F4, Vref and core temperature come through injected channels triggered by software polling, and those don't need DMA at all. So the ADC looks healthy in status while the two channels I actually cared about are missing, and that's why I went through the jumper, the divider and the pin mapping before it occurred to me to look at DMA.",
       },
       {
         kind: "code",
@@ -245,7 +245,7 @@ export const buildLog: BuildLogEntry[] = [
       {
         kind: "callout",
         label: "Note for next time",
-        text: "I checked DMA for the motors because that was the collision I already knew about, and it didn't occur to me to check it for the ADC. Checking DMA at bring-up applies to every peripheral, not just the motors.",
+        text: "I checked DMA for the motors because that was the collision I already knew about, and didn't think to check it for the ADC. From now on I'm checking DMA for every peripheral at bring-up, not just the motors.",
       },
     ],
   },
@@ -267,17 +267,17 @@ export const buildLog: BuildLogEntry[] = [
     blocks: [
       {
         kind: "text",
-        text: "Before any paste went down I generated a placement guide from the KiCad file, reading the actual pad-to-net connections instead of trusting the BOM. It's organised by part value rather than reference designator, because that's how you actually assemble: open one strip, place every position for that value, seal the strip, then open the next. Never two strips open at once.",
+        text: "Before any paste went down I generated a placement guide from the KiCad file, reading the actual pad-to-net connections instead of trusting the BOM. It's sorted by part value rather than reference designator, because that's how I actually place parts: open one strip, place every position for that value, seal it, then open the next, and never have two strips open at once.",
       },
       {
         kind: "text",
-        text: "That might sound like a lot of process for a board with sixty-odd passives, but two pairs on this board sit next to each other in the same 0805 package and are silently wrong if swapped:",
+        text: "That's probably a lot of process for a board with sixty-odd passives, but there are two pairs on here that sit next to each other in the same 0805 package, and nothing would tell me if I swapped them:",
       },
       {
         kind: "list",
         items: [
           "R6 (marked 1003, 100 kΩ) and R13 (1002, 10 kΩ) are the VBAT divider. Swapped, PA1 sees 15.3 V instead of 1.53 V and the pin dies the first time a pack goes in.",
-          "R7 (1002) and R8 (3241) set the buck feedback. Swapped, the converter outputs 1.221 × (1 + 3.24/10) = 1.62 V instead of 5 V, nothing downstream runs, and you spend an evening blaming the TPS5450.",
+          "R7 (1002) and R8 (3241) set the buck feedback. Swapped, the converter outputs 1.221 × (1 + 3.24/10) = 1.62 V instead of 5 V, nothing downstream runs, and I'd probably spend an evening blaming the TPS5450.",
         ],
       },
       {
@@ -286,7 +286,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "Everything goes down value-side-up so I can read the markings back afterwards instead of taking my own word for it.",
+        text: "Everything goes down value-side-up so I can read the markings back afterwards and check them.",
       },
     ],
   },
@@ -301,23 +301,23 @@ export const buildLog: BuildLogEntry[] = [
     blocks: [
       {
         kind: "text",
-        text: "Two bad discoveries today. First the gyro: I'd designed around a TDK ICM-42605, and somewhere between choosing it and needing it the whole 426xx family went reel-only at LCSC (minimum order a thousand-plus) and out of stock at DigiKey and Mouser. In quantity one it's effectively gone.",
+        text: "Two bad discoveries today. First the gyro: I'd designed around a TDK ICM-42605, and somewhere between choosing it and needing it the whole 426xx family went reel-only at LCSC (minimum order a thousand-plus) and out of stock at DigiKey and Mouser, so for buying one it's basically gone.",
       },
       {
         kind: "text",
-        text: "The replacement is a Bosch BMI270. It has the same 2.5 × 3.0 mm LGA-14 outline, but that's the only thing it shares. The pinout is different, so it needed a new footprint and every IMU net re-routed. The decoupling is different too (100 nF at VDD and 100 nF at VDDIO, where the 42605 wanted a 2.2 µF / 0.1 µF / 10 nF set), and the unused-pin strapping is inverted: ASDx and ASCx now go to VDDIO and must not be grounded, whereas grounding is what the 42605's RESV pins wanted.",
+        text: "The replacement is a Bosch BMI270. It has the same 2.5 × 3.0 mm LGA-14 outline and not much else in common. The pinout is different, so it needed a new footprint and every IMU net re-routed. The decoupling is different too (100 nF at VDD and 100 nF at VDDIO, where the 42605 wanted a 2.2 µF / 0.1 µF / 10 nF set), and the unused-pin strapping is inverted: ASDx and ASCx now go to VDDIO and must not be grounded, whereas grounding is what the 42605's RESV pins wanted.",
       },
       {
         kind: "text",
-        text: "The power tree absorbed all of it with no changes. VDD stayed on the quiet TLV733P rail and VDDIO stayed on the main AP2112K rail, so a forced sourcing change cost me a footprint and a re-route instead of a power redesign. That wasn't planned. I split the rails back in June to keep digital switching noise off the gyro supply, and it happened to pay off two months later for an unrelated reason.",
+        text: "The power side didn't need to change at all. VDD stayed on the quiet TLV733P rail and VDDIO stayed on the main AP2112K rail, so the swap cost me a footprint and a re-route instead of a power redesign. That was luck more than planning: I split the rails back in June to keep digital switching noise off the gyro supply, not because I expected to change parts.",
       },
       {
         kind: "text",
-        text: "It does cost something. The BMI270 ships uncalibrated, which is why Betaflight discourages it for new designs, and it caps the PID loop at 3.2 kHz instead of 8 kHz. For Acro freestyle neither matters much, and the alternative was not having a board.",
+        text: "There are downsides. The BMI270 ships uncalibrated, which is why Betaflight discourages it for new designs, and it caps the PID loop at 3.2 kHz instead of 8 kHz. For Acro freestyle I don't think either matters much, and I couldn't get the other part in quantity one anyway.",
       },
       {
         kind: "text",
-        text: "Then, while reconciling three different BOM files against each other, I found the flash problem. U3 as ordered and fitted is a GigaDevice GD25Q16E, which is 16 Mbit, so 2 MB. The BOM called for a 128 Mbit part. The wrong one made it onto the order and I didn't catch it until a week after the boards shipped, which says a fair bit about how I was managing the BOM.",
+        text: "Then, while going through three different BOM files that didn't agree with each other, I found the flash problem. U3 as ordered and fitted is a GigaDevice GD25Q16E, which is 16 Mbit, so 2 MB. The BOM called for a 128 Mbit part. The wrong one ended up on the order and I didn't notice until a week after the boards shipped. Having three BOMs is probably how that happened.",
       },
       {
         kind: "text",
@@ -330,12 +330,12 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "What I lose is log duration, not function: roughly 22 seconds at 3.2 kHz, 44 at 1.6 kHz, 87 at 800 Hz. Tuning runs are 30 to 60 seconds anyway, and 800 Hz still resolves everything below 400 Hz, which is where the motor and frame noise peaks that filter tuning depends on are. The real loss is not being able to log a whole pack. Every candidate upgrade uses the same SOIC-8 208-mil footprint, so fixing it later is a hot-air swap.",
+        text: "Logging still works, the logs are just short: roughly 22 seconds at 3.2 kHz, 44 at 1.6 kHz, 87 at 800 Hz. Tuning runs are 30 to 60 seconds anyway, and 800 Hz still resolves everything below 400 Hz, which is where the motor and frame noise peaks that filter tuning cares about are. What actually bugs me is not being able to log a whole pack. Every candidate upgrade uses the same SOIC-8 208-mil footprint, so fixing it later is a hot-air swap.",
       },
       {
         kind: "callout",
         label: "New bring-up item: JP10",
-        text: "Found this while auditing. The quiet 3.3 V rail reaches the BMI270's VDD through JP10, a normally-open solder jumper. If it isn't bridged, the board enumerates fine over USB and reports no gyro, which looks a lot like a firmware bug.",
+        text: "Found this while auditing. The quiet 3.3 V rail reaches the BMI270's VDD through JP10, a normally-open solder jumper. If it isn't bridged, the board enumerates fine over USB and just reports no gyro, which I'd almost certainly mistake for a firmware bug.",
       },
     ],
   },
@@ -358,7 +358,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "All of that went into one file, VERIFIED_PINOUT.md, which is now the only pin document I trust. I marked the older tables superseded instead of deleting them, so I can still see what I got wrong and when.",
+        text: "All of that went into one file, VERIFIED_PINOUT.md, and that's the one I go by now. I marked the older tables superseded instead of deleting them, so I can still see what I got wrong and when.",
       },
       {
         kind: "text",
@@ -443,11 +443,11 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "Motor 4 also had to move. It was on a pin that wants DMA1 Stream 3, and so does SPI2_RX, which is the blackbox flash, so DShot and the logger would have been fighting over the same stream. That doesn't show up as a compile error. It shows up as a motor misbehaving only while you're logging, which would be a miserable bug to track down.",
+        text: "Motor 4 also had to move. It was on a pin that wants DMA1 Stream 3, and so does SPI2_RX, which is the blackbox flash, so DShot and the logger would have been fighting over the same stream. You don't get a compile error for that, you'd just get a motor that misbehaves only while it's logging, which would be a miserable bug to track down.",
       },
       {
         kind: "text",
-        text: "I remapped it and checked the new assignment against the DMA request tables in RM0090, but I don't fully trust the table. dma show all on real hardware is the check that counts, so that went on the bring-up list.",
+        text: "I remapped it and checked the new assignment against the DMA request tables in RM0090, but I don't fully trust the table, so running dma show all on the real board went on the bring-up list.",
       },
     ],
   },
@@ -466,7 +466,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "The BLS-04 has no BEC, it just hands you raw pack voltage. So the board carries its own buck converter running off up to 16.8 V, which is a much more interesting problem than taking a regulated 5 V from somewhere else, and the external Matek BEC I'd planned on is gone. So far that constraint has been the most useful decision on the project.",
+        text: "The BLS-04 has no BEC, it just hands you raw pack voltage. So the board carries its own buck converter running off up to 16.8 V, which is a much more interesting problem than taking a regulated 5 V from somewhere else, and the external Matek BEC I'd planned on is gone. I think that constraint has probably been the most useful decision on the project so far.",
       },
       {
         kind: "text",

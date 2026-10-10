@@ -3,6 +3,7 @@ import { Archivo, Hanken_Grotesk, Martian_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_URL } from "@/lib/site";
+import { NavHistory } from "@/components/NavHistory";
 import "./globals.css";
 
 const display = Archivo({
@@ -59,6 +60,7 @@ export default function RootLayout({
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`} data-scroll-behavior="smooth">
       <body className="antialiased font-sans">
         {children}
+        <NavHistory />
         {/* Both no-op in development and on non-Vercel hosts, so they don't
             need to be conditionally rendered. */}
         <Analytics />

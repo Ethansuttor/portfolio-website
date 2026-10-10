@@ -151,9 +151,9 @@ export default function DroneBuildLogPage() {
               schematic to something that actually flies.
             </p>
             <p className="text-on-surface/70 text-sm md:text-base leading-relaxed">
-              I&apos;ve been keeping this log since May, including the entries that make me look bad: a
-              gyro that went out of stock mid-design, a flash chip an eighth the size I ordered, and a DMA
-              collision that looked like a hardware fault for a full day.
+              I&apos;ve been keeping this log since May. So far that&apos;s included a gyro that went out of
+              stock mid-design, a flash chip an eighth the size I ordered, and a DMA collision that looked
+              like a hardware fault for a full day.
             </p>
           </div>
 
