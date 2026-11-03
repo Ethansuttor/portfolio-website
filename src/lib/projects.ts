@@ -42,19 +42,19 @@ export const allProjects: Project[] = [
       { label: "Betaflight", category: "FIRMWARE" },
       { label: "Bosch BMI270", category: "IMU" },
       { label: "TPS5450", category: "POWER" },
-      { label: "GD25Q16E", category: "FLASH" },
+      { label: "W25Q128JV", category: "FLASH" },
     ],
     summary:
-      "An STM32F405 flight controller for a 4S FPV quad, running Betaflight on a target I wrote (ETHANF405). The gyro gets its own LDO so logic noise stays off its rail, and a TPS5450 buck makes 5 V straight from the pack. Solder jumpers split the power tree, so I could bring the board up one stage at a time.",
+      "An STM32F405 flight controller for a 4S quad, running Betaflight on a target I wrote (ETHANF405). v1 is 80 × 80 mm and flies. v2, called IRIS, is 55 × 55 mm, about 53% less board, and adds 16 MB of blackbox flash, a barometer, GPS and optical flow ports, camera and VTX power, and a 5 V buck sized for 3 A.",
     description:
-      "A flight controller for an FPV quad, built around an STM32F405 and running Betaflight on a custom target (ETHANF405). There are two 3.3 V LDOs: an AP2112K for the logic and a TLV733P that feeds only the IMU, so switching noise from the MCU never reaches the gyro. That split paid off when the 426xx IMU I designed around went out of stock. Swapping to a Bosch BMI270 meant a new footprint and new decoupling caps, and nothing in the power tree had to change. The ESC I paired it with (a Flycolor Raptor BLS-04) has no BEC, so the board makes its own 5 V at up to 5 A from the 4S pack with a TPS5450 buck. It also has SPI flash for blackbox logs, an i-BUS input for a FlySky FS-iA6B receiver, and solder jumpers that keep each power stage disconnected until I close them on the bench.",
+      "A flight controller for a quad, built around an STM32F405 and running Betaflight on a custom target (ETHANF405). The ESC I paired it with (a Flycolor Raptor BLS-04) has no BEC, so the board makes its own 5 V from the pack with a TPS5450 buck. v1 had a separate LDO for the IMU, which made swapping to a Bosch BMI270 painless when the IMU I designed around went out of stock, and solder jumpers that let me bring the power tree up one stage at a time. v1 flies now, and its flight logs drove most of v2: the 2 MB flash filled in about 85 seconds, the current sensor turned out to be reading a floating ADC pin, and the 5 V rail was limited to about 1.5 A by the inductor. v2 (IRIS) fixes those, drops the board from 80 × 80 mm to 55 × 55 mm on the standard 30.5 mm pattern, and adds ports for GPS, compass, optical flow and the H501A camera so position hold can come later.",
     technicalDetails: [
-      { label: "MCU", detail: "STM32F405RGT6 (168MHz Cortex-M4 with FPU), running custom Betaflight target ETHANF405 with motor 4 remapped to PB5 (TIM3_CH2) to prevent DMA1 Stream 3 collisions" },
-      { label: "Power Tree", detail: "TPS5450DDAR buck converter (VBAT to 5V/5A) with Panasonic POSCAP 220µF ESR-matched output cap; dual-LDO architecture (AP2112K for logic/VDDIO, TLV733P for dedicated quiet IMU VDD)" },
-      { label: "IMU", detail: "Bosch BMI270 6-axis MEMS gyro/accelerometer on isolated 3.3V sensor rail, mounted at the center of the board" },
-      { label: "Blackbox", detail: "GigaDevice GD25Q16E, 2 MB of SPI NOR flash for blackbox logs. The BOM called for the 16 MB BY25Q128ES and the wrong part got ordered, so logging runs at a 1/4 sample rate to fit about 87 seconds per log" },
-      { label: "Bring-Up", detail: "Normally-open solder jumpers split the power tree across 4 stages for current-limited bench testing; test points on all rails and scope ground loops" },
-      { label: "PCB & Fab", detail: "~60×60mm 4-layer stackup (ENIG finish for LGA gyro) with single-sided SMD layout for hotplate reflow; mated to Flycolor Raptor BLS-04 ESC via 10-pin JST SH1.0 harness" },
+      { label: "MCU", detail: "STM32F405RGT6 (168 MHz Cortex-M4 with FPU) on both boards. v2 moves motors 3 and 4 to TIM4 (PB6/PB7) to free all six U(S)ARTs; DShot and SPI DMA streams checked against Betaflight source and CubeMX before layout" },
+      { label: "Power Tree", detail: "TPS5450 buck from 3S or 4S (12.6 to 16.8 V). v2 uses a 15 µH inductor rated 9 A, SS54 diodes and a 35 mΩ polymer output cap for 3 A continuous, where v1's 2 A inductor limited the rail to about 1.5 A. Single AP2112K 3.3 V rail, with a ferrite bead footprint on the IMU supply" },
+      { label: "IMU & Baro", detail: "Bosch BMI270 6-axis IMU near the stack centre. v2 adds a Goertek SPA06-003 barometer (DPS368 second source on the same footprint) on I2C1" },
+      { label: "Blackbox", detail: "v2: Winbond W25Q128JV, 16 MB, about 11 minutes per log at 1/4 sampling and in Betaflight's stock flash table. v1 has a 2 MB GD25Q16E (wrong part ordered) that needed a driver table patch and holds about 85 seconds" },
+      { label: "Expansion", detail: "JST-GH GPS and compass port in Pixhawk pin order, spare I2C port, optical flow port on USART3, 8 pin H501A camera header, AIO camera/VTX power pads, i-BUS telemetry to the FS-iA6B on UART4, ELRS pad on USART1" },
+      { label: "PCB & Fab", detail: "v2: 55 × 55 mm, 4 layers (In1 solid GND, In2 3.3 V plane), black mask, 30.5 mm mounting holes. v1: 80 × 80 mm, ENIG, single-sided SMD for one hotplate reflow pass. Both mate to the BLS-04 through its 10 pin SH1.0 harness" },
     ],
     images: [
       { src: "/assets/drone-pcb-assembled.jpeg", alt: "Assembled STM32F405 flight controller PCB after hotplate reflow", caption: "Assembled Board", aspect: "portrait" },

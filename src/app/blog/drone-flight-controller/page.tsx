@@ -10,7 +10,7 @@ import { GitHubIcon } from "@/components/icons";
 const PROJECT_SLUG = "custom-drone-flight-controller";
 const TITLE = "Flight Controller Build Log";
 const DESCRIPTION =
-  "A dated log of designing, fabricating and bringing up a custom STM32F405 flight controller PCB, including the sourcing failure, the wrong flash chip, and the DMA collision that cost a day.";
+  "A dated log of designing, fabricating and bringing up a custom STM32F405 flight controller PCB, including the sourcing failure, the wrong flash chip, the DMA collision that cost a day, first flights, and the smaller v2 board.";
 
 export const metadata: Metadata = {
   title: `${TITLE} | Ethan Suttor`,

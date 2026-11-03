@@ -150,7 +150,7 @@ function BoardPhoto() {
       </div>
 
       <figcaption className="mt-4 text-sm text-on-surface-variant">
-        My flight controller after hotplate reflow. It&apos;s in the airframe now, and it flips the moment it lifts off.{" "}
+        My first flight controller after hotplate reflow. It flies now, and v2, about half the size, is on order.{" "}
         <Link href={BUILD_LOG_HREF} className="text-primary underline-offset-4 hover:underline">
           Read the build log
         </Link>
