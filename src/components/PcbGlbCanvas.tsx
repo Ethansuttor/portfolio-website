@@ -130,6 +130,19 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
     return () => observer.disconnect();
   }, []);
 
+  // OrbitControls zoom is on so pinch works (touch, and trackpads, which send a
+  // ctrl+wheel). A plain mouse wheel is stopped here, in the capture phase,
+  // before it reaches the canvas, so it keeps scrolling the page.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey) e.stopPropagation();
+    };
+    el.addEventListener('wheel', onWheel, { capture: true });
+    return () => el.removeEventListener('wheel', onWheel, { capture: true });
+  }, []);
+
   return (
     <div ref={containerRef} className="w-full relative flex flex-col gap-2.5 my-4">
       {/* Header bar */}
@@ -143,7 +156,7 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
 
         <div className="flex flex-wrap items-center gap-3">
           <span className="text-sm text-on-surface-variant hidden sm:inline">
-            Drag to rotate, use + and − to zoom
+            Drag to rotate, pinch or use + and − to zoom
           </span>
           <button
             type="button"
@@ -217,13 +230,13 @@ export function PcbGlbCanvas({ url = DEFAULT_MODEL_URL }: { url?: string }) {
             <ContactShadows frames={1} position={[0, -1.2, 0]} opacity={0.5} scale={5} blur={1.5} far={2} />
           </Suspense>
 
-          {/* Zoom is off so the wheel always scrolls the page; the +/− buttons
-              above dolly the camera instead. */}
+          {/* Pinch zooms; a plain mouse wheel is filtered out above so it
+              scrolls the page. The +/− buttons dolly the camera too. */}
           <OrbitControls
             ref={controlsRef}
             makeDefault
             enablePan={false}
-            enableZoom={false}
+            enableZoom
             autoRotate={isSpinning}
             autoRotateSpeed={1.0}
             minDistance={0.8}
