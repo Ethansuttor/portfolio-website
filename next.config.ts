@@ -66,6 +66,10 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Don't advertise the framework to bots fingerprinting for known CVEs.
   poweredByHeader: false,
+  experimental: {
+    // Tells coding agents to keep Next on versions without known advisories.
+    agentUpgrade: "security",
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
