@@ -108,7 +108,7 @@ const controlButtonClass =
 
 /** The only board model on the site; kept here so the preload and the component
  *  default can't point at different files. */
-const DEFAULT_MODEL_URL = "/assets/FC_PC_1.glb";
+const DEFAULT_MODEL_URL = "/assets/IRIS_v2.glb";
 
 useGLTF.preload(DEFAULT_MODEL_URL);
 

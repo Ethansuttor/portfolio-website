@@ -40,9 +40,223 @@ export type BuildLogEntry = {
 
 /** Where the build stands, shown in the log's header band. Kept beside the
  *  entries so it gets updated in the same edit as each new one. */
-export const buildStatus = "Airframe built, flips on liftoff";
+export const buildStatus = "v1 flying, v2 (IRIS) ordered";
 
 export const buildLog: BuildLogEntry[] = [
+  {
+    slug: "iris-v2-ordered",
+    date: "2026-11-02",
+    dateLabel: "November 2, 2026",
+    phase: "v2 Fab",
+    title: "v2 is ordered, and it's about half the size",
+    standfirst:
+      "IRIS, the second board, went to fab with black solder mask. It's 55 × 55 mm against v1's 80 × 80, and it has more on it.",
+    blocks: [
+      {
+        kind: "text",
+        text: "Ordered the v2 boards today, with a stencil, from the fab export I made at 6:59 pm. The board is called IRIS (the logo is an eye where the iris is a camera aperture, since v2 is the board that adds a camera), and this time the mask is black. The 3D model on the project page is this board, exported straight out of KiCad.",
+      },
+      {
+        kind: "text",
+        text: "v1 is 80 × 80 mm and v2 is 55 × 55 mm, so 3,025 mm² against 6,400 mm², which is about 53% less board. I was aiming for 50 × 50 and it ended up at 55 once everything was routed. It still uses the 30.5 mm mounting pattern, so it bolts straight onto the ESC stack instead of needing the 80 × 80 carrier plate v1 sits on. Compared with v1 it adds:",
+      },
+      {
+        kind: "list",
+        items: [
+          "16 MB of blackbox flash (W25Q128JV) instead of 2 MB. That's about 11 minutes at 1/4 sampling instead of about 85 seconds, and the part is already in Betaflight's stock flash table, so the driver patch v1 needs goes away.",
+          "A barometer (Goertek SPA06-003, with the Infineon DPS368 as a second source on the same footprint) on I2C1.",
+          "A 6 pin JST-GH GPS and compass port in Pixhawk pin order, so a stock GPS cable plugs straight in, plus a spare 4 pin I2C port for a rangefinder.",
+          "A 4 pin JST-SH port on USART3 for an optical flow and rangefinder module, for position hold later.",
+          "An 8 pin header that matches the H501A camera board's connector, on UART5, and power pads for an all-in-one camera and VTX.",
+          "i-BUS telemetry out to the FS-iA6B's SENS port on UART4, so battery voltage shows up on the transmitter, and a pad on USART1 TX for an ELRS receiver.",
+          "A 5 V buck sized for 3 A continuous instead of about 1.5 A, and an SMD buzzer.",
+        ],
+      },
+      {
+        kind: "text",
+        text: "Only the parts v1's leftover stock doesn't cover went on the LCSC order. Everything else (the F405, BMI270, TPS5450, AP2112K, crystal, most of the passives) comes out of the v1 bags. That's based on a paper count, the v1 order minus one built board, so I still need to physically count the ICs, the crystal, CN1 and the 1210 caps before the boards show up.",
+      },
+      {
+        kind: "text",
+        text: "Two things I left as they are on purpose. The TPS5450's PowerPAD only has 3 GND vias (6 to 9 would be better), so I'll watch U6's temperature under load at bring-up. And there's no Schottky in series with VBUS, which means if the battery is in and the USB cable goes to a host that's switched off, the board back-drives VBUS at about 4.6 V. For now the rule is just not to do that.",
+      },
+      {
+        kind: "text",
+        text: "While waiting I pulled the GPS module out of the old Hubsan H501A. It's a u-blox M8030-KT, and wired to an ESP32 as a serial bridge it put out NMEA at 9600 baud straight away. Sitting inside a window it got a 3D fix 43 seconds after power-on, 7 satellites used of 17 in view, HDOP 1.34. That's below Betaflight's default 8 satellite minimum for GPS Rescue, but that's the window, not the module. It's going on the J4 GPS port.",
+      },
+      {
+        kind: "text",
+        text: "When the boards arrive: inspect them, check every power rail to ground for shorts before placing a single part, then bring up the buck on its own with a current limit before the MCU goes on.",
+      },
+    ],
+  },
+  {
+    slug: "v2-layout",
+    date: "2026-10-29",
+    dateLabel: "October 29, 2026",
+    phase: "v2 Layout",
+    title: "Routing v2, and moving the camera supply off USB",
+    standfirst:
+      "A week of review rounds on the v2 layout. The worst finding was a 19 mm buck switch node, and the most useful one was a supply problem that only shows up on USB.",
+    blocks: [
+      {
+        kind: "text",
+        text: "The first review of the layout, on October 22, found the buck's switch node was about 19 mm of track. The PH pin is on the right side of U6, L3 was on the left, and the catch diode D2 was 6 mm above, so the noisiest net on the board went the long way round. I rotated U6 so PH faces L3 and put D2's cathode right at PH, and the U6 to D2 to L3 path is now about 7 mm at 0.8 mm wide.",
+      },
+      {
+        kind: "text",
+        text: "Two buck capacitors also needed actual part numbers, which turned out to matter. C16, the 330 µF output cap, has to be low ESR: the TPS5450 datasheet design example (15 µH, 330 µF) needs ESR under about 40 mΩ, and an ordinary MnO2 tantalum is in the hundreds of mΩ, which would break the loop compensation. It's a 330 µF polymer part now. The input caps were 4.7 µF 1210 with no voltage rating, and a 25 V X7R loses most of its capacitance at 16.8 V, so they went back to v1's 10 µF 100 V parts. v2 also has to run on 3S and 4S, so 12.6 V to 16.8 V in.",
+      },
+      {
+        kind: "text",
+        text: "The supply problem: the camera/VTX pads and the H501A header were on +5V, which USB VBUS feeds directly. On USB alone the VTX and camera would have powered up too (about 0.6 to 0.8 A from a 0.5 A port, with a VTX sitting on the bench with no airflow), and on battery they'd get 5 V minus the ORing diode drop, about 4.6 V, when the H501A is a 5.0 V part. I moved both to +5V_Buck, which only exists when the battery is in and doesn't go through D3. USB now only carries about 250 mA of board load.",
+      },
+      {
+        kind: "text",
+        text: "Then rounds of routing review against the saved board, with a script that measures clearances and trace lengths from the .kicad_pcb. Some of what came up:",
+      },
+      {
+        kind: "list",
+        items: [
+          "VBAT_ADC was 0.25 mm and I2C1_SCL 0.31 mm from the edge of an M3 mounting hole, and three motor lines ran 0.4 to 0.6 mm from another one. A metal screw and standoff go through those holes.",
+          "CURR_ADC was 55.7 mm long with a detour to the current-sense jumper in a corner. The first reroute ran 8.7 mm under the buck inductor, which is about the worst place for an analog line, so it got moved again and now runs between D2 and L3 instead of under either.",
+          "The buzzer driver was 22 mm from the buzzer. Q2, D8 and R26 moved next to BZ1.",
+          "+5V ended up 0.25 mm from the top right hole. By the time I ordered it was 1.38 mm.",
+        ],
+      },
+      {
+        kind: "text",
+        text: "The stackup is F.Cu, 0.1 mm prepreg, In1, a 1.24 mm core, In2, 0.1 mm prepreg, B.Cu. In1 is a solid GND plane and In2 is one continuous 3.3 V plane, which means traces on the bottom layer reference the 3.3 V plane, not ground. The front got a full GND pour too. Final DRC is 0 unconnected, and everything left is silkscreen overlap or library mismatch warnings.",
+      },
+    ],
+  },
+  {
+    slug: "v2-scope",
+    date: "2026-10-21",
+    dateLabel: "October 21, 2026",
+    phase: "v2 Design",
+    title: "Scoping v2, and taking the OSD back out",
+    standfirst:
+      "Three goals for v2: smaller, video, and holding position. Most of the actual changes came from what went wrong on v1.",
+    blocks: [
+      {
+        kind: "text",
+        text: "With v1 flying I could finally pin down v2. The goals are a smaller board, video, and flight that holds position as well as it can. I'm staying on the STM32F405. The LQFP64 has enough pins (about 40 of 51 used) and all six U(S)ARTs once the motors move off PA3/PB10 and the battery sensing moves to PC0/PC1. An H7 only really pays off for full ArduPilot, so that's a maybe for a v3.",
+      },
+      {
+        kind: "text",
+        text: "Moving motors 3 and 4 to PB6/PB7 (TIM4) meant checking DMA again, since v1 already lost a day to it. I went through Betaflight's DMA request map and init order before drawing anything:",
+      },
+      {
+        kind: "code",
+        caption: "DShot streams on v2, checked in Betaflight source and CubeMX",
+        code: "M1 TIM3_CH3  DMA1 Stream 7\nM2 TIM3_CH4  DMA1 Stream 2\nM3 TIM4_CH1  DMA1 Stream 0\nM4 TIM4_CH2  DMA1 Stream 3   <- SPI2_RX only maps to D1S3\nADC1         DMA2 Stream 4",
+      },
+      {
+        kind: "text",
+        text: "So there's a conflict, but a soft one. Betaflight allocates motor DMA before SPI DMA, so the motors win, and the blackbox flash on SPI2 gets TX-only DMA with reads running polled. That costs a little CPU and doesn't touch the motors, so I'm accepting it, and if it matters, turning on bidirectional DShot moves F4 motors to bitbang and frees the stream. CubeMX's DMA tab came out the same, stream for stream.",
+      },
+      {
+        kind: "text",
+        text: "For video I designed in an AT7456E OSD with its 27 MHz crystal, a CAM/AUX video select jumper and the composite in/out network, and then took it all back out the same day. Live video is going to be an off-the-shelf all-in-one camera and VTX on power pads, and the H501A camera board records to its own SD card through an 8 pin header. Dropping the OSD also freed SPI3 and PA15, and meant I didn't need a filtered 5 V branch just for one chip.",
+      },
+      {
+        kind: "text",
+        text: "Position hold needs optical flow and a rangefinder, and Betaflight doesn't support optical flow at all, so that's INAV eventually. I didn't want v2 to wait on choosing modules, so the plan is a populated core with provisioned expansion: GPS and compass, optical flow and spare I2C ports are all on the board, nothing gets plugged in yet, and it runs Betaflight first.",
+      },
+      {
+        kind: "text",
+        text: "The rest of the changes trace back to v1:",
+      },
+      {
+        kind: "list",
+        items: [
+          "Flash goes to 16 MB (W25Q128JV). v1's 2 MB holds about 85 seconds at 1/4 sampling, and every flight log so far has ended because it filled up.",
+          "The separate IMU LDO is gone. I flew v1 with the BMI270 on the main 3.3 V rail and it flew the same, but that's how it felt, not a log, so the IMU gets an 0805 ferrite bead footprint (fit 0 Ω if it's not needed) plus 2.2 µF and 0.1 µF at the pin. If gyro noise shows up on v2, the bead goes on.",
+          "The 5 V buck gets a bigger inductor. v1's has a 2 A saturation current, which limits the rail to about 1.5 A. At 3 A out, 16.8 V in and 15 µH, ripple is about 0.47 A peak to peak and the peak current about 3.24 A, so I wanted 4 A or more of saturation current and picked a 15 µH part rated 9 A. The SS34 diodes go to 5 A SS54s.",
+          "Current sense gets a 100 kΩ pulldown and a 100 nF cap at the ADC pin, so an unplugged sense line reads 0 A instead of floating, which is exactly what v1's does.",
+          "The status LED moves from PC14 to PC8. PC13 to PC15 are in the backup domain and the datasheet says they shouldn't source current.",
+          "The buzzer goes SMD (MLT-8530). It's rated 3.6 V, so it has a 10 Ω series resistor from 5 V and has to be PWM driven at 2.7 kHz. Driven with DC it's silent and pulls about 190 mA.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "first-flight-logs",
+    date: "2026-10-21",
+    dateLabel: "October 21, 2026",
+    phase: "Flight logs",
+    title: "The current sensor was reading the battery voltage",
+    standfirst:
+      "First real blackbox logs. The current reading was 30 A at hover, which was wrong in a more interesting way than a bad scale factor.",
+    blocks: [
+      {
+        kind: "text",
+        text: "Now that it flies I've got actual blackbox data. The first log, on the 20th, was exactly 2,097,152 bytes, which is the whole 2 MB flash, and that's why the last recording ended without a clean stop. Second flight today: 85.4 seconds at an 821 Hz log rate, and it filled the flash again and cut off mid-hover. At 1/4 sampling 2 MB just holds about 85 seconds.",
+      },
+      {
+        kind: "text",
+        text: "The current sensor said about 30 A at hover, which is 450 W at 15 V for a 790 g quad. That isn't plausible, and my first guess was that ibat_scale was off. It isn't a scale problem though:",
+      },
+      {
+        kind: "list",
+        items: [
+          "amperageLatest sits between 29.4 and 30.7 A from near idle all the way to hover.",
+          "It goes down as load goes up (correlation -0.64 with the motor sum).",
+          "It tracks the battery voltage at a fixed 2.05 A/V (std 1.2%). The October 20 log does the same at 2.00 A/V.",
+        ],
+      },
+      {
+        kind: "text",
+        text: "A wrong scale factor would still move with load. This reads like PA2 is sitting at about 1.2 V and following VBAT, which is what a floating STM32 ADC input does: the sample cap holds charge from the previous channel in the sequence, and on v1 that's PA1, the battery divider. So the current signal isn't reaching the pin. Next is checking the CurrentM1 jumper is actually bridged and that the ESC harness current pin makes it to PA2. v2 gets a pulldown on that pin so this can't happen quietly again.",
+      },
+      {
+        kind: "text",
+        text: "The motors are uneven too. On the 20th the four motor averages were a smooth gradient. Today three of them are within 3% and motor 4 (front left) is on its own about 13% higher:",
+      },
+      {
+        kind: "code",
+        caption: "Mean motor output, M1 to M4",
+        code: "2026-10-20   830   898   975  1023\n2026-10-21   977   990  1009  1123",
+      },
+      {
+        kind: "text",
+        text: "Yaw I term also moved from about 0 to +13. One motor out on its own plus a new yaw offset points at that motor or its prop more than at the centre of gravity. I spun each motor by hand with no power, and M4 has less resistance than the other three, specifically weaker cogging notches rather than smoother bearings. My working diagnosis is reduced magnet flux on M4 (heat damage, or a cracked or loose magnet), which would explain it needing about 13% more command. I haven't confirmed it yet. The plan is a shorted-phase braking comparison, a look at the bell magnets, then a replacement motor and a new log. Until then it's gentle hovers only, and I check bell temperature after each flight.",
+      },
+      {
+        kind: "text",
+        text: "Gyro noise has one narrow peak that moved from 173 to 180 Hz up to 182 to 186 Hz as hover rpm went up, and between the two flights pitch noise dropped while roll went up. Noise that's axis dependent and sits at motor frequency is mechanical (props, motors, frame), not supply noise, and after filtering it's 0.8 to 1.2 deg/s in that band. At an 821 Hz log rate I can't see anything above about 410 Hz though, so this doesn't prove the IMU supply is clean.",
+      },
+      {
+        kind: "callout",
+        label: "What changed in how I review logs",
+        text: "Rewriting the analysis script for every flight was how I ended up with five slightly different versions of it. It's one flight review tool now, run the same way on every log, and it flags the current sensor as invalid on both of these logs without being told to look.",
+      },
+    ],
+  },
+  {
+    slug: "it-flies",
+    date: "2026-10-20",
+    dateLabel: "October 20, 2026",
+    phase: "First flight",
+    title: "It flies, and I can't say exactly why",
+    standfirst:
+      "Rebuilt the frame and checked motor direction and board orientation. It stopped flipping, but I changed two things at once.",
+    blocks: [
+      {
+        kind: "text",
+        text: "I rebuilt the frame from scratch with the same parts, built tighter so the flight controller and IMU sit more rigidly. I also went through motor direction and board orientation properly, which I hadn't done before the first liftoff attempt. It now takes off and flies without flipping.",
+      },
+      {
+        kind: "text",
+        text: "The catch is that I made both changes together, so I can't say for sure which one fixed it. Most likely it was the direction and orientation check: a wrong motor direction, motor order or align_board gives you a full flip right at liftoff, and a loose mount usually doesn't. A loose mount could still have been contributing.",
+      },
+      {
+        kind: "text",
+        text: "It's flying in ANGLE mode on stock 4.5 PIDs with a 3.2 kHz loop and blackbox at 1/4 sampling. Still open: failsafe hasn't been tested, and I need to save a diff all of the flying config so I can compare it with the September one.",
+      },
+    ],
+  },
   {
     slug: "flash-was-never-dead",
     date: "2026-09-14",

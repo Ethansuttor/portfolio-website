@@ -29,7 +29,7 @@ export function AboutMe() {
               </p>
               <p>
                 The flight controller started as a test: could I take an embedded system from a blank schematic to something
-                that actually flies? It doesn&apos;t fly yet. The build log has everything that went wrong along the way,
+                that actually flies? It flies now, and the second version is on order. The build log has everything that went wrong along the way,
                 including the parts that make me look bad.
               </p>
             </div>
