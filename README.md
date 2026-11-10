@@ -93,7 +93,7 @@ src/
     glowTheme.ts          BorderGlow tuning for the project cards
 public/assets/            Images, PDFs, and the .glb board model
 assets-raw/               Unoptimized 3D exports and unpublished photos (git-ignored)
-docs/                     Long-form source copy and the original design mockup
+docs/                     Long-form source copy, the original design mockup, and archive/ for finished plans
 ```
 
 ## Editing content
