@@ -58,6 +58,14 @@ export const allProjects: Project[] = [
     ],
     images: [
       { src: "/assets/drone-pcb-assembled.jpeg", alt: "Assembled STM32F405 flight controller PCB after hotplate reflow", caption: "Assembled Board", aspect: "portrait" },
+      {
+        src: "/assets/drone-first-flight.mp4",
+        alt: "The quadcopter taking off and hovering on the v1 flight controller",
+        caption: "First Flight",
+        aspect: "portrait",
+        video: true,
+        poster: "/assets/drone-first-flight-poster.jpg",
+      },
       { src: "/assets/STM32.png", alt: "STM32 MCU Schematic & Signal Routing", caption: "MCU & Core Logic" },
       {
         src: "/assets/drone-motor-spin.mp4",
@@ -79,6 +87,17 @@ export const allProjects: Project[] = [
         alt: "Completed quadcopter with the custom flight controller, props and LiPo pack fitted, sitting on a tripod",
         caption: "Assembled Quadcopter",
         aspect: "portrait",
+      },
+      {
+        src: "/assets/drone-v1-on-frame.jpg",
+        alt: "The green v1 flight controller mounted on a red 3D-printed carrier plate on the quad frame, with jumper wires and a large 1000 µF capacitor soldered on",
+        caption: "v1 on the Carrier Plate",
+        aspect: "portrait",
+      },
+      {
+        src: "/assets/iris-v2-render.png",
+        alt: "KiCad 3D render of the IRIS v2 flight controller: square black-masked board with the STM32 in the middle and JST connectors around the edges",
+        caption: "IRIS (v2) 3D Render",
       },
     ],
     githubHref: "https://github.com/Ethansuttor/drone_PCB",
