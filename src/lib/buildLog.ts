@@ -63,7 +63,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "It's 55 × 55 mm. v1 was 80 × 80, so it's roughly half the board, and it bolts straight onto the 30.5 mm stack instead of needing that big carrier plate. The 3D model on the project page is this one.",
+        text: "It's 55 × 55 mm. v1 was 80 × 80, so that's 53% less board area, and it bolts straight onto the 30.5 mm stack instead of needing that big carrier plate. The 3D model on the project page is this one.",
       },
       {
         kind: "text",
@@ -78,6 +78,7 @@ export const buildLog: BuildLogEntry[] = [
           "a header for the camera out of an old Hubsan H501A, plus power pads for a camera/VTX",
           "battery voltage sent back to my transmitter",
           "a 5 V supply that can actually do 3 A",
+          "one 3.3 V regulator instead of two, and three test jumpers instead of nine",
         ],
       },
       {
@@ -198,7 +199,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "Motor 4 (front left) is also working about 13% harder than the others. Spun them all by hand and that one has noticeably weaker cogging, so I think its magnets are weak, maybe from heat. Haven't confirmed that yet. Gentle hovers until I swap it.",
+        text: "The motors are more interesting. Yesterday's log had a smooth gradient across all four in how hard they were driven, which made me think the weight was off center. Today motors 1 to 3 are within 3% of each other and motor 4 (front left) alone is running about 13% higher, with a new yaw offset. One motor standing apart points at that motor or its prop, not the balance. Spun them all by hand with the power off and that one has noticeably weaker magnetic detents, so I think its magnets are weak, maybe from heat. Haven't confirmed that yet. Gentle hovers until I swap it.",
       },
       {
         kind: "text",
@@ -212,7 +213,7 @@ export const buildLog: BuildLogEntry[] = [
     dateLabel: "October 20, 2026",
     phase: "First flight",
     title: "It flies",
-    standfirst: "No more flipping. Not totally sure why though.",
+    standfirst: "No more flipping. Two motors were spinning the wrong way.",
     media: {
       kind: "video",
       src: "/assets/drone-first-flight.mp4",
@@ -224,11 +225,11 @@ export const buildLog: BuildLogEntry[] = [
     blocks: [
       {
         kind: "text",
-        text: "Rebuilt the frame from scratch, tighter this time, and actually checked motor direction and board orientation before taking off, which I hadn't done the first time. It flies now.",
+        text: "Found the flip. Nothing was wrong with the board or the firmware. Some of the motor leads were wired backwards, so a motor was spinning clockwise with a counterclockwise prop on it. Swapped the leads and it flies fine now.",
       },
       {
         kind: "text",
-        text: "Problem is I changed two things at once, so I can't say for sure which one fixed it. My guess is the direction and orientation check, since getting that wrong is the classic flip on takeoff and a loose mount usually isn't. Could've been both.",
+        text: "This one's on me. I was too eager to see it fly and skipped the basic checks. A spin test with the props off would have caught it in a minute, and I lost a lot more than a minute by not doing one.",
       },
       {
         kind: "text",
@@ -262,11 +263,11 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "Then I made it worse. I was poking pins on the powered MCU with a meter (0.5 mm pitch, bad idea) and the board stopped showing up on USB. The MCU got hot, I measured about 3 Ω from the core regulator pin to ground, figured I'd cooked it, and started planning a respin.",
+        text: "Then I made it worse. I was poking pins on the powered MCU with a meter (0.5 mm pitch, bad idea) and the board stopped showing up on USB. The MCU got hot, I read about 3 Ω to ground, decided the whole board was dead, and started planning a respin.",
       },
       {
         kind: "text",
-        text: "Next day I plugged it in and it booted fine. The 3 Ω was me measuring ground to ground on an empty pad. The actual short was a cracked cap (C12), and pulling it had already fixed the board. Should have just tried powering it again.",
+        text: "Next day I plugged it in and it booted fine. The 3 Ω was me sitting on the ground pad of a capacitor. In that same session a probe slip cracked that cap (C12), which was the only real damage in the whole thing, and I caused it. Pulling it had already fixed the board. Should have just tried powering it again.",
       },
       {
         kind: "text",
@@ -279,7 +280,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "C8 40 15 is exactly what the datasheet says, so the chip had been answering the whole time. Betaflight 4.5.5 just doesn't have it in its chip list, so it ignored the reply and printed zeros. My own July notes said it was in the list. It wasn't.",
+        text: "C8 40 15 is exactly what the datasheet says, so the chip had been answering correctly every time. Betaflight 4.5.5 just doesn't have it in its table of known parts, so the driver threw the answer away and printed zeros. The zeros I'd been reasoning from for days were a placeholder nobody had measured. My own July notes said it was in the list. It wasn't.",
       },
       {
         kind: "code",
@@ -288,7 +289,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "It's not upstream, so I have to re-add it every clean build. Note to self: print the raw bytes before deciding what the hardware is doing, and stop probing powered fine-pitch chips.",
+        text: "It's not upstream, so I have to re-add it every clean build. New rules: before running a test, write down what each explanation predicts, and skip it if they all predict the same thing. Look at raw data before trusting a summary of it. And don't call a part dead off a meter reading. Power it and see what it does.",
       },
     ],
   },
@@ -345,7 +346,7 @@ export const buildLog: BuildLogEntry[] = [
     blocks: [
       {
         kind: "text",
-        text: "Brought the board up one power stage at a time through the solder jumpers. It all worked: 3.3 V up, MCU on USB, crystal running at 168 MHz, buck putting out 4.98 V, gyro showed up as soon as I bridged its jumper, and each motor got its own DMA stream.",
+        text: "Brought the board up one power stage at a time through the solder jumpers. Rails, clock and IMU all came up first try: 3.3 V up, MCU on USB, system clock at 168 MHz, buck putting out 4.98 V from a 15.58 V pack (4.99 V expected), the BMI270 showed up on SPI1 at a 3225 Hz gyro rate as soon as I bridged its jumper, and each motor got its own DMA stream. The one thing that didn't come up was the flash, which returned a chip ID of all zeros. Parking that for now.",
       },
       {
         kind: "text",
@@ -371,7 +372,7 @@ export const buildLog: BuildLogEntry[] = [
       },
       {
         kind: "text",
-        text: "I'd checked DMA for the motors and nothing else. Checking all of it from now on.",
+        text: "With that in, the battery divider measures 11.13:1 against the 11:1 it was designed for. I'd checked DMA for the motors and nothing else. Checking all of it from now on.",
       },
     ],
   },
