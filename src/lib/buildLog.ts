@@ -50,6 +50,12 @@ export const buildLog: BuildLogEntry[] = [
     phase: "v2 Fab",
     title: "v2 is ordered",
     standfirst: "Black boards this time, and about half the size.",
+    media: {
+      kind: "image",
+      src: "/assets/iris-v2-render.png",
+      alt: "KiCad 3D render of the IRIS v2 flight controller: square black-masked board with the STM32 in the middle and JST connectors for GPS, I2C, flow and camera around the edges",
+      caption: "IRIS in KiCad's 3D viewer. 55 × 55 mm, with plugs for GPS, flow, I2C and the camera around the edge.",
+    },
     blocks: [
       {
         kind: "text",
@@ -170,6 +176,13 @@ export const buildLog: BuildLogEntry[] = [
     phase: "Flight logs",
     title: "The current sensor was lying",
     standfirst: "First real flight logs. Current read 30 A at a hover, which can't be right.",
+    media: {
+      kind: "image",
+      src: "/assets/drone-v1-on-frame.jpg",
+      aspect: "portrait",
+      alt: "The green v1 flight controller mounted on a red 3D-printed carrier plate on the quad frame, with jumper wires and a large 1000 µF capacitor soldered on",
+      caption: "v1 on the carrier plate, bodge wires and all. This is the setup these logs came from.",
+    },
     blocks: [
       {
         kind: "text",
@@ -200,6 +213,14 @@ export const buildLog: BuildLogEntry[] = [
     phase: "First flight",
     title: "It flies",
     standfirst: "No more flipping. Not totally sure why though.",
+    media: {
+      kind: "video",
+      src: "/assets/drone-first-flight.mp4",
+      poster: "/assets/drone-first-flight-poster.jpg",
+      aspect: "portrait",
+      alt: "The quadcopter taking off and hovering on the v1 flight controller",
+      caption: "Off the ground and staying right side up.",
+    },
     blocks: [
       {
         kind: "text",
